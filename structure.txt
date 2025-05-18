@@ -1,0 +1,54 @@
+Auction/
+├── .gitignore
+├── .prettierrc
+├── eslint.confio.mis
+├── index.html
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+├── webpack.config.js
+├── src/
+│   ├── app.tsx
+│   ├── decl.d.ts
+│   ├── index.tsx
+│   ├── routes.ts
+│   ├── style.css
+│   ├── components/
+│   │   ├── Article.module.css
+│   │   ├── Article.tsx
+│   │   ├── Footer.module.css
+│   │   ├── Footer.tsx
+│   │   ├── HeroBanner.module.css
+│   │   ├── HeroBanner.tsx
+│   │   ├── InformationAddition.module.css
+│   │   ├── InformationAddition.tsx
+│   │   ├── LotGrid.module.css
+│   │   ├── LotGrid.tsx
+│   │   ├── Search.module.css
+│   │   └── Search.tsx
+│   ├── icons/
+│   ├── images/
+│   ├── pages/
+│   │   ├── bag/
+│   │   ├── catalog/
+│   │   ├── favorite/
+│   │   ├── home/
+│   │   ├── newsCatalog/
+│   │   ├── openLot/
+│   │   └── personalAccount/
+│   ├── popApps/
+│   │   ├── bag/
+│   │   ├── accountRegistration/
+│   │   ├── addCard/
+│   │   ├── congrats/
+│   │   ├── deleteFavorite/
+│   │   ├── forgottenPassword/
+│   │   ├── login/
+│   │   ├── passwordCreation/
+│   │   └── photo/
+│   └── widgets/
+│   │   └── views/
+├── dist/
+├── node_modules/
+├── @types/
+└── idea/

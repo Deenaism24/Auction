@@ -1,0 +1,157 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border: none;
+    box-shadow: none;
+    padding-left: calc((100% - 1220px)/2) ;
+    padding-right: calc((100% - 1220px)/2);
+    height: 60px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 27px;
+    color: #000;
+    text-decoration: none;
+}
+
+.centerNav {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.login {
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+    gap: 8px;
+}
+.login:hover {
+    text-decoration: underline;
+}
+
+.auth {
+    color: #333;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.link {
+    color: #333;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.bagIcon,
+.burgerIcon,
+.icon {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.burger {
+    display: none;
+}
+
+.burgerMenu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #FFFFFF;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.burgerMenu.active {
+    display: block;
+}
+
+.burgerMenuContent {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.burgerMenuLink {
+    color: #333;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 0;
+}
+
+.burgerMenuLink:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 1260px) {
+    .header,
+    .burgerMenu  {
+        padding-right: 10%;
+        padding-left: 10%;
+    }
+    .centerNav,
+    .burgerMenu {
+        display: none;
+    }
+    .burger,
+    .burgerMenu.active {
+        display: block;
+    }
+}
+
+@media (max-width: 768px) {
+    .header,
+    .burgerMenu  {
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+}
+
+@media (max-width: 650px) {
+    .login,
+    .icon {
+        display: none;
+        width: 0;
+    }
+}
+
+@media (max-width: 425px) {
+    .header,
+    .burgerMenu  {
+        padding-left: max(20px, calc((100% - 335px)/2));
+        padding-right: max(20px, calc((100% - 335px)/2));
+    }
+    .actions {
+        min-width: unset;
+        padding: 0 8px;
+        gap: 0;
+    }
+    .bagIcon {
+        padding-right: 20px;
+    }
+}
+

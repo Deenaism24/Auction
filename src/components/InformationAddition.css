@@ -1,0 +1,350 @@
+.informationAddition {
+    width: 355px;
+    font-family: 'Gilroy', sans-serif;
+}
+
+.backColor {
+    background-color: #FFFFFF;
+}
+
+.filterHeader {
+    margin-bottom: 24px;
+}
+
+.filterTitleRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.filterTitle {
+    padding-top: 20px;
+    font-size: 31px;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+.filterIcon {
+    width: 24px;
+    height: 24px;
+}
+
+.clearFilter {
+    font-size: 14px;
+    color: #171717;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.clearFilter.active {
+    text-decoration: underline;
+}
+
+.filterSection {
+    margin-bottom: 24px;
+}
+
+.sectionTitle {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 21px;
+    font-weight: normal;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.sortWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    cursor: pointer;
+}
+
+.sortIcon {
+    width: 24px;
+    height: 24px;
+}
+
+.sortDropdown {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+}
+
+.sortOption {
+    padding: 4px 8px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    line-height: 1.2;
+}
+
+.sortOption:hover {
+    color: #4F7B9E;
+}
+
+.activeOption {
+    font-weight: bold;
+    background-color: #EDEDED;
+}
+
+.checkboxGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.checkboxItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    gap: 10px;
+    width: 100%;
+}
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #171717;
+    appearance: none;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.checkbox:checked {
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.6667 4.66663L6.83337 11.3333L3.33337 8.30299' stroke='%23171717' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.filterItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-left: 8px;
+}
+
+.itemCount {
+    font-size: 12px;
+    color: #171717;
+    margin-left: 8px;
+}
+
+.filterWrapper {
+    border-top: 1px solid #DBDBDB;
+}
+
+.filterWrapper:last-child {
+    border-bottom: 1px solid #DBDBDB;
+    margin-bottom: 40px;
+}
+
+.sectionWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.infoSection {
+    gap: 20px;
+    color: #171717;
+}
+
+.infoHeader,
+.registrationHeader{
+    font-size: 27px;
+    text-transform: uppercase;
+    padding-top: 12px;
+    font-weight: normal;
+    margin-bottom: 20px;
+}
+
+.registrationHeader {
+    border-top: 1px solid #DBDBDB;
+}
+
+.infoList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.infoListItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.auctionDate {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    gap: 8px;
+    text-transform: uppercase;
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+.dateRange {
+    gap: 8px;
+    font-size: 16px;
+    color: #4F7B9E;
+    text-transform: uppercase;
+}
+
+.infoCeilTitle {
+    color: #9C9C9C;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.infoText {
+    font-size: 14px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    color: #9C9C9C;
+}
+
+.registerButton {
+    display: block;
+    background-color: transparent;
+    text-decoration: none;
+    color: #000;
+    width: 100%;
+    border: 1px solid #171717;
+    cursor: pointer;
+    text-align: center;
+    padding: 12px 0;
+    text-transform: uppercase;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.contactInfo {
+    padding: 30px;
+    background-color: #F8F8F8;
+    margin-top: 20px;
+}
+
+.contactHeader {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.contactItem {
+    margin-bottom: 10px;
+}
+
+.contactName {
+    font-weight: bold;
+    font-size: 16px;
+    margin: 10px 0 5px 0;
+}
+
+.contactTitle {
+    font-style: italic;
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.contactLine {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.contactLink {
+    color: #171717;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.contactIcon {
+    width: 16px;
+    height: 16px;
+}
+
+.mobileAccordion {
+    display: none;
+}
+
+@media (max-width: 1260px) {
+    .informationAddition {
+        width: 100%;
+    }
+    .backColor {
+        background-color: #F8F8F8;
+    }
+    .registerButton {
+        background-color: #F8F8F8;
+    }
+    .contactInfo {
+        border-top: 1px solid #DBDBDB;
+    }
+    .mobileAccordion {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #171717;
+        color: white;
+        padding: 20px;
+        width: 100%;
+        height: 79px;
+        font-size: 31px;
+        cursor: pointer;
+        margin-top: 20px;
+        box-sizing: border-box;
+    }
+    .mobileAccordionIcon {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+@media (max-width: 425px) {
+    .mobileAccordion {
+        font-size: 16px;
+    }
+    .filterTitle {
+        font-size: 14px;
+    }
+    .sectionTitle,
+    .infoListItem,
+    .auctionDate ,
+    .dateRange,
+    .infoText,
+    .registerButton,
+    .contactHeader,
+    .contactName,
+    .contactTitle,
+    .contactLine,
+    .contactLink{
+        font-size: 12px;
+    }
+    .registrationHeader,
+    .infoHeader{
+        font-size: 13px;
+    }
+}
