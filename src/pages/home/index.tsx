@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import HeroBanner from '../../components/HeroBanner';
 import LotGrid from '../../components/LotGrid';
 import './home.css';
@@ -7,16 +7,17 @@ import Article from '../../components/Article';
 import Footer from '../../widgets/footer';
 import Header from '../../widgets/header';
 
-// Основной компонент приложения
 const HomePage: React.FC = () => {
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
   return (
     <>
-      <Header />
+      <Header searchInputRef={searchInputRef} />
       <main>
         <HeroBanner />
         <div className="auctionContainer">
           <LotGrid />
-          <InformationAddition />
+          <InformationAddition ref={searchInputRef} />
         </div>
         <Article />
       </main>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
 import AuthIcon from '../../icons/enter.svg';
 import SearchIcon from '../../icons/search.svg';
@@ -9,29 +9,26 @@ import './Header.css';
 import { NavLink } from 'react-router';
 import { routes } from '../../routes';
 
-const Header = (): React.ReactElement => {
+interface HeaderProps {
+  searchInputRef: React.RefObject<HTMLInputElement | null>;
+}
+
+const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const handleSearchClick = () => {
-    // Закрываем меню, если оно открыто
     setIsMenuOpen(false);
 
-    // Прокручиваем к секции поиска
     const searchSection = document.getElementById('search-section');
     if (searchSection) {
       searchSection.scrollIntoView({ behavior: 'smooth' });
 
-      // Фокусируем поле ввода после небольшой задержки (чтобы успела произойти прокрутка)
       setTimeout(() => {
-        const searchInput = document.querySelector('.searchInput') as HTMLInputElement;
-        if (searchInput) {
-          searchInput.focus();
-        }
+        searchInputRef.current?.focus();
       }, 500);
     }
   };
@@ -111,7 +108,6 @@ const Header = (): React.ReactElement => {
             </div>
           </div>
         </div>
-
       </header>
     </>
   );

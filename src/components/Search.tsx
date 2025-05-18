@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import './Search.css';
 import SearchIcon from '../icons/search.svg';
 
-const Search: React.FC = () => {
+interface SearchProps {
+  onSearch?: (value: string) => void;
+}
+
+const Search = forwardRef<HTMLInputElement, SearchProps>(({ onSearch }, ref) => {
   const [searchValue, setSearchValue] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+    if (onSearch) {
+      onSearch(e.target.value);
+    }
+  };
 
   return (
     <div className='searchContainer'>
@@ -11,8 +22,9 @@ const Search: React.FC = () => {
         <input
           type="text"
           value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
+          onChange={handleChange}
           className='searchInput'
+          ref={ref}
         />
         {searchValue === '' && (
           <div className='scrollingPlaceholder'>
@@ -23,6 +35,6 @@ const Search: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default Search;
