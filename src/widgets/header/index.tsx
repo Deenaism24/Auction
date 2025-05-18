@@ -11,9 +11,10 @@ import { routes } from '../../routes';
 
 interface HeaderProps {
   searchInputRef: React.RefObject<HTMLInputElement | null>;
+  onLoginClick?: () => void;  // Добавляем опциональный пропс
 }
 
-const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
+const Header: React.FC<HeaderProps> = ({ searchInputRef, onLoginClick = () => {} }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -55,11 +56,11 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
           </NavLink>
         </div>
         <div className='actions'>
-          <NavLink to={routes.login} className='auth'>
+          <span onClick={onLoginClick} className='auth'>
             <div className='login'>АВТОРИЗАЦИЯ
               <img src={AuthIcon} alt="Вход" className='icon' />
             </div>
-          </NavLink>
+          </span>
           <HashLink smooth to="#search-section" onClick={handleSearchClick}>
             <img className='icon' alt="Поиск" src={SearchIcon} />
           </HashLink>
@@ -94,9 +95,9 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
               </NavLink>
               {window.innerWidth <= 650 && (
                 <>
-                  <NavLink to={routes.login} className='burgerMenuLink' onClick={toggleMenu}>
+                  <span className='burgerMenuLink' onClick={onLoginClick}>
                     АВТОРИЗАЦИЯ
-                  </NavLink>
+                  </span>
                   <HashLink smooth to="#search-section" className='burgerMenuLink' onClick={handleSearchClick}>
                     ПОИСК
                   </HashLink>
