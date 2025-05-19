@@ -26,7 +26,7 @@ const HomePage: React.FC<HomePageProps> = ({ showLogin }) => {
         </div>
         <Article />
       </main>
-      <Footer />
+      <Footer onLoginClick={showLogin} />
     </>
   );
 };

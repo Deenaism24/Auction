@@ -3,8 +3,13 @@ import './Footer.css';
 import EnterIcon from '../../icons/enter.svg';
 import { NavLink } from 'react-router';
 import { routes } from '../../routes';
+import AuthIcon from '../../icons/enter.svg';
 
-const Index: React.FC = () => {
+interface FooterProps {
+  onLoginClick?: () => void;
+}
+
+const Footer: React.FC<FooterProps> = ({onLoginClick = () => {}}) => {
   return (
     <>
       <footer className="footer">
@@ -57,13 +62,14 @@ const Index: React.FC = () => {
         </div>
 
         {/* Login Button */}
-        <NavLink to={routes.login} className="loginButton">
-          LOG IN
-          <img src={EnterIcon} alt="Login" className="loginIcon" />
-        </NavLink>
+        <span onClick={onLoginClick} className='auth'>
+          <div className='login'>LOG IN
+            <img src={AuthIcon} alt="Вход" className='icon' />
+          </div>
+        </span>
       </footer>
     </>
   );
 };
 
-export default Index;
+export default Footer;
