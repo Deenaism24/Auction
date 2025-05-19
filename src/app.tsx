@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/home';
-import LoginPopup from './popApps/login';
+import { AuthModalProvider } from './contexts/AuthFlowModalContext';
+import { AddCardModalProvider } from './contexts/AddCardModalContext';
+import { DeleteFavoriteModalProvider } from './contexts/DeleteFavoriteModalContext';
+import { ZoomPhotoModalProvider } from './contexts/ZoomPhotoModalContext';
+import ModalManager from './widgets/ModalManager';
 
 const App = () => {
-  const [showLogin, setShowLogin] = useState(false);
-
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage showLogin={() => setShowLogin(true)} />} />
-      </Routes>
-
-      {showLogin && <LoginPopup onClose={() => setShowLogin(false)} />}
+      <AuthModalProvider>
+        <AddCardModalProvider>
+          <DeleteFavoriteModalProvider>
+            <ZoomPhotoModalProvider>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+              </Routes>
+              <ModalManager />
+            </ZoomPhotoModalProvider>
+          </DeleteFavoriteModalProvider>
+        </AddCardModalProvider>
+      </AuthModalProvider>
     </BrowserRouter>
   );
 };

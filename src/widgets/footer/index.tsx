@@ -1,14 +1,18 @@
 import React from 'react';
 import './Footer.css';
 import { NavLink } from 'react-router';
+import { useAuthModal } from '../../contexts/AuthFlowModalContext';
 import { routes } from '../../routes';
+
 import AuthIcon from '../../icons/enter.svg';
 
-interface FooterProps {
-  onLoginClick?: () => void;
-}
 
-const Footer: React.FC<FooterProps> = ({onLoginClick = () => {}}) => {
+
+const Footer: React.FC = () => {
+const { open } = useAuthModal();
+  const handleLoginClick = () => {
+    open('login');
+  };
   return (
     <>
       <footer className="footer">
@@ -61,11 +65,11 @@ const Footer: React.FC<FooterProps> = ({onLoginClick = () => {}}) => {
         </div>
 
         {/* Login Button */}
-        <span onClick={onLoginClick} className='auth'>
+        <div onClick={handleLoginClick} className='auth'>
           <div className='login'>LOG IN
             <img src={AuthIcon} alt="Вход" className='icon' />
           </div>
-        </span>
+        </div>
       </footer>
     </>
   );

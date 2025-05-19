@@ -1,8 +1,7 @@
 Auction/
 ├── .gitignore
 ├── .prettierrc
-├── eslint.confio.mis
-├── index.html
+├── eslint.config.mis
 ├── package.json
 ├── package-lock.json
 ├── tsconfig.json
@@ -10,21 +9,27 @@ Auction/
 ├── src/
 │   ├── app.tsx
 │   ├── decl.d.ts
+│   ├── index.html
 │   ├── index.tsx
 │   ├── routes.ts
 │   ├── style.css
+│   ├── contexts/
+│   │   ├── AuthFlowModalContext.tsx
+│   │   ├── AddCardModalContext.tsx
+│   │   ├── DeleteFavoriteModalContext.tsx
+│   │   └── ZoomPhotoModalContext.tsx
 │   ├── components/
-│   │   ├── Article.module.css
+│   │   ├── Article.css
 │   │   ├── Article.tsx
-│   │   ├── Footer.module.css
+│   │   ├── Footer.css
 │   │   ├── Footer.tsx
-│   │   ├── HeroBanner.module.css
+│   │   ├── HeroBanner.css
 │   │   ├── HeroBanner.tsx
-│   │   ├── InformationAddition.module.css
+│   │   ├── InformationAddition.css
 │   │   ├── InformationAddition.tsx
-│   │   ├── LotGrid.module.css
+│   │   ├── LotGrid.css
 │   │   ├── LotGrid.tsx
-│   │   ├── Search.module.css
+│   │   ├── Search.css
 │   │   └── Search.tsx
 │   ├── icons/
 │   ├── images/
@@ -37,17 +42,21 @@ Auction/
 │   │   ├── openLot/
 │   │   └── personalAccount/
 │   ├── popApps/
-│   │   ├── bag/
-│   │   ├── accountRegistration/
-│   │   ├── addCard/
-│   │   ├── congrats/
-│   │   ├── deleteFavorite/
-│   │   ├── forgottenPassword/
-│   │   ├── login/
-│   │   ├── passwordCreation/
-│   │   └── photo/
+│   │   ├── accountRegistration.tsx
+│   │   ├── addCard.tsx
+│   │   ├── messageSend.tsx
+│   │   ├── deleteFavorite.tsx
+│   │   ├── forgottenPassword.tsx
+│   │   ├── login.tsx
+│   │   ├── cratePassword.tsx
+│   │   └── style.css
 │   └── widgets/
-│   │   └── views/
+│       ├── footer/
+│       │   ├── index.tsx
+│       │   └── Footer.css
+│       └── header/
+│           ├── index.tsx
+│           └── Header.css
 ├── dist/
 ├── node_modules/
 ├── @types/

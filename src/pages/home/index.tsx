@@ -7,17 +7,12 @@ import Article from '../../components/Article';
 import Footer from '../../widgets/footer';
 import Header from '../../widgets/header';
 
-interface HomePageProps {
-  showLogin?: () => void;
-}
-
-const HomePage: React.FC<HomePageProps> = ({ showLogin }) => {
+const HomePage: React.FC = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <>
-      <Header
-        onLoginClick={showLogin}  searchInputRef={searchInputRef} />
+      <Header searchInputRef={searchInputRef} />
       <main>
         <HeroBanner />
         <div className="auctionContainer">
@@ -26,7 +21,7 @@ const HomePage: React.FC<HomePageProps> = ({ showLogin }) => {
         </div>
         <Article />
       </main>
-      <Footer onLoginClick={showLogin} />
+      <Footer />
     </>
   );
 };

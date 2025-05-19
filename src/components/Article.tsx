@@ -2,7 +2,6 @@ import React from 'react';
 import './Article.css';
 import ArticleIcon from '../icons/article.svg';
 import ArticleImage from '../images/img5.png';
-import { NavLink } from 'react-router';
 import { routes } from '../routes';
 
 const Article: React.FC = () => {

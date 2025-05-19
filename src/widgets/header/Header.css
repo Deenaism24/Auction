@@ -41,17 +41,14 @@
     text-decoration: none;
     align-items: center;
     gap: 8px;
-}
-.login:hover {
-    text-decoration: underline;
-}
-
-.auth {
     color: #333;
-    text-decoration: none;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+}
+
+.login:hover {
+    text-decoration: underline;
 }
 
 .link {
@@ -85,6 +82,7 @@
     background-color: #FFFFFF;
     width: 100%;
     box-sizing: border-box;
+    z-index: 3000;
 }
 
 .burgerMenu.active {

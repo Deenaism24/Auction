@@ -50,10 +50,11 @@ const sortOptions = [
 
 interface InformationAdditionProps {
   forwardedRef?: React.RefObject<HTMLInputElement>;
+  onLoginClick?: () => void;
 }
 
 const InformationAddition = forwardRef<HTMLInputElement, InformationAdditionProps>(
-  (props, ref) => {
+  ({ forwardedRef, onLoginClick = () => {} }, ref) => {
     const [showFiltersMobile, setShowFiltersMobile] = useState(true);
     const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
     const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
@@ -269,9 +270,9 @@ const InformationAddition = forwardRef<HTMLInputElement, InformationAdditionProp
                 Зарегистрируйтесь сейчас, чтобы делать предварительные ставки или делать ставки в
                 реальном времени в нашем цифровом зале продаж.
               </p>
-              <Link to={routes.auth} className='registerButton'>
+              <button onClick={ onLoginClick } className='registerButton'>
                 Зарегистрироваться
-              </Link>
+              </button>
             </div>
 
             <div className='infoSection'>
