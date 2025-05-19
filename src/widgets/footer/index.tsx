@@ -1,6 +1,5 @@
 import React from 'react';
 import './Footer.css';
-import EnterIcon from '../../icons/enter.svg';
 import { NavLink } from 'react-router';
 import { routes } from '../../routes';
 import AuthIcon from '../../icons/enter.svg';

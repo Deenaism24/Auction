@@ -12,6 +12,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    color: #9C9C9C;
+    text-decoration: none;
 }
 
 .articleIcon {
@@ -19,10 +21,11 @@
     height: 24px;
 }
 
-.title {
+.articleTitle {
     font-size: 21px;
     color: #9C9C9C;
     font-weight: normal;
+    text-decoration: none;
 }
 
 .articleContent {

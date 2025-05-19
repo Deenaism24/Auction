@@ -30,4 +30,5 @@ export const routes = {
   terms: 'beee',
   business: 'beee',
   slavary: 'beee',
+  article: 'article',
 };
