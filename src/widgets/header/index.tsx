@@ -37,7 +37,9 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef, onLoginClick = () => {}
   return (
     <>
       <header className='header'>
-        <NavLink to={routes.home} className='logo'> AUCTION.COM </NavLink>
+        <span className='logo' onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+          AUCTION.COM
+        </span>
         <div className='centerNav'>
           <NavLink to={routes.access} className='link'>
             PREFERED ACCESS
