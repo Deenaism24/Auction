@@ -7,7 +7,6 @@
     top: 0;
     z-index: 1000;
     border: none;
-    box-shadow: none;
     padding-left: calc((100% - 1220px)/2) ;
     padding-right: calc((100% - 1220px)/2);
     height: 60px;

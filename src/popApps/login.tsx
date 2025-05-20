@@ -60,7 +60,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
 
   return (
     <div className='popup' ref={popupRef}>
-      <div className='header'>
+      <div className='popupHeader'>
         <h2 className='title'>АВТОРИЗАЦИЯ</h2>
         <button className='closeButton' onClick={onClose}>
           <img src={closeIcon} alt='Close' />
