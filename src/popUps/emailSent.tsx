@@ -12,9 +12,9 @@ const EmailSentPopup: React.FC<EmailSentPopupProps> = ({ onClose }) => {
       <img src={closeIcon} onClick={onClose} alt='Close' className={styles.closeIcon} />
       <h2 className={ styles.title }>EMAIL SENT</h2>
       <p className={ styles.description }>
-        We've sent you an email with further instructions. Please check your inbox.
+        На указанный Вами электронный адрес отправлено письмо с инструкцией по восстановлению пароля.
       </p>
-      <button onClick={onClose} className={`${styles.button} ${styles.primaryButton}`}>
+      <button onClick={onClose} className={`${styles.mainButton} ${styles.active}`}>
         OK
       </button>
     </div>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import * as styles from './style.module.css';
 import closeIcon from '../icons/close.svg';
+import eyeIcon from '../icons/eye.svg';
+import closedEyeIcon from '../icons/closed.svg';
 
 interface AddCardProps {
   onClose: () => void;
@@ -14,6 +16,12 @@ const AddCard: React.FC<AddCardProps> = ({ onClose, onSuccess }) => {
     expiry: '',
     cvv: ''
   });
+  const [CVV, setCVV] = useState('');
+  const [showCVV, setShowCVV] = useState(false);
+
+  const toggleCVVVisibility = () => {
+    setShowCVV(!showCVV);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,20 +68,32 @@ const AddCard: React.FC<AddCardProps> = ({ onClose, onSuccess }) => {
           name="expiry"
           placeholder="Срок действия карты"
           value={cardData.expiry}
-          onChange={handleChange}
+          onChange={(e) => setCVV(e.target.value)}
           className={styles.input}
           required
         />
-        <input
-          type="text"
-          name="cvv"
-          placeholder="CVV код"
-          value={cardData.cvv}
-          onChange={handleChange}
-          className={styles.input}
-          required
-        />
-        <button type="submit" className={`${styles.button} ${styles.primaryButton}`}>
+        <div className={styles.inputContainer}>
+          <input
+            type={showCVV ? "text" : "CVV"}
+            placeholder="CVV"
+            value={CVV}
+            onChange={handleChange}
+            className={styles.input}
+            required
+          />
+          <button
+            type="button"
+            className={styles.passwordToggle}
+            onClick={toggleCVVVisibility}
+          >
+            <img
+              src={showCVV ? eyeIcon : closedEyeIcon}
+              alt="Toggle CVV visibility"
+              className={styles.eyeIcon}
+            />
+          </button>
+        </div>
+        <button type="submit" className={`${styles.mainButton} ${styles.active}`}>
           Добавить карту
         </button>
       </form>

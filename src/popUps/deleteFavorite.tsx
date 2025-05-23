@@ -16,10 +16,10 @@ const DeleteFavorite: React.FC<DeleteFavoriteProps> = ({ onClose, onConfirm }) =
         Вы уверены, что хотите убрать выбранную позицию из избранного?
       </p>
       <div className={ styles.confirmationButtons }>
-        <button onClick={onClose} className={`${styles.button} ${styles.secondaryButton} ${styles.confirmationButton}`}>
+        <button onClick={onClose} className={`${styles.mainButton}`}>
           Нет
         </button>
-        <button onClick={onConfirm} className={`${styles.button} ${styles.primaryButton} ${styles.confirmationButton}`}>
+        <button onClick={onConfirm} className={`${styles.mainButton} ${styles.active}`}>
           Да
         </button>
       </div>
