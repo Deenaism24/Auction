@@ -114,14 +114,14 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
           <div className={styles.buttons}>
             <button
               type="submit"
-              className={`${styles.loginButton} ${activeButton === 'login' ? styles.active : ''}`}
+              className={`${styles.mainButton} ${activeButton === 'login' ? styles.active : ''}`}
               onClick={handleLoginClick}
             >
               Авторизироваться
             </button>
             <button
               type="button"
-              className={`${styles.loginButton} ${activeButton === 'create' ? styles.active : ''}`}
+              className={`${styles.mainButton} ${activeButton === 'create' ? styles.active : ''}`}
               onClick={handleCreateAccountClick}
             >
               Создать новый аккаунт

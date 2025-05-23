@@ -4,7 +4,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    width: min(90vw, 430px);
+    width: 500px;
+    /*width: min(90vw, 430px);*/
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     z-index: 1000;
 }
@@ -38,6 +39,7 @@
 .inputContainer {
     position: relative;
     width: 100%;
+    align-items: center;
 }
 
 .input {
@@ -79,10 +81,9 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 30px;
 }
 
-.loginButton {
+.mainButton {
     padding: 12px;
     font-size: 16px;
     cursor: pointer;
@@ -92,30 +93,34 @@
     border: 1px solid #171717;
 }
 
-.loginButton.active {
+.mainButton.active {
     background-color: #171717;
     color: white;
 }
 
+.mainButton:last-child {
+    margin-bottom: 30px;
+}
+
 /* Общие стили для кнопок */
-.button {
-    padding: 12px 24px;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: none;
-}
+/*.button {*/
+/*    padding: 12px 24px;*/
+/*    border-radius: 4px;*/
+/*    font-size: 16px;*/
+/*    font-weight: 500;*/
+/*    cursor: pointer;*/
+/*    transition: all 0.3s ease;*/
+/*    border: none;*/
+/*}*/
 
-.primaryButton {
-    background-color: #1890ff;
-    color: white;
-}
+/*.primaryButton {*/
+/*    background-color: #1890ff;*/
+/*    color: white;*/
+/*}*/
 
-.primaryButton:hover {
-    background-color: #40a9ff;
-}
+/*.primaryButton:hover {*/
+/*    background-color: #40a9ff;*/
+/*}*/
 
 /* Стили для форм */
 .form {
@@ -126,18 +131,45 @@
 }
 
 /* Стили для чекбоксов */
+.checkboxContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    /*align-items: center;*/
+}
+
 .checkbox {
     width: 18px;
     height: 18px;
-    margin-right: 8px;
-    accent-color: #1890ff;
+    min-width: 18px;
+    min-height: 18px;
+    border: 1px solid #171717;
+    appearance: none;
+    cursor: pointer;
+    margin-left: 0;
+}
+
+.checkbox:checked {
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.6667 4.66663L6.83337 11.3333L3.33337 8.30299' stroke='%23171717' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .checkboxLabel {
     display: flex;
-    align-items: center;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
+    font-weight: 400;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.additionalLabel {
+    font-size: 12px;
+    color: #171717;
+    font-weight: 400;
 }
 
 /* Стили для иконок */

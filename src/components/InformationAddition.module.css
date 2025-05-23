@@ -84,6 +84,7 @@
     font-weight: bold;
     background-color: #EDEDED;
 }
+
 .checkboxItem {
     display: flex;
     align-items: center;
@@ -96,6 +97,8 @@
 .checkbox {
     width: 18px;
     height: 18px;
+    min-width: 18px;
+    min-height: 18px;
     border: 1px solid #171717;
     appearance: none;
     cursor: pointer;

@@ -19,23 +19,25 @@ const ForgottenPassword: React.FC<ForgottenPasswordProps> = ({ onClose, onSucces
   return (
     <div className={styles.popup}>
       <img src={closeIcon} onClick={onClose} alt='Close' className={styles.closeIcon} />
-      <h2 className={styles.title}>ЗАБЫЛИ ПАРОЛЬ</h2>
-      <p className={styles.description}>
-        Пожалуйста, укажите Ваш E-mail адрес для восстановления пароля.
-      </p>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <input
-          type="email"
-          placeholder="E-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className={styles.input}
-          required
-        />
-        <button type="submit" className={`${styles.button} ${styles.primaryButton}`}>
-          Продолжить
-        </button>
-      </form>
+      <div className={styles.title}> ЗАБЫЛИ ПАРОЛЬ </div>
+      <div className={styles.content}>
+        <p className={styles.description}>
+          Пожалуйста, укажите Ваш E-mail адрес для восстановления пароля.
+        </p>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <input
+            type="email"
+            placeholder="E-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={styles.input}
+            required
+          />
+          <button type="submit" className={`${styles.mainButton} ${styles.active}`}>
+            Продолжить
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
