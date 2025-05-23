@@ -25,7 +25,7 @@
 
 .link {
     font-size: 14px;
-    color: #9C9C9C;
+    color: #171717;
     text-decoration: none;
 }
 
@@ -34,22 +34,29 @@
 }
 
 .auth {
-    color: #333;
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 600;
+    align-items: center;
+    display: flex;
     cursor: pointer;
-    text-transform: uppercase;
     padding-top: 12px;
+    height: fit-content;
+    gap: 10px;
 }
 
 .auth:hover {
     text-decoration: underline;
 }
 
+.login {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
 .icon {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    display: inline-block;
 }
 
 @media (max-width: 1260px) {

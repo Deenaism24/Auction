@@ -1,6 +1,5 @@
-// LoginPopup.tsx
 import React, { useState, useRef, useEffect } from 'react';
-import './style.css';
+import * as styles from './style.module.css';
 import closeIcon from '../icons/close.svg';
 import eyeIcon from '../icons/eye.svg';
 import closedEyeIcon from '../icons/closedEye.svg';
@@ -59,66 +58,72 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
   }, [onClose]);
 
   return (
-    <div className='popup' ref={popupRef}>
-      <div className='popupHeader'>
-        <h2 className='title'>АВТОРИЗАЦИЯ</h2>
-        <button className='closeButton' onClick={onClose}>
-          <img src={closeIcon} alt='Close' />
-        </button>
+    <div className={styles.popup} ref={popupRef}>
+      <img src={closeIcon} onClick={onClose} alt='Close' className={styles.closeIcon} />
+      <div className={styles.popupHeader}>
+        <h2 className={styles.title}>АВТОРИЗАЦИЯ</h2>
+
       </div>
 
-      <div className='content'>
-        <p className='description'>
+      <div className={styles.content}>
+        <p className={styles.description}>
           Войдите в свою учетную запись, чтобы делать ставки и регистрироваться для участия в продажах.
         </p>
 
-        <form onSubmit={handleLogin}>
-          <div className='inputContainer'>
+        <form onSubmit={handleLogin} className={styles.form}>
+          <div className={styles.inputContainer}>
             <input
               type="email"
               placeholder="E-mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className='input'
+              className={styles.input}
               required
             />
           </div>
 
-          <div className='inputContainer'>
+          <div className={styles.inputContainer}>
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Пароль"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className='input'
+              className={styles.input}
               required
             />
             <button
               type="button"
-              className='passwordToggle'
+              className={styles.passwordToggle}
               onClick={togglePasswordVisibility}
             >
-              <img src={showPassword ? closedEyeIcon : eyeIcon} alt="Toggle password visibility" />
+              <img
+                src={showPassword ? eyeIcon : closedEyeIcon}
+                alt="Toggle password visibility"
+                className={styles.eyeIcon}
+              />
             </button>
           </div>
 
-          <div className='forgotPassword'>
-            <button type="button" className='forgotPasswordButton'>
+          <div className={styles.forgotPassword}>
+            <button
+              type="button"
+              className={styles.forgotPasswordButton}
+            >
               ЗАБЫЛИ ВАШ ПАРОЛЬ?
             </button>
           </div>
 
-          <div className='buttons'>
+          <div className={styles.buttons}>
             <button
               type="submit"
-              className={`loginButton ${activeButton === 'login' ? 'active' : ''}`}
+              className={`${styles.loginButton} ${activeButton === 'login' ? styles.active : ''}`}
               onClick={handleLoginClick}
             >
               Авторизироваться
             </button>
             <button
               type="button"
-              className={`createAccountButton ${activeButton === 'create' ? 'active' : ''}`}
+              className={`${styles.createAccountButton} ${activeButton === 'create' ? styles.active : ''}`}
               onClick={handleCreateAccountClick}
             >
               Создать новый аккаунт

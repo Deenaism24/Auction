@@ -1,5 +1,6 @@
 import React from 'react';
-import './style.css';
+import * as styles from './style.module.css';
+import closeIcon from '../icons/close.svg';
 
 interface MessageSendProps {
   onClose: () => void;
@@ -7,13 +8,13 @@ interface MessageSendProps {
 
 const MessageSend: React.FC<MessageSendProps> = ({ onClose }) => {
   return (
-    <div className='popup'>
-      <button className='closeButton' onClick={onClose}>×</button>
-      <h2 className='title'>ПИСЬМО ОТПРАВЛЕНО</h2>
-      <p className='description'>
+    <div className={ styles.popup }>
+      <img src={closeIcon} onClick={onClose} alt='Close' className={styles.closeIcon} />
+      <h2 className={ styles.title }>ПИСЬМО ОТПРАВЛЕНО</h2>
+      <p className={ styles.description }>
         На указанный Вами электронный адрес отправлено письмо с инструкцией по восстановлению пароля.
       </p>
-      <button onClick={onClose} className='button primaryButton'>
+      <button onClick={onClose} className={`${styles.button} ${styles.primaryButton}`}>
         Хорошо
       </button>
     </div>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, forwardRef } from 'react';
-import { Link } from 'react-router-dom';
-import './InformationAddition.css';
+import * as styles from './InformationAddition.module.css';
 import Search from './Search';
 import CollectedIcon from '../icons/collected.svg';
 import ExpendedIcon from '../icons/expended.svg';
@@ -10,7 +9,7 @@ import PhoneIcon from '../icons/phone.svg';
 import MailIcon from '../icons/mail.svg';
 import CalendarIcon from '../icons/calendar.svg';
 import CheckmarkIcon from '../icons/checkmark.svg';
-import { routes } from '../routes';
+import { useAuthModal } from '../contexts/AuthFlowModalContext';
 
 interface FilterType {
   name: string;
@@ -48,13 +47,9 @@ const sortOptions = [
   { label: 'По убыванию стартовой стоимости', value: 'price-desc' },
 ];
 
-interface InformationAdditionProps {
-  forwardedRef?: React.RefObject<HTMLInputElement>;
-  onLoginClick?: () => void;
-}
-
-const InformationAddition = forwardRef<HTMLInputElement, InformationAdditionProps>(
-  ({ forwardedRef, onLoginClick = () => {} }, ref) => {
+const InformationAddition = forwardRef<HTMLInputElement, { forwardedRef?: React.RefObject<HTMLInputElement> }>(
+  ({ forwardedRef }, ref) => {
+    const { open } = useAuthModal();
     const [showFiltersMobile, setShowFiltersMobile] = useState(true);
     const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
     const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
@@ -105,29 +100,29 @@ const InformationAddition = forwardRef<HTMLInputElement, InformationAdditionProp
       toggleOpen: () => void,
       onChange: (name: string) => void
     ) => (
-      <div className='filterWrapper'>
-        <div className='sectionWrapper' onClick={toggleOpen}>
-          <span className='sectionTitle'>{title}</span>
+      <div className={ styles.filterWrapper }>
+        <div className={ styles.sectionWrapper } onClick={toggleOpen}>
+          <span className={ styles.sectionTitle }>{title}</span>
           <img
             src={isOpen ? ExpendedIcon : CollectedIcon}
             alt={`Toggle ${title}`}
-            className='sortIcon'
+            className={ styles.sortIcon }
           />
         </div>
         {isOpen && (
-          <ul className='sortDropdown'>
+          <ul className={ styles.sortDropdown }>
             {items.map((item) => (
-              <li key={item.name} className='sortOption'>
-                <label className='checkboxItem'>
+              <li key={item.name} className={ styles.sortOption }>
+                <label className={ styles.checkboxItem }>
                   <input
                     type="checkbox"
-                    className='checkbox'
+                    className={ styles.checkbox }
                     checked={selectedItems.includes(item.name)}
                     onChange={() => onChange(item.name)}
                   />
-                  <div className='filterItem'>
+                  <div className={ styles.filterItem }>
                     <span>{item.name}</span>
-                    <span className='itemCount'>{item.count}</span>
+                    <span className={ styles.itemCount }>{item.count}</span>
                   </div>
                 </label>
               </li>
@@ -138,31 +133,31 @@ const InformationAddition = forwardRef<HTMLInputElement, InformationAdditionProp
     );
 
     return (
-      <div className="informationAddition">
-        <div id='search-section'>
+      <div className={styles.informationAddition}>
+        <div id="search-section">
           <Search ref={ref} />
         </div>
-        <div className='mobileAccordion' onClick={() => setShowFiltersMobile((prev) => !prev)}>
+        <div className={styles.mobileAccordion} onClick={() => setShowFiltersMobile((prev) => !prev)}>
           <span>ИНФОРМАЦИЯ И ДОПОЛНЕНИЕ</span>
           <img
             src={showFiltersMobile ? ExpendedWhiteIcon : CollectedWhiteIcon}
             alt="Toggle"
-            className='mobileAccordionIcon'
+            className={styles.mobileAccordionIcon}
           />
         </div>
 
         {showFiltersMobile && (
-          <div className='backColor'>
-            <div className='topWrapper'>
-              <div className='filterHeader'>
-                <div className='filterTitleRow'>
-                  <div className='filterTitle'>ФИЛЬТРАЦИЯ</div>
+          <div className={styles.backColor}>
+            {/*<div className={styles.topWrapper}>*/}
+              <div className={styles.filterHeader}>
+                <div className={styles.filterTitleRow}>
+                  <div className={styles.filterTitle}>ФИЛЬТРАЦИЯ</div>
                   {hasFilters && (
-                    <img src={CheckmarkIcon} alt="Checkmark" className='filterIcon' />
+                    <img src={CheckmarkIcon} alt="Checkmark" className={styles.filterIcon} />
                   )}
                 </div>
                 <div
-                  className={`clearFilter ${hasFilters ? 'active' : ''}`}
+                  className={`${styles.clearFilter} ${hasFilters ? styles.active : ''}`}
                   onClick={clearFilters}
                 >
                   ОЧИСТИТЬ ФИЛЬТР
@@ -170,22 +165,24 @@ const InformationAddition = forwardRef<HTMLInputElement, InformationAdditionProp
               </div>
 
               <div
-                className='sectionWrapper'
+                className={styles.sectionWrapper}
                 onClick={() => setSortDropdownOpen((prev) => !prev)}
               >
-                <span className='sectionTitle'>СОРТИРОВКА</span>
+                <span className={styles.sectionTitle}>СОРТИРОВКА</span>
                 <img
                   src={sortDropdownOpen ? ExpendedIcon : CollectedIcon}
                   alt="Toggle Sort"
-                  className='sortIcon'
+                  className={styles.sortIcon}
                 />
               </div>
               {sortDropdownOpen && (
-                <ul className='sortDropdown'>
+                <ul className={styles.sortDropdown}>
                   {sortOptions.map((option) => (
                     <li
                       key={option.value}
-                      className={`sortOption ${selectedSort === option.value ? 'activeOption' : ''}`}
+                      className={`${styles.sortOption} ${
+                        selectedSort === option.value ? styles.activeOption : ''
+                      }`}
                       onClick={() => {
                         setSelectedSort(option.value);
                         setSortDropdownOpen(false);
@@ -223,40 +220,37 @@ const InformationAddition = forwardRef<HTMLInputElement, InformationAdditionProp
                 () => setCategoryDropdownOpen((prev) => !prev),
                 (name) => toggleFilter(name, selectedCategories, setSelectedCategories)
               )}
-            </div>
 
-            <div className='filterWrapper'>
+            <div className={styles.filterWrapper}>
               <div
-                className='sectionWrapper'
+                className={styles.sectionWrapper}
                 onClick={() => setInfoDropdownOpen((prev) => !prev)}
               >
-                <span className='infoHeader'>ИНФОРМАЦИЯ</span>
+                <span className={styles.infoHeader}>ИНФОРМАЦИЯ</span>
                 <img
                   src={infoDropdownOpen ? ExpendedIcon : CollectedIcon}
                   alt="Toggle Info"
-                  className='sortIcon'
+                  className={styles.sortIcon}
                 />
               </div>
               {infoDropdownOpen && (
-                <div className='infoSection'>
-                  <ul className='infoList'>
-                    <li className='infoListItem'>
-                    <span className='auctionDate'>
-                      <img src={CalendarIcon} alt="" className='icon' />
-                      ДАТА АУКЦИОНА
-                    </span>
-                      <span className='dateRange'>10 – 13 ЯНВАРЯ</span>
+                <div className={styles.infoSection}>
+                  <ul className={styles.infoList}>
+                    <li className={styles.infoListItem}>
+                      <span className={styles.auctionDate}>
+                        <img src={CalendarIcon} alt="" className={styles.icon} />
+                        ДАТА АУКЦИОНА
+                      </span>
+                      <span className={styles.dateRange}>10 – 13 ЯНВАРЯ</span>
                     </li>
                   </ul>
-
-                  <div className='infoHighlight'>
-                    <div className='infoCeilTitle'>УТРО ПРОДАЖ</div>
+                  <div className={styles.dateTime}>
+                    <div className={styles.infoCeilTitle}>УТРО ПРОДАЖ</div>
                     <div>10–11 Января 6:00</div>
                     <div>Лоты (1–24)</div>
                   </div>
-
-                  <div className='infoHighlight'>
-                    <div className='infoCeilTitle'>ВЕЧЕР ПРОДАЖ</div>
+                  <div className={styles.dateTime}>
+                    <div className={styles.infoCeilTitle}>ВЕЧЕР ПРОДАЖ</div>
                     <div>13 Января 18:00</div>
                     <div>Лоты (25–31)</div>
                   </div>
@@ -264,53 +258,53 @@ const InformationAddition = forwardRef<HTMLInputElement, InformationAdditionProp
               )}
             </div>
 
-            <div className='infoSection'>
-              <h3 className='registrationHeader'>РЕГИСТРАЦИЯ ОТКРЫТА</h3>
-              <p className='infoText'>
+            <div className={styles.infoSection}>
+              <h3 className={styles.registrationHeader}>РЕГИСТРАЦИЯ ОТКРЫТА</h3>
+              <p className={styles.infoText}>
                 Зарегистрируйтесь сейчас, чтобы делать предварительные ставки или делать ставки в
                 реальном времени в нашем цифровом зале продаж.
               </p>
-              <button onClick={ onLoginClick } className='registerButton'>
+              <button onClick={() => open('register')} className={styles.registerButton}>
                 Зарегистрироваться
               </button>
             </div>
 
-            <div className='infoSection'>
-              <div className='contactInfo'>
-                <div className='contactHeader'>Контакты со специалистом</div>
+            <div className={styles.infoSection}>
+              <div className={styles.contactInfo}>
+                <div className={styles.contactHeader}>Контакты со специалистом</div>
 
-                <div className='contactItem'>
-                  <div className='contactLine'>
-                    <img src={PhoneIcon} alt="PHONE" className='icon' />
+                <div className={styles.contactItem}>
+                  <div className={styles.contactLine}>
+                    <img src={PhoneIcon} alt="PHONE" className={styles.icon} />
                     <span>+44 20 7318 4024</span>
                   </div>
-                  <div className='contactLine'>
-                    <img src={MailIcon} alt="MAIL" className='contactIcon' />
-                    <a href="mailto:EditionsLondon@Phillips.com" className='contactLink'>
+                  <div className={styles.contactLine}>
+                    <img src={MailIcon} alt="MAIL" className={styles.contactIcon} />
+                    <a href="mailto:EditionsLondon@Phillips.com" className={styles.contactLink}>
                       EditionsLondon@Phillips.com
                     </a>
                   </div>
                 </div>
 
-                <div className='contactItem'>
-                  <div className='contactName'>Rebecca Tooby</div>
-                  <div className='contactTitle'>
+                <div className={styles.contactItem}>
+                  <div className={styles.contactName}>Rebecca Tooby</div>
+                  <div className={styles.contactTitle}>
                     DesmondSpecialist, Head of Sale, EditionsTooby
                   </div>
-                  <div className='contactLine'>
-                    <img src={MailIcon} alt="MAIL" className='contactIcon' />
-                    <a href="mailto:desmond@phillips.com" className='contactLink'>
+                  <div className={styles.contactLine}>
+                    <img src={MailIcon} alt="MAIL" className={styles.contactIcon} />
+                    <a href="mailto:desmond@phillips.com" className={styles.contactLink}>
                       desmond@phillips.com
                     </a>
                   </div>
                 </div>
 
-                <div className='contactItem'>
-                  <div className='contactName'>Robert Kennan</div>
-                  <div className='contactTitle'>Head of Editions, Europe</div>
-                  <div className='contactLine'>
-                    <img src={MailIcon} alt="MAIL" className='contactIcon' />
-                    <a href="mailto:rkennan@phillips.com" className='contactLink'>
+                <div className={styles.contactItem}>
+                  <div className={styles.contactName}>Robert Kennan</div>
+                  <div className={styles.contactTitle}>Head of Editions, Europe</div>
+                  <div className={styles.contactLine}>
+                    <img src={MailIcon} alt="MAIL" className={styles.contactIcon} />
+                    <a href="mailto:rkennan@phillips.com" className={styles.contactLink}>
                       rkennan@phillips.com
                     </a>
                   </div>
@@ -323,7 +317,5 @@ const InformationAddition = forwardRef<HTMLInputElement, InformationAdditionProp
     );
   }
 );
-
-// InformationAddition.displayName = 'InformationAddition';
 
 export default InformationAddition;

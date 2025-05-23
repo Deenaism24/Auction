@@ -1,6 +1,7 @@
 .informationAddition {
     width: 355px;
     font-family: 'Gilroy', sans-serif;
+    margin-bottom: 40px;
 }
 
 .backColor {
@@ -43,24 +44,12 @@
     text-decoration: underline;
 }
 
-.filterSection {
-    margin-bottom: 24px;
-}
-
 .sectionTitle {
     padding-top: 10px;
     padding-bottom: 10px;
     font-size: 21px;
     font-weight: normal;
     text-transform: uppercase;
-    cursor: pointer;
-}
-
-.sortWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
     cursor: pointer;
 }
 
@@ -95,13 +84,6 @@
     font-weight: bold;
     background-color: #EDEDED;
 }
-
-.checkboxGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
 .checkboxItem {
     display: flex;
     align-items: center;
@@ -118,6 +100,7 @@
     appearance: none;
     cursor: pointer;
     margin-right: 8px;
+    margin-left: 0;
 }
 
 .checkbox:checked {
@@ -131,7 +114,6 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-left: 8px;
 }
 
 .itemCount {
@@ -210,10 +192,15 @@
 }
 
 .infoCeilTitle {
-    color: #9C9C9C;
-    font-weight: bold;
+    color: #6D6D6D;
+    font-weight: 600;
     text-transform: uppercase;
     margin-bottom: 8px;
+}
+
+.dateTime {
+    gap: 6px;
+    padding-bottom: 12px;
 }
 
 .infoText {

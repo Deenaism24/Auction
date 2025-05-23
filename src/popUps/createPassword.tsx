@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './style.css';
+import * as styles from './style.module.css';
+import closeIcon from '../icons/close.svg';
 
 interface CreatePasswordProps {
   onClose: () => void;
@@ -17,19 +18,19 @@ const CreatePassword: React.FC<CreatePasswordProps> = ({ onClose, onSuccess }) =
   };
 
   return (
-    <div className='popup'>
-      <button className='closeButton' onClick={onClose}>×</button>
-      <h2 className='title'>СОЗДАТЬ ПАРОЛЬ</h2>
-      <p className='description'>
+    <div className={styles.popup}>
+      <img src={closeIcon} onClick={onClose} alt='Close' className={styles.closeIcon} />
+      <h2 className={styles.title}>СОЗДАТЬ ПАРОЛЬ</h2>
+      <p className={styles.description}>
         Войдите в свою учетную запись, чтобы делать ставки и регистрироваться для участия в продажах.
       </p>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <input
           type="password"
           placeholder="Новый пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className='input'
+          className={styles.input}
           required
         />
         <input
@@ -37,10 +38,10 @@ const CreatePassword: React.FC<CreatePasswordProps> = ({ onClose, onSuccess }) =
           placeholder="Подтвердите пароль"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          className='input'
+          className={styles.input}
           required
         />
-        <button type="submit" className='button primaryButton'>
+        <button type="submit" className={`${styles.button} ${styles.primaryButton}`}>
           Создать новый пароль
         </button>
       </form>

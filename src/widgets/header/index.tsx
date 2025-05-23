@@ -5,7 +5,7 @@ import SearchIcon from '../../icons/search.svg';
 import StarIcon from '../../icons/star.svg';
 import BagIcon from '../../icons/bag.svg';
 import BurgerIcon from '../../icons/burger.svg';
-import './Header.css';
+import * as styles from './Header.module.css';
 import { NavLink } from 'react-router';
 import { useAuthModal } from '../../contexts/AuthFlowModalContext';
 import { routes } from '../../routes';
@@ -77,84 +77,81 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
 
   return (
     <>
-      <header className='header'>
-        <span className='logo' onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          AUCTION.COM
-        </span>
-        <div className='centerNav'>
-          <NavLink to={routes.access} className='link' onClick={closeMenu}>
+      <header className={styles.header}>
+      <span
+        className={styles.logo}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
+        AUCTION.COM
+      </span>
+        <div className={styles.centerNav}>
+          <NavLink to={routes.access} className={styles.link} onClick={closeMenu}>
             PREFERED ACCESS
           </NavLink>
-          <NavLink to={routes.about} className='link' onClick={closeMenu}>
+          <NavLink to={routes.about} className={styles.link} onClick={closeMenu}>
             ABOUT
           </NavLink>
-          <NavLink to={routes.catalog} className='link' onClick={closeMenu}>
+          <NavLink to={routes.catalog} className={styles.link} onClick={closeMenu}>
             DISCOVER
           </NavLink>
-          <NavLink to={routes.services} className='link' onClick={closeMenu}>
+          <NavLink to={routes.services} className={styles.link} onClick={closeMenu}>
             SERVICES
           </NavLink>
-          <NavLink to={routes.instructions} className='link' onClick={closeMenu}>
+          <NavLink to={routes.instructions} className={styles.link} onClick={closeMenu}>
             КАК КУПИТЬ ИЛИ ПРОДАТЬ
           </NavLink>
         </div>
-        <div className='actions'>
-          <div onClick={handleLoginClick} className='login'>
+        <div className={styles.actions}>
+          <div onClick={handleLoginClick} className={styles.login}>
             АВТОРИЗАЦИЯ
-            <img src={AuthIcon} alt="Вход" className='icon' />
+            <img src={AuthIcon} alt="Вход" className={styles.icon} />
           </div>
           <HashLink smooth to="#search-section" onClick={handleSearchClick}>
-            <img className='icon' alt="Поиск" src={SearchIcon} />
+            <img className={styles.icon} alt="Поиск" src={SearchIcon} />
           </HashLink>
           <NavLink to={routes.favorite} onClick={closeMenu}>
-            <img className='icon' alt="Избранное" src={StarIcon} />
+            <img className={styles.icon} alt="Избранное" src={StarIcon} />
           </NavLink>
           <NavLink to={routes.bag} onClick={closeMenu}>
-            <img className='bagIcon' alt="Корзина" src={BagIcon} />
+            <img className={styles.bagIcon} alt="Корзина" src={BagIcon} />
           </NavLink>
           <img
             src={BurgerIcon}
             alt="Меню"
-            className='burger'
+            className={styles.burger}
             onClick={toggleMenu}
             ref={burgerRef}
           />
         </div>
       </header>
 
-      {/* Оверлей для затемнения фона */}
-      <div
-        className={`burgerOverlay ${isMenuOpen ? 'active' : ''}`}
-        onClick={closeMenu}
-      />
-
       {/* Бургер-меню */}
-      <div className={`burgerMenu ${isMenuOpen ? 'active' : ''}`} ref={menuRef}>
-        <div className="burgerMenuContent">
-          <NavLink to={routes.access} className='burgerMenuLink' onClick={closeMenu}>
+      <div className={`${styles.burgerMenu} ${isMenuOpen ? styles.active : ''}`} ref={menuRef}>
+        <div className={styles.burgerMenuContent}>
+          <NavLink to={routes.access} className={styles.burgerMenuLink} onClick={closeMenu}>
             PREFERED ACCESS
           </NavLink>
-          <NavLink to={routes.about} className='burgerMenuLink' onClick={closeMenu}>
+          <NavLink to={routes.about} className={styles.burgerMenuLink} onClick={closeMenu}>
             ABOUT
           </NavLink>
-          <NavLink to={routes.catalog} className='burgerMenuLink' onClick={closeMenu}>
+          <NavLink to={routes.catalog} className={styles.burgerMenuLink} onClick={closeMenu}>
             DISCOVER
           </NavLink>
-          <NavLink to={routes.services} className='burgerMenuLink' onClick={closeMenu}>
+          <NavLink to={routes.services} className={styles.burgerMenuLink} onClick={closeMenu}>
             SERVICES
           </NavLink>
-          <NavLink to={routes.instructions} className='burgerMenuLink' onClick={closeMenu}>
+          <NavLink to={routes.instructions} className={styles.burgerMenuLink} onClick={closeMenu}>
             КАК КУПИТЬ ИЛИ ПРОДАТЬ
           </NavLink>
           {window.innerWidth <= 650 && (
             <>
-              <span className='burgerMenuLink' onClick={handleLoginClick}>
-                АВТОРИЗАЦИЯ
-              </span>
-              <HashLink smooth to="#search-section" className='burgerMenuLink' onClick={handleSearchClick}>
+            <span className={styles.burgerMenuLink} onClick={handleLoginClick}>
+              АВТОРИЗАЦИЯ
+            </span>
+              <HashLink smooth to="#search-section" className={styles.burgerMenuLink} onClick={handleSearchClick}>
                 ПОИСК
               </HashLink>
-              <NavLink to={routes.favorite} className='burgerMenuLink' onClick={closeMenu}>
+              <NavLink to={routes.favorite} className={styles.burgerMenuLink} onClick={closeMenu}>
                 ИЗБРАННОЕ
               </NavLink>
             </>

@@ -1,7 +1,7 @@
 Auction/
 ├── .gitignore
 ├── .prettierrc
-├── eslint.config.mis
+├── eslint.config.mjs
 ├── package.json
 ├── package-lock.json
 ├── tsconfig.json

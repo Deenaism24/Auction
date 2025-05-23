@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './LotGrid.css';
+import * as styles from './LotGrid.module.css';
 import { generatePath, NavLink } from 'react-router';
 import { routes } from '../routes';
 import CalendarIcon from '../icons/calendar.svg';
@@ -10,7 +10,7 @@ import NextPageAIcon from '../icons/nextpageA.svg';
 import NextPageDIcon from '../icons/nextpageD.svg';
 import DollarIcon from '../icons/dollar.svg';
 import lots from '../default';
-import PhotoPopup from './../popApps/photo';
+import { useZoomPhotoModal } from '../contexts/ZoomPhotoModalContext';
 
 function getWindowWidth() {
   return window.innerWidth;
@@ -19,7 +19,6 @@ function getWindowWidth() {
 const LotGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [windowWidth] = React.useState(getWindowWidth());
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const lotsPerPage = windowWidth >= 600 ? 9 : 4;
 
   const totalPages = Math.ceil(lots.length / lotsPerPage);
@@ -32,49 +31,49 @@ const LotGrid = () => {
     }
   };
 
+  const { open } = useZoomPhotoModal();
   const openImagePopup = (imageUrl: string) => {
-    setSelectedImage(imageUrl);
-  };
-
-  const closeImagePopup = () => {
-    setSelectedImage(null);
+    open(imageUrl);
   };
 
   return (
-    <section className='lotSection'>
-      <div className='gridHeader'>
-        <div className='h2'>Аукцион картин автора</div>
-        <div className='subHeader'>
-          <div className='auctionDate'>
+    <section className={styles.lotSection}>
+      <div className={styles.gridHeader}>
+        <div className={styles.h2}>Аукцион картин автора</div>
+        <div className={styles.subHeader}>
+          <div className={styles.auctionDate}>
             <img src={CalendarIcon} alt="ДАТА АУКЦИОНА" />
             ДАТА АУКЦИОНА
           </div>
-          <div className='dateRange'>10–13 ЯНВАРЯ</div>
+          <div className={styles.dateRange}>10–13 ЯНВАРЯ</div>
         </div>
       </div>
 
-      <div className='grid'>
+      <div className={styles.grid}>
         {currentLots.map((lot) => (
-          <div key={lot.id} className='card'>
-            <div className='imageWrapper' onClick={() => openImagePopup(lot.image)}>
-              <img src={lot.image} alt={lot.title} className='image' />
-              <img src={MagnifierIcon} alt="Посмотреть" className='magnifier' />
+          <div key={lot.id} className={styles.card}>
+            <div className={styles.imageWrapper} onClick={() => openImagePopup(lot.image)}>
+              <img src={lot.image} alt={lot.title} className={styles.image} />
+              <img src={MagnifierIcon} alt="Посмотреть" className={styles.magnifier} />
             </div>
-            <NavLink to={generatePath(routes.openLot, { lot: lot.number })} className='info'>
-              <div className='info'>
-                <div className='numberRow'>
-                  <span className='label'>НОМЕР ЛОТА:</span>
-                  <span className='numberValue'>{lot.number}</span>
+            <NavLink
+              to={generatePath(routes.openLot, { lot: lot.number })}
+              className={styles.info}
+            >
+              <div className={styles.info}>
+                <div className={styles.numberRow}>
+                  НОМЕР ЛОТА:
+                  <span className={styles.numberValue}>{lot.number}</span>
                 </div>
-                <div className='lotName'>
+                <div className={styles.lotName}>
                   {lot.title}
                 </div>
-                <div className='priceBlock'>
-                  <div className='priceLabel'>
+                <div>
+                  <div className={styles.priceLabel}>
                     <img src={DollarIcon} alt="Цена" />
                     СТАРТОВАЯ ЦЕНА
                   </div>
-                  <div className='priceValue'>{lot.price}</div>
+                  <div className={styles.priceValue}>{lot.price}</div>
                 </div>
               </div>
             </NavLink>
@@ -82,21 +81,14 @@ const LotGrid = () => {
         ))}
       </div>
 
-      {selectedImage && (
-        <PhotoPopup
-          imageUrl={selectedImage}
-          onClose={closeImagePopup}
-        />
-      )}
-
-      <div className='pagination'>
+      <div className={styles.pagination}>
         <button
-          className={`pageBtn ${currentPage === 1 ? 'disabled' : ''}`}
+          className={`${styles.pageBtn} ${currentPage === 1 ? styles.disabled : ''}`}
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
           <img src={currentPage === 1 ? BackPageAIcon : BackPageDIcon} alt="Назад" />
-          <div className={`pageBtn ${currentPage === 1 ? 'disabled' : ''}`}>
+          <div className={`${styles.pageBtn} ${currentPage === 1 ? styles.disabled : ''}`}>
             Назад
           </div>
         </button>
@@ -106,7 +98,7 @@ const LotGrid = () => {
           return (
             <button
               key={page}
-              className={`pageNum ${currentPage === page ? 'active' : ''}`}
+              className={`${styles.pageNum} ${currentPage === page ? styles.active : ''}`}
               onClick={() => handlePageChange(page)}
             >
               {page}
@@ -115,11 +107,11 @@ const LotGrid = () => {
         })}
 
         <button
-          className={`pageBtn ${currentPage === totalPages ? 'disabled' : ''}`}
+          className={`${styles.pageBtn} ${currentPage === totalPages ? styles.disabled : ''}`}
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
-          <div className={`pageBtn ${currentPage === totalPages ? 'disabled' : ''}`}>
+          <div className={`${styles.pageBtn} ${currentPage === totalPages ? styles.disabled : ''}`}>
             Вперед
           </div>
           <img src={currentPage === totalPages ? NextPageAIcon : NextPageDIcon} alt="Вперед" />

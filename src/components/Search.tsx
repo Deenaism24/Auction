@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from 'react';
-import './Search.css';
+import * as styles from './Search.module.css';
 import SearchIcon from '../icons/search.svg';
 
 interface SearchProps {
@@ -17,21 +17,21 @@ const Search = forwardRef<HTMLInputElement, SearchProps>(({ onSearch }, ref) => 
   };
 
   return (
-    <div className='searchContainer'>
-      <div className='searchInputWrapper'>
+    <div className={ styles.searchContainer }>
+      <div className={ styles.searchInputWrapper }>
         <input
           type="text"
           value={searchValue}
           onChange={handleChange}
-          className='searchInput'
+          className={ styles.searchInput }
           ref={ref}
         />
         {searchValue === '' && (
-          <div className='scrollingPlaceholder'>
+          <div className={ styles.scrollingPlaceholder }>
             Для поиска по аукциону введите номер лота или название
           </div>
         )}
-        <img src={SearchIcon} alt="Search" className='searchIcon' />
+        <img src={SearchIcon} alt="Search" className={ styles.searchIcon }/>
       </div>
     </div>
   );

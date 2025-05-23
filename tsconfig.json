@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node",
     "target": "es2022",
     "jsx": "react",
     "module": "commonjs",
@@ -10,5 +11,5 @@
     "skipLibCheck": true,
     "outDir": "dist"
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "src/decl.d.ts"],
 }

@@ -44,22 +44,6 @@ module.exports = {
         },
       },
       {
-        test: /\.css$/i,
-        exclude: /\.module\.css$/i,
-        use: [
-          { loader: 'style-loader' },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                auto: true, // Включает модули для файлов *.module.css
-                localIdentName: '[name]__[local]--[hash:base64:5]', // Формат имён классов
-              },
-            },
-          },
-        ],
-      },
-      {
         test: /\.module\.css$/i,
         use: [
           'style-loader',
@@ -68,11 +52,17 @@ module.exports = {
             options: {
               modules: {
                 localIdentName: '[name]__[local]--[hash:base64:5]',
+                exportLocalsConvention: 'asIs',
               },
             },
           },
         ],
-      }
+      },
+      {
+        test: /\.css$/i,
+        exclude: /\.module\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
     ],
   },
   plugins: [

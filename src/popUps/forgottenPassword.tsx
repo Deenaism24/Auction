@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './style.css';
+import * as styles from './style.module.css';
+import closeIcon from '../icons/close.svg';
 
 interface ForgottenPasswordProps {
   onClose: () => void;
@@ -16,22 +17,22 @@ const ForgottenPassword: React.FC<ForgottenPasswordProps> = ({ onClose, onSucces
   };
 
   return (
-    <div className='popup'>
-      <button className='closeButton' onClick={onClose}>×</button>
-      <h2 className='title'>ЗАБЫЛИ ПАРОЛЬ</h2>
-      <p className='description'>
+    <div className={styles.popup}>
+      <img src={closeIcon} onClick={onClose} alt='Close' className={styles.closeIcon} />
+      <h2 className={styles.title}>ЗАБЫЛИ ПАРОЛЬ</h2>
+      <p className={styles.description}>
         Пожалуйста, укажите Ваш E-mail адрес для восстановления пароля.
       </p>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <input
           type="email"
           placeholder="E-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className='input'
+          className={styles.input}
           required
         />
-        <button type="submit" className='button primaryButton'>
+        <button type="submit" className={`${styles.button} ${styles.primaryButton}`}>
           Продолжить
         </button>
       </form>

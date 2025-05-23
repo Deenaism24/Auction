@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './style.css';
+import * as styles from './style.module.css';
+import closeIcon from '../icons/close.svg';
 
 interface RegistrationProps {
   onClose: () => void;
@@ -31,10 +32,10 @@ const RegisterPopup: React.FC<RegistrationProps> = ({ onClose, onSuccess }) => {
   };
 
   return (
-    <div className='popup'>
-      <button className='closeButton' onClick={onClose}>×</button>
-      <h2 className='title'>РЕГИСТРАЦИЯ АККАУНТА</h2>
-      <p className='description'>
+    <div className={ styles.popup }>
+      <img src={closeIcon} onClick={onClose} alt='Close' className={styles.closeIcon} />
+      <h2 className={ styles.title }>РЕГИСТРАЦИЯ АККАУНТА</h2>
+      <p className={ styles.description }>
         Заполните поля для регистрации нового аккаунта в системе.
       </p>
       <form onSubmit={handleSubmit}>
@@ -44,7 +45,7 @@ const RegisterPopup: React.FC<RegistrationProps> = ({ onClose, onSuccess }) => {
           placeholder="ФИО (не обязательно к заполнению)"
           value={formData.name}
           onChange={handleChange}
-          className='input'
+          className={ styles.input }
         />
         <input
           type="email"
@@ -52,7 +53,7 @@ const RegisterPopup: React.FC<RegistrationProps> = ({ onClose, onSuccess }) => {
           placeholder="E-mail адрес"
           value={formData.email}
           onChange={handleChange}
-          className='input'
+          className={ styles.input }
           required
         />
         <input
@@ -61,7 +62,7 @@ const RegisterPopup: React.FC<RegistrationProps> = ({ onClose, onSuccess }) => {
           placeholder="Телефон в формате +7 (xxx) xxx – xx – xx"
           value={formData.phone}
           onChange={handleChange}
-          className='input'
+          className={ styles.input }
           required
         />
         <input
@@ -70,7 +71,7 @@ const RegisterPopup: React.FC<RegistrationProps> = ({ onClose, onSuccess }) => {
           placeholder="Пароль"
           value={formData.password}
           onChange={handleChange}
-          className='input'
+          className={ styles.input }
           required
         />
         <input
@@ -79,7 +80,7 @@ const RegisterPopup: React.FC<RegistrationProps> = ({ onClose, onSuccess }) => {
           placeholder="Подтверждение пароля"
           value={formData.confirmPassword}
           onChange={handleChange}
-          className='input'
+          className={ styles.input }
           required
         />
         <div className='checkboxContainer'>
@@ -89,14 +90,14 @@ const RegisterPopup: React.FC<RegistrationProps> = ({ onClose, onSuccess }) => {
             id="agreement"
             checked={formData.agreed}
             onChange={handleChange}
-            className='checkbox'
+            className={ styles.checkbox }
             required
           />
-          <label htmlFor="agreement" className='checkboxLabel'>
+          <label htmlFor="agreement" className={ styles.checkboxLabel }>
             Я ПРОЧИТАЛ И СОГЛАСЕН С ПРАВИЛАМИ ИСПОЛЬЗОВАНИЯ ПЕРСОНАЛЬНЫХ ДАННЫХ
           </label>
         </div>
-        <button type="submit" className='button primaryButton'>
+        <button type="submit" className={`${styles.button} ${styles.primaryButton}`}>
           Зарегистрироваться
         </button>
       </form>

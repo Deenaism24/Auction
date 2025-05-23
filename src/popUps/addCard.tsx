@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './style.css';
+import * as styles from './style.module.css';
+import closeIcon from '../icons/close.svg';
 
 interface AddCardProps {
   onClose: () => void;
@@ -29,20 +30,20 @@ const AddCard: React.FC<AddCardProps> = ({ onClose, onSuccess }) => {
   };
 
   return (
-    <div className='popup'>
-      <button className='closeButton' onClick={onClose}>×</button>
-      <h2 className='title'>ДОБАВЛЕНИЕ КАРТЫ</h2>
-      <p className='description'>
+    <div className={styles.popup}>
+      <img src={closeIcon} onClick={onClose} alt='Close' className={styles.closeIcon} />
+      <h2 className={styles.title}>ДОБАВЛЕНИЕ КАРТЫ</h2>
+      <p className={styles.description}>
         Введите данные карты для добавления ее в систему
       </p>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <input
           type="text"
           name="number"
           placeholder="Номер карты"
           value={cardData.number}
           onChange={handleChange}
-          className='input'
+          className={styles.input}
           required
         />
         <input
@@ -51,7 +52,7 @@ const AddCard: React.FC<AddCardProps> = ({ onClose, onSuccess }) => {
           placeholder="Фамилия имя как на карте"
           value={cardData.name}
           onChange={handleChange}
-          className='input'
+          className={styles.input}
           required
         />
         <input
@@ -60,7 +61,7 @@ const AddCard: React.FC<AddCardProps> = ({ onClose, onSuccess }) => {
           placeholder="Срок действия карты"
           value={cardData.expiry}
           onChange={handleChange}
-          className='input'
+          className={styles.input}
           required
         />
         <input
@@ -69,10 +70,10 @@ const AddCard: React.FC<AddCardProps> = ({ onClose, onSuccess }) => {
           placeholder="CVV код"
           value={cardData.cvv}
           onChange={handleChange}
-          className='input'
+          className={styles.input}
           required
         />
-        <button type="submit" className='button primaryButton'>
+        <button type="submit" className={`${styles.button} ${styles.primaryButton}`}>
           Добавить карту
         </button>
       </form>
