@@ -3,12 +3,15 @@ import * as styles from './style.module.css';
 import closeIcon from '../icons/close.svg';
 import eyeIcon from '../icons/eye.svg';
 import closedEyeIcon from '../icons/closedEye.svg';
+import { useAuthModal } from '../contexts/AuthFlowModalContext';
+
 
 interface LoginPopupProps {
   onClose: () => void;
 }
 
 const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
+  const { open } = useAuthModal();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -26,8 +29,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
   };
 
   const handleCreateAccountClick = () => {
-    setActiveButton('create');
-    // TODO: Handle create account logic
+    open('register', { email, password });
   };
 
   const handleLoginClick = () => {
@@ -104,6 +106,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
           <button
             type="button"
             className={styles.forgotPasswordButton}
+            onClick={() => open('forgot-password')}
           >
             ЗАБЫЛИ ВАШ ПАРОЛЬ?
           </button>

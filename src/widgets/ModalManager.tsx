@@ -10,7 +10,7 @@ import EmailSentPopup from '../popUps/emailSent';
 import PhotoPopup from '../popUps/photo';
 
 const ModalManager = () => {
-  const { isOpen: authOpen, view, close: closeAuth } = useAuthModal();
+  const { isOpen: authOpen, view, close: closeAuth, data } = useAuthModal();
   const { isOpen: zoomOpen, imageUrl, close: closeZoom } = useZoomPhotoModal();
 
   // Если открыт popup приближения изображения — показываем только его
@@ -25,7 +25,13 @@ const ModalManager = () => {
     case 'login':
       return <LoginPopup onClose={closeAuth} />;
     case 'register':
-      return <RegisterPopup onClose={closeAuth} onSuccess={() => {}} />;
+      return (
+        <RegisterPopup
+          onClose={closeAuth}
+          onSuccess={() => {}}
+          prefillData={data}
+        />
+      );
     case 'forgot-password':
       return <ForgotPasswordPopup onClose={closeAuth} onSuccess={() => {}} />;
     case 'create-password':

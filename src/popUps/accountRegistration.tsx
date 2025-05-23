@@ -5,15 +5,19 @@ import closeIcon from '../icons/close.svg';
 interface RegistrationProps {
   onClose: () => void;
   onSuccess: () => void;
+  prefillData?: {
+    email?: string;
+    password?: string;
+  };
 }
 
-const RegisterPopup: React.FC<RegistrationProps> = ({ onClose, onSuccess }) => {
+const RegisterPopup: React.FC<RegistrationProps> = ({ onClose, onSuccess, prefillData }) => {
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
+    email: prefillData?.email || '',
     phone: '',
-    password: '',
-    confirmPassword: '',
+    password: prefillData?.password || '',
+    confirmPassword: prefillData?.password || '',
     agreed: false
   });
 

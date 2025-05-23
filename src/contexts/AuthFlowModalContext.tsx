@@ -9,22 +9,32 @@ type AuthView =
   | null;
 
 interface AuthModalContextType {
-  open: (view: Exclude<AuthView, null>) => void;
+  open: (view: Exclude<AuthView, null>, data?: any) => void;
   close: () => void;
   view: AuthView;
   isOpen: boolean;
+  data?: any;
 }
+
 
 const AuthModalContext = createContext<AuthModalContextType | undefined>(undefined);
 
 export const AuthModalProvider = ({ children }: { children: ReactNode }) => {
   const [view, setView] = useState<AuthView>(null);
+  const [data, setData] = useState<any>(null);
 
-  const open = (v: Exclude<AuthView, null>) => setView(v);
-  const close = () => setView(null);
+  const open = (v: Exclude<AuthView, null>, d?: any) => {
+    setView(v);
+    setData(d || null);
+  };
+
+  const close = () => {
+    setView(null);
+    setData(null);
+  };
 
   return (
-    <AuthModalContext.Provider value={{ open, close, view, isOpen: view !== null }}>
+    <AuthModalContext.Provider value={{ open, close, view, isOpen: view !== null, data }}>
       {children}
     </AuthModalContext.Provider>
   );
