@@ -280,6 +280,7 @@
 @media (max-width: 1260px) {
     .informationAddition {
         width: 100%;
+        margin-bottom: 0;
     }
     .backColor {
         background-color: #F8F8F8;

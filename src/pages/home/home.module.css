@@ -1,15 +1,11 @@
 body {
     font-family: 'Gilroy', sans-serif;
-    margin: 0;
     background-color: #FFFFFF;
 }
 
 .auctionContainer {
-    padding-top: 30px;
-    padding-right: calc((100% - 1220px)/2);
-    padding-left: calc((100% - 1220px)/2);
+    padding: 30px calc((100% - 1220px) / 2);
     display: flex;
-    margin: 0 auto;
     justify-content: space-between;
 }
 

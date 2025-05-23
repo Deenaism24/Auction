@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import HeroBanner from '../../components/HeroBanner';
 import LotGrid from '../../components/LotGrid';
-import './home.css';
+import * as styles from './home.module.css';
 import InformationAddition from '../../components/InformationAddition';
 import Article from '../../components/Article';
 import Footer from '../../widgets/footer';
@@ -15,7 +15,7 @@ const HomePage: React.FC = () => {
       <Header searchInputRef={searchInputRef} />
       <main>
         <HeroBanner />
-        <div className="auctionContainer">
+        <div className={ styles.auctionContainer }>
           <LotGrid />
           <InformationAddition ref={searchInputRef} />
         </div>

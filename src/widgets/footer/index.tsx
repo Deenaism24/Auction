@@ -7,9 +7,8 @@ import { routes } from '../../routes';
 import AuthIcon from '../../icons/enter.svg';
 
 
-
 const Footer: React.FC = () => {
-const { open } = useAuthModal();
+  const { open } = useAuthModal();
   const handleLoginClick = () => {
     open('login');
   };

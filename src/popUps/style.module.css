@@ -4,24 +4,17 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    padding: 40px;
-    width: 100%;
-    max-width: 430px; /* 350 + 40*2 padding */
+    width: min(90vw, 430px);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     z-index: 1000;
 }
 
-.popupHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 30px;
-    margin-bottom: 40px; /* Расстояние до описания */
-}
-
 .title {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 30px;
     font-size: 31px;
-    font-weight: bold;
+    font-weight: 400;
     color: #171717;
     text-transform: uppercase;
     margin: 0;
@@ -29,21 +22,22 @@
 
 .content {
     width: 350px;
-    margin: 0 auto;
+    margin: auto;
+    gap: 30px;
 }
 
 .description {
     font-size: 18px;
+    font-weight: 400;
     color: #171717;
     margin: 0 0 30px 0; /* 30px до почты */
     line-height: 1.4;
-    text-align: left;
+    text-align: center;
 }
 
 .inputContainer {
     position: relative;
     width: 100%;
-    margin-bottom: 30px; /* 30px до пароля */
 }
 
 .input {
@@ -65,12 +59,8 @@
     padding: 0;
 }
 
-.forgotPassword {
-    text-align: right;
-    margin-bottom: 30px; /* 30px до кнопки авторизации */
-}
-
 .forgotPasswordButton {
+    text-align: left;
     background: none;
     border: none;
     font-size: 12px;
@@ -88,42 +78,24 @@
 .buttons {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* 10px между кнопками */
+    gap: 10px;
+    margin-bottom: 30px;
 }
 
 .loginButton {
     padding: 12px;
     font-size: 16px;
     cursor: pointer;
-    text-transform: uppercase;
-    font-weight: bold;
-    background-color: #171717;
-    color: white;
-    border: 1px solid #171717;
-}
-
-.createAccountButton {
-    padding: 12px;
-    font-size: 16px;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: bold;
+    font-weight: 400;
     background-color: white;
     color: #171717;
     border: 1px solid #171717;
 }
 
 .loginButton.active {
-    background-color: white;
-    color: #171717;
-}
-
-.createAccountButton.active {
     background-color: #171717;
     color: white;
 }
-
-
 
 /* Общие стили для кнопок */
 .button {
@@ -168,13 +140,15 @@
     cursor: pointer;
 }
 
+/* Стили для иконок */
 .closeIcon {
-    top: 32px;          /* Отступ сверху 32px */
-    right: 32px;        /* Отступ справа 32px */
-    width: 32px;        /* Размер иконки */
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 32px;
     height: 32px;
     cursor: pointer;
-    z-index: 1200;      /* Высокий z-index чтобы была поверх других элементов */
+    z-index: 1200;
 }
 
 .eyeIcon {
@@ -201,3 +175,4 @@
     display: block;
     margin: 0 auto;
 }
+

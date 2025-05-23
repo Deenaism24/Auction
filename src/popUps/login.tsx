@@ -60,10 +60,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
   return (
     <div className={styles.popup} ref={popupRef}>
       <img src={closeIcon} onClick={onClose} alt='Close' className={styles.closeIcon} />
-      <div className={styles.popupHeader}>
-        <h2 className={styles.title}>АВТОРИЗАЦИЯ</h2>
-
-      </div>
+      <div className={styles.title}> АВТОРИЗАЦИЯ</div>
 
       <div className={styles.content}>
         <p className={styles.description}>
@@ -104,14 +101,12 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
             </button>
           </div>
 
-          <div className={styles.forgotPassword}>
-            <button
-              type="button"
-              className={styles.forgotPasswordButton}
-            >
-              ЗАБЫЛИ ВАШ ПАРОЛЬ?
-            </button>
-          </div>
+          <button
+            type="button"
+            className={styles.forgotPasswordButton}
+          >
+            ЗАБЫЛИ ВАШ ПАРОЛЬ?
+          </button>
 
           <div className={styles.buttons}>
             <button
@@ -123,7 +118,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
             </button>
             <button
               type="button"
-              className={`${styles.createAccountButton} ${activeButton === 'create' ? styles.active : ''}`}
+              className={`${styles.loginButton} ${activeButton === 'create' ? styles.active : ''}`}
               onClick={handleCreateAccountClick}
             >
               Создать новый аккаунт
