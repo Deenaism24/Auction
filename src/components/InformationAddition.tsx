@@ -134,7 +134,7 @@ const InformationAddition = forwardRef<HTMLInputElement, { forwardedRef?: React.
 
     return (
       <div className={styles.informationAddition}>
-        <div id="search-section">
+        <div >{/*id="search-section">*/}
           <Search ref={ref} />
         </div>
         <div className={styles.mobileAccordion} onClick={() => setShowFiltersMobile((prev) => !prev)}>

@@ -17,7 +17,7 @@ const Search = forwardRef<HTMLInputElement, SearchProps>(({ onSearch }, ref) => 
   };
 
   return (
-    <div className={ styles.searchContainer }>
+    <div className={ styles.searchContainer } id="search-section">
       <div className={ styles.searchInputWrapper }>
         <input
           type="text"
