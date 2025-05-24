@@ -12,6 +12,7 @@
     height: 60px;
     box-sizing: border-box;
     width: 100%;
+    border-bottom: #DBDBDB 1px solid;
 }
 
 .logo {

@@ -18,7 +18,7 @@ export const routes = {
   services: '/services',
   instructions: '/instructions',
   search: '/search',
-  bag: '/bag',
+  bag: '/cart',
   help: 'beee',
   locations: 'beee',
   app: 'beee',

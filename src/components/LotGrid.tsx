@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import * as styles from './LotGrid.module.css';
 import { generatePath, NavLink } from 'react-router';
 import { routes } from '../routes';
-import CalendarIcon from '../icons/calendar.svg';
 import MagnifierIcon from '../icons/magnifier.svg';
 import BackPageAIcon from '../icons/backpageA.svg';
 import BackPageDIcon from '../icons/backpageD.svg';
 import NextPageAIcon from '../icons/nextpageA.svg';
 import NextPageDIcon from '../icons/nextpageD.svg';
 import DollarIcon from '../icons/dollar.svg';
-import lots from '../default';
+import lots from '../lotsList';
 import { useZoomPhotoModal } from '../contexts/ZoomPhotoModalContext';
 
 function getWindowWidth() {
@@ -37,18 +36,7 @@ const LotGrid = () => {
   };
 
   return (
-    <section className={styles.lotSection}>
-      <div className={styles.gridHeader}>
-        <div className={styles.h2}>Аукцион картин автора</div>
-        <div className={styles.subHeader}>
-          <div className={styles.auctionDate}>
-            <img src={CalendarIcon} alt="ДАТА АУКЦИОНА" />
-            ДАТА АУКЦИОНА
-          </div>
-          <div className={styles.dateRange}>10–13 ЯНВАРЯ</div>
-        </div>
-      </div>
-
+    <div>
       <div className={styles.grid}>
         {currentLots.map((lot) => (
           <div key={lot.id} className={styles.card}>
@@ -117,7 +105,7 @@ const LotGrid = () => {
           <img src={currentPage === totalPages ? NextPageAIcon : NextPageDIcon} alt="Вперед" />
         </button>
       </div>
-    </section>
+    </div>
   );
 };
 

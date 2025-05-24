@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { HashLink } from 'react-router-hash-link';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import AuthIcon from '../../icons/enter.svg';
 import SearchIcon from '../../icons/search.svg';
 import StarIcon from '../../icons/star.svg';
 import BagIcon from '../../icons/bag.svg';
 import BurgerIcon from '../../icons/burger.svg';
 import * as styles from './Header.module.css';
-import { NavLink } from 'react-router';
 import { useAuthModal } from '../../contexts/AuthFlowModalContext';
 import { routes } from '../../routes';
 
@@ -20,7 +20,21 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const burgerRef = useRef<HTMLImageElement>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
+  const handleLogoClick = () => {
+    if (location.pathname === routes.home) {
+      // Если уже на главной - скроллим наверх
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      // переходим на главную
+      navigate(routes.home);
+    }
+    closeMenu();
+  };
+
+  // Остальные обработчики остаются без изменений
   const handleLoginClick = () => {
     setIsMenuOpen(false);
     open('login');
@@ -45,7 +59,6 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
     }
   };
 
-  // Закрытие меню при клике вне его области
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -59,7 +72,6 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
       }
     };
 
-    // Закрытие меню при нажатии Escape
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isMenuOpen) {
         closeMenu();
@@ -78,12 +90,12 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
   return (
     <>
       <header className={styles.header}>
-      <span
-        className={styles.logo}
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      >
-        AUCTION.COM
-      </span>
+        <span
+          className={styles.logo}
+          onClick={handleLogoClick}
+        >
+          AUCTION.COM
+        </span>
         <div className={styles.centerNav}>
           <NavLink to={routes.access} className={styles.link} onClick={closeMenu}>
             PREFERED ACCESS
@@ -145,9 +157,9 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
           </NavLink>
           {window.innerWidth <= 650 && (
             <>
-            <span className={styles.burgerMenuLink} onClick={handleLoginClick}>
-              АВТОРИЗАЦИЯ
-            </span>
+              <span className={styles.burgerMenuLink} onClick={handleLoginClick}>
+                АВТОРИЗАЦИЯ
+              </span>
               <HashLink smooth to="#search-section" className={styles.burgerMenuLink} onClick={handleSearchClick}>
                 ПОИСК
               </HashLink>

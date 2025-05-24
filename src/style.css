@@ -1,7 +1,50 @@
 body {
     font-family: 'Gilroy', sans-serif;
+    margin: 0;
 }
 
 #search-section {
     scroll-margin-top: 80px;
+}
+
+.main {
+    font-family: 'Gilroy', sans-serif;
+    background-color: #FFFFFF;
+    padding-left: calc((100% - 1220px)/2) ;
+    padding-right: calc((100% - 1220px)/2);
+}
+
+.auctionContainer {
+    padding: 30px calc((100% - 1220px) / 2);
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 1260px) {
+    .auctionContainer {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .auctionContainer > :first-child {
+        order: 2;
+    }
+
+    .auctionContainer > :nth-child(2) {
+        order: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .main {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+@media (max-width: 425px) {
+    .main {
+        padding-left: max(20px, calc((100% - 335px)/2));
+        padding-right: max(20px, calc((100% - 335px)/2));
+    }
 }

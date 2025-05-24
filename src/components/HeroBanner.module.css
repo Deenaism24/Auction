@@ -4,6 +4,7 @@
     object-fit: cover;
     object-position: center;
     display: block;
+    padding: 0;
 }
 
 @media (max-width: 800px) {

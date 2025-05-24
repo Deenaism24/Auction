@@ -1,15 +1,16 @@
 import React, { useState, useEffect, forwardRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import * as styles from './InformationAddition.module.css';
 import Search from './Search';
+import Contacts from './Contacts';
 import CollectedIcon from '../icons/collected.svg';
 import ExpendedIcon from '../icons/expended.svg';
 import CollectedWhiteIcon from '../icons/collectedWhite.svg';
 import ExpendedWhiteIcon from '../icons/expendedWhite.svg';
-import PhoneIcon from '../icons/phone.svg';
-import MailIcon from '../icons/mail.svg';
 import CalendarIcon from '../icons/calendar.svg';
 import CheckmarkIcon from '../icons/checkmark.svg';
 import { useAuthModal } from '../contexts/AuthFlowModalContext';
+import {routes} from '../routes';
 
 interface FilterType {
   name: string;
@@ -49,6 +50,8 @@ const sortOptions = [
 
 const InformationAddition = forwardRef<HTMLInputElement, { forwardedRef?: React.RefObject<HTMLInputElement> }>(
   ({ forwardedRef }, ref) => {
+    const location = useLocation();
+    const isFavoritePage = location.pathname === routes.favorite;
     const { open } = useAuthModal();
     const [showFiltersMobile, setShowFiltersMobile] = useState(true);
     const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
@@ -132,11 +135,19 @@ const InformationAddition = forwardRef<HTMLInputElement, { forwardedRef?: React.
       </div>
     );
 
+    if (isFavoritePage) {
+      return (
+        <div className={styles.informationAddition}>
+          <Search ref={ref} />
+          <Contacts />
+        </div>
+      );
+    }
     return (
       <div className={styles.informationAddition}>
-        <div >{/*id="search-section">*/}
+        {/*<div>*/}
           <Search ref={ref} />
-        </div>
+        {/*</div>*/}
         <div className={styles.mobileAccordion} onClick={() => setShowFiltersMobile((prev) => !prev)}>
           <span>ИНФОРМАЦИЯ И ДОПОЛНЕНИЕ</span>
           <img
@@ -148,7 +159,6 @@ const InformationAddition = forwardRef<HTMLInputElement, { forwardedRef?: React.
 
         {showFiltersMobile && (
           <div className={styles.backColor}>
-            {/*<div className={styles.topWrapper}>*/}
               <div className={styles.filterHeader}>
                 <div className={styles.filterTitleRow}>
                   <div className={styles.filterTitle}>ФИЛЬТРАЦИЯ</div>
@@ -268,49 +278,7 @@ const InformationAddition = forwardRef<HTMLInputElement, { forwardedRef?: React.
                 Зарегистрироваться
               </button>
             </div>
-
-            <div className={styles.infoSection}>
-              <div className={styles.contactInfo}>
-                <div className={styles.contactHeader}>Контакты со специалистом</div>
-
-                <div className={styles.contactItem}>
-                  <div className={styles.contactLine}>
-                    <img src={PhoneIcon} alt="PHONE" className={styles.icon} />
-                    <span>+44 20 7318 4024</span>
-                  </div>
-                  <div className={styles.contactLine}>
-                    <img src={MailIcon} alt="MAIL" className={styles.contactIcon} />
-                    <a href="mailto:EditionsLondon@Phillips.com" className={styles.contactLink}>
-                      EditionsLondon@Phillips.com
-                    </a>
-                  </div>
-                </div>
-
-                <div className={styles.contactItem}>
-                  <div className={styles.contactName}>Rebecca Tooby</div>
-                  <div className={styles.contactTitle}>
-                    DesmondSpecialist, Head of Sale, EditionsTooby
-                  </div>
-                  <div className={styles.contactLine}>
-                    <img src={MailIcon} alt="MAIL" className={styles.contactIcon} />
-                    <a href="mailto:desmond@phillips.com" className={styles.contactLink}>
-                      desmond@phillips.com
-                    </a>
-                  </div>
-                </div>
-
-                <div className={styles.contactItem}>
-                  <div className={styles.contactName}>Robert Kennan</div>
-                  <div className={styles.contactTitle}>Head of Editions, Europe</div>
-                  <div className={styles.contactLine}>
-                    <img src={MailIcon} alt="MAIL" className={styles.contactIcon} />
-                    <a href="mailto:rkennan@phillips.com" className={styles.contactLink}>
-                      rkennan@phillips.com
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Contacts/>
           </div>
         )}
       </div>
