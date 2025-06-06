@@ -72,6 +72,7 @@
 
 .burger {
     display: none;
+    cursor: pointer;
 }
 
 .burgerMenu {

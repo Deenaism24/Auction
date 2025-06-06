@@ -10,7 +10,7 @@ Auction/
 │   ├── app.tsx
 │   ├── decl.d.ts
 │   ├── index.html
-│   ├── index.tsx
+│   ├── ContentPage.tsx
 │   ├── routes.ts
 │   ├── style.css
 │   ├── contexts/
@@ -34,13 +34,21 @@ Auction/
 │   ├── icons/
 │   ├── images/
 │   ├── pages/
-│   │   ├── bag/
+│   │   ├── cart/
 │   │   ├── catalog/
 │   │   ├── favorite/
 │   │   ├── home/
 │   │   ├── newsCatalog/
 │   │   ├── openLot/
-│   │   └── personalAccount/
+│   │   ├── personalAccount/
+│   │   ├── access/
+│   │   ├── about/
+│   │   ├── services/
+│   │   ├── instructions/
+│   │   ├── support/
+│   │   ├── corporate/
+│   │   ├── more/
+│   │   └── ContentPage.tsx
 │   ├── popApps/
 │   │   ├── accountRegistration.tsx
 │   │   ├── addCard.tsx
@@ -52,10 +60,10 @@ Auction/
 │   │   └── style.css
 │   └── widgets/
 │       ├── footer/
-│       │   ├── index.tsx
+│       │   ├── ContentPage.tsx
 │       │   └── Footer.css
 │       └── header/
-│           ├── index.tsx
+│           ├── ContentPage.tsx
 │           └── Header.css
 ├── dist/
 ├── node_modules/

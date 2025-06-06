@@ -1,0 +1,122 @@
+.footerLinksContainer {
+    padding: 40px calc((100% - 1220px) / 2);
+    margin: 0 auto;
+    max-width: 1220px;
+    font-family: 'Gilroy', sans-serif;
+    color: #171717;
+    box-sizing: border-box;
+}
+
+.footerLinksTitle { /* Renamed from .pageTitle */
+    font-size: 41px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #DBDBDB;
+    padding-bottom: 20px;
+}
+
+.linkGroup {
+    margin-bottom: 30px;
+}
+
+.groupTitle {
+    font-size: 27px;
+    font-weight: normal;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.linksList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.linkItem {
+    /* Styles for list items */
+}
+
+.link { /* Styles for the clickable div/span */
+    font-size: 14px;
+    color: #171717;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    cursor: pointer;
+}
+
+.link:hover {
+    color: #4F7B9E;
+    text-decoration: underline;
+}
+
+/* A little space between link groups on smaller screens in case margin-bottom is reduced */
+@media (max-width: 1260px) {
+    .linkGroup {
+        margin-bottom: 20px;
+    }
+}
+
+
+/* Responsive styles */
+@media (max-width: 1260px) {
+    .footerLinksContainer { /* Renamed */
+        padding-left: 10%;
+        padding-right: 10%;
+        max-width: none;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+    .footerLinksTitle { /* Renamed */
+        font-size: 31px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+    }
+    .linkGroup {
+        margin-bottom: 20px;
+    }
+    .groupTitle {
+        font-size: 21px;
+        margin-bottom: 10px;
+    }
+    .link {
+        font-size: 12px;
+    }
+    .linksList {
+        gap: 5px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footerLinksContainer { /* Renamed */
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+@media (max-width: 425px) {
+    .footerLinksContainer { /* Renamed */
+        padding-left: max(20px, calc((100% - 335px)/2));
+        padding-right: max(20px, calc((100% - 335px)/2));
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    .footerLinksTitle { /* Renamed */
+        font-size: 16px;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+    }
+    .groupTitle {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    .link {
+        font-size: 10px;
+    }
+    .linksList {
+        gap: 3px;
+    }
+}

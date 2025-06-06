@@ -23,6 +23,9 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Находится ли текущая страница на маршруте информации
+  const isInformationPage = location.pathname === routes.information;
+
   const handleLogoClick = () => {
     if (location.pathname === routes.home) {
       // Если уже на главной - скроллим наверх
@@ -34,7 +37,6 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
     closeMenu();
   };
 
-  // Остальные обработчики остаются без изменений
   const handleLoginClick = () => {
     setIsMenuOpen(false);
     open('login');
@@ -51,13 +53,17 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
   const handleSearchClick = () => {
     closeMenu();
     const searchSection = document.getElementById('search-section');
-    if (searchSection) {
+
+    if (searchSection && (location.pathname === routes.home || location.pathname === routes.favorite)) {
       searchSection.scrollIntoView({ behavior: 'smooth' });
       setTimeout(() => {
         searchInputRef.current?.focus();
       }, 500);
+    } else {
+      navigate(`${routes.home}#search-section`);
     }
   };
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -96,23 +102,25 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
         >
           AUCTION.COM
         </span>
-        <div className={styles.centerNav}>
-          <NavLink to={routes.access} className={styles.link} onClick={closeMenu}>
-            PREFERED ACCESS
-          </NavLink>
-          <NavLink to={routes.about} className={styles.link} onClick={closeMenu}>
-            ABOUT
-          </NavLink>
-          <NavLink to={routes.catalog} className={styles.link} onClick={closeMenu}>
-            DISCOVER
-          </NavLink>
-          <NavLink to={routes.services} className={styles.link} onClick={closeMenu}>
-            SERVICES
-          </NavLink>
-          <NavLink to={routes.instructions} className={styles.link} onClick={closeMenu}>
-            КАК КУПИТЬ ИЛИ ПРОДАТЬ
-          </NavLink>
-        </div>
+        {!isInformationPage && (
+          <div className={styles.centerNav}>
+            <HashLink smooth to={routes.access} className={styles.link} onClick={closeMenu}>
+              PREFERED ACCESS
+            </HashLink>
+            <HashLink smooth to={routes.about} className={styles.link} onClick={closeMenu}>
+              ABOUT
+            </HashLink>
+            <NavLink to={routes.article} className={styles.link} onClick={closeMenu}>
+              DISCOVER
+            </NavLink>
+            <HashLink smooth to={routes.services} className={styles.link} onClick={closeMenu}>
+              SERVICES
+            </HashLink>
+            <HashLink smooth to={routes.instructions} className={styles.link} onClick={closeMenu}>
+              КАК КУПИТЬ ИЛИ ПРОДАТЬ
+            </HashLink>
+          </div>
+        )}
         <div className={styles.actions}>
           <div onClick={handleLoginClick} className={styles.login}>
             АВТОРИЗАЦИЯ
@@ -124,7 +132,7 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
           <NavLink to={routes.favorite} onClick={closeMenu}>
             <img className={styles.icon} alt="Избранное" src={StarIcon} />
           </NavLink>
-          <NavLink to={routes.bag} onClick={closeMenu}>
+          <NavLink to={routes.cart} onClick={closeMenu}>
             <img className={styles.bagIcon} alt="Корзина" src={BagIcon} />
           </NavLink>
           <img
@@ -140,21 +148,40 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
       {/* Бургер-меню */}
       <div className={`${styles.burgerMenu} ${isMenuOpen ? styles.active : ''}`} ref={menuRef}>
         <div className={styles.burgerMenuContent}>
-          <NavLink to={routes.access} className={styles.burgerMenuLink} onClick={closeMenu}>
+          <HashLink smooth to={routes.access} className={styles.burgerMenuLink} onClick={closeMenu}>
             PREFERED ACCESS
-          </NavLink>
-          <NavLink to={routes.about} className={styles.burgerMenuLink} onClick={closeMenu}>
+          </HashLink>
+          <HashLink smooth to={routes.about} className={styles.burgerMenuLink} onClick={closeMenu}>
             ABOUT
-          </NavLink>
-          <NavLink to={routes.catalog} className={styles.burgerMenuLink} onClick={closeMenu}>
+          </HashLink>
+          <NavLink to={routes.article} className={styles.burgerMenuLink} onClick={closeMenu}>
             DISCOVER
           </NavLink>
-          <NavLink to={routes.services} className={styles.burgerMenuLink} onClick={closeMenu}>
+          <HashLink smooth to={routes.services} className={styles.burgerMenuLink} onClick={closeMenu}>
             SERVICES
-          </NavLink>
-          <NavLink to={routes.instructions} className={styles.burgerMenuLink} onClick={closeMenu}>
+          </HashLink>
+          <HashLink smooth to={routes.instructions} className={styles.burgerMenuLink} onClick={closeMenu}>
             КАК КУПИТЬ ИЛИ ПРОДАТЬ
-          </NavLink>
+          </HashLink>
+
+            <HashLink
+              smooth
+              to={routes.ROUTE_TO_FOOTER_LINKS_SUPPORT}
+              className={styles.burgerMenuLink}
+              onClick={closeMenu}
+            >
+              ПОДДЕРЖКА
+            </HashLink>
+
+            <HashLink
+              smooth
+              to={routes.ROUTE_TO_FOOTER_LINKS_CORPORATE}
+              className={styles.burgerMenuLink}
+              onClick={closeMenu}
+            >
+              СОТРУДНИЧЕСТВО
+            </HashLink>
+
           {window.innerWidth <= 650 && (
             <>
               <span className={styles.burgerMenuLink} onClick={handleLoginClick}>

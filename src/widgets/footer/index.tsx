@@ -1,66 +1,82 @@
 import React from 'react';
 import * as styles from './Footer.module.css';
-import { NavLink } from 'react-router';
 import { useAuthModal } from '../../contexts/AuthFlowModalContext';
 import { routes } from '../../routes';
+import { downloadEmptyPdf } from '../../utils/downloadPDF';
+import { useConfirmationModal } from '../../contexts/ConfirmationModalContext';
 
 import AuthIcon from '../../icons/enter.svg';
 
-
 const Footer: React.FC = () => {
   const { open } = useAuthModal();
+  const { openConfirmation } = useConfirmationModal();
+
   const handleLoginClick = () => {
     open('login');
   };
+
+  const handleDownloadClick = async (linkText: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    const filename = `${linkText.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '_')}.pdf`;
+    const message = 'Скачать файл';
+
+    const confirmed = await openConfirmation(message, filename);
+
+    if (confirmed) {
+      downloadEmptyPdf(filename);
+    }
+  };
+
+
   return (
     <>
       <footer className={styles.footer}>
         {/* Support Column */}
         <div className={styles.column}>
           <h3 className={styles.columnTitle}>SUPPORT</h3>
-          <NavLink to={routes.help} className={styles.link}>
-            HELP CENTER
-          </NavLink>
-          <NavLink to={routes.locations} className={styles.link}>
-            LOCATIONS
-          </NavLink>
-          <NavLink to={routes.app} className={styles.link}>
-            DOWNLOAD THE APP
-          </NavLink>
+          {routes.footerLinks.support.map(link => (
+            <div
+              key={link.path} // Use link.path as key
+              className={styles.link} // Apply link styles
+              onClick={(e) => handleDownloadClick(link.text, e)} // !!! ИЗМЕНЕНИЕ: Pass event object
+              style={{ cursor: 'pointer' }}
+            >
+              {link.text}
+            </div>
+          ))}
         </div>
 
         {/* Corporate Column */}
         <div className={styles.column}>
           <h3 className={styles.columnTitle}>CORPORATE</h3>
-          <NavLink to={routes.press} className={styles.link}>
-            PRESS
-          </NavLink>
-          <NavLink to={routes.privacy} className={styles.link}>
-            PRIVACY POLICY
-          </NavLink>
-          <NavLink to={routes.governance} className={styles.link}>
-            CORPORATE GOVERNANCE
-          </NavLink>
-          <NavLink to={routes.careers} className={styles.link}>
-            CAREERS
-          </NavLink>
+          {routes.footerLinks.corporate.map(link => (
+            <div
+              key={link.path}
+              className={styles.link}
+              onClick={(e) => handleDownloadClick(link.text, e)}
+              style={{ cursor: 'pointer' }}
+            >
+              {link.text}
+            </div>
+          ))}
         </div>
 
         {/* More Column */}
         <div className={styles.column}>
           <h3 className={styles.columnTitle}>MORE...</h3>
-          <NavLink to={routes.security} className={styles.link}>
-            SECURITY
-          </NavLink>
-          <NavLink to={routes.terms} className={styles.link}>
-            TERMS & CONDITIONS
-          </NavLink>
-          <NavLink to={routes.business} className={styles.link}>
-            CONDITIONS OF BUSINESS
-          </NavLink>
-          <NavLink to={routes.slavary} className={styles.link}>
-            MODERN SLAVERY STATEMENT
-          </NavLink>
+          {routes.footerLinks.more.map(link => (
+            <div
+              key={link.path}
+              className={styles.link}
+              onClick={(e) => handleDownloadClick(link.text, e)}
+              style={{ cursor: 'pointer' }}
+            >
+              {link.text}
+            </div>
+          ))}
         </div>
 
         {/* Login Button */}

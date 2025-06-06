@@ -1,0 +1,184 @@
+.sectionContainer {
+    padding: 40px calc((100% - 1220px) / 2);
+    margin: 0 auto; /* Убираем margin-left/right и центрируем */
+    max-width: 1220px; /* Ограничиваем максимальную ширину контента */
+
+    border-top: 1px solid #DBDBDB;
+    font-family: 'Gilroy', sans-serif;
+    color: #171717;
+    box-sizing: border-box; /* Учитываем padding в ширине */
+}
+
+
+/* Общий стиль для заголовка секции (h2) */
+.sectionTitle {
+    font-size: 31px;
+    font-weight: normal;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+/* Общий стиль для основного текста (p) */
+.sectionText {
+    /* !!! ИСПРАВЛЕНИЕ: Базовый размер текста */
+    font-size: 16px; /* Увеличим базовый размер текста */
+    line-height: 1.6; /* Чуть увеличим межстрочный интервал для лучшей читаемости */
+    color: #9C9C9C;
+}
+
+/* Общий стиль для контейнера контента внутри секции (для gap) */
+.sectionContent {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Стандартный промежуток между параграфами/элементами */
+}
+
+/* Специфический стиль для контейнера контента секции "Как купить или продать" (больший gap между шагами) */
+.howToBuySellSectionContent {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Больший промежуток между блоками "Купить" и "Продать" */
+}
+
+/* Специфический стиль для подзаголовка (h3 в "Как купить или продать") */
+.stepTitle {
+    font-size: 21px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+/* Специфический стиль для списков (ul, ol) */
+.sectionList {
+    list-style: disc inside;
+    padding-left: 0;
+    margin: 0;
+    /* !!! ИСПРАВЛЕНИЕ: Базовый размер шрифта списка */
+    font-size: 16px; /* Увеличим базовый размер списка */
+    line-height: 1.6;
+    color: #9C9C9C;
+}
+
+.sectionList li {
+    margin-bottom: 5px;
+}
+
+/* Специфический стиль для нумерованного списка в "Как купить или продать" */
+.howToBuySellStepsList {
+    list-style: decimal inside;
+    padding-left: 0;
+    margin: 0;
+    /* !!! ИСПРАВЛЕНИЕ: Базовый размер шрифта списка */
+    font-size: 16px; /* Увеличим базовый размер списка */
+    line-height: 1.6;
+    color: #9C9C9C;
+}
+
+.howToBuySellStepsList li {
+    margin-bottom: 10px;
+}
+
+
+/* Специфический стиль для кнопки/ссылки в секции Discover */
+.sectionLinkButton {
+    display: inline-block;
+    background-color: transparent;
+    color: #000;
+    border: 1px solid #171717;
+    cursor: pointer;
+    text-align: center;
+    padding: 12px 20px;
+    text-transform: uppercase;
+    /* !!! ИСПРАВЛЕНИЕ: Базовый размер шрифта кнопки */
+    font-size: 16px; /* Увеличим базовый размер кнопки */
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-top: 10px;
+}
+
+.sectionLinkButton:hover {
+    background-color: #171717;
+    color: #fff;
+    text-decoration: none;
+}
+
+
+/* Адаптивность */
+@media (max-width: 1260px) {
+    .sectionContainer {
+        /* !!! ИСПРАВЛЕНИЕ: Адаптивные отступы как у хедера */
+        padding-left: 10%;
+        padding-right: 10%;
+        margin: 0 auto; /* Центрирование на меньших экранах */
+        max-width: none; /* Убираем ограничение ширины */
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+    .sectionTitle {
+        margin-bottom: 15px;
+        /* Размер заголовка остается 31px до 425px */
+    }
+    /* !!! ИСПРАВЛЕНИЕ: Размер основного текста и списков на экранах < 1260px */
+    .sectionText,
+    .sectionList,
+    .sectionList li,
+    .howToBuySellStepsList,
+    .howToBuySellStepsList li {
+        font-size: 14px; /* Уменьшаем размер текста и списков до 14px */
+        line-height: 1.5;
+    }
+    .stepTitle {
+        /* Размер подзаголовка остается 21px до 425px */
+    }
+    .sectionLinkButton {
+        /* Размер кнопки остается 16px до 425px */
+    }
+
+    .sectionContent {
+        gap: 10px;
+    }
+    .howToBuySellSectionContent {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sectionContainer {
+        /* Отступы как у хедера на этих разрешениях */
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+
+@media (max-width: 425px) {
+    .sectionContainer {
+        /* Отступы как у хедера на самых маленьких разрешениях */
+        padding-left: max(20px, calc((100% - 335px)/2));
+        padding-right: max(20px, calc((100% - 335px)/2));
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    .sectionTitle {
+        font-size: 16px; /* Уменьшаем размер заголовка */
+        margin-bottom: 10px;
+    }
+    .sectionText,
+    .sectionList,
+    .sectionList li,
+    .howToBuySellStepsList,
+    .howToBuySellStepsList li {
+        font-size: 12px; /* Уменьшаем размер текста и списков */
+        line-height: 1.4;
+    }
+    .stepTitle {
+        font-size: 14px; /* Уменьшаем размер подзаголовка */
+        margin-bottom: 10px;
+    }
+    .sectionLinkButton {
+        font-size: 12px; /* Уменьшаем размер шрифта кнопки */
+        padding: 10px 15px;
+        margin-top: 5px;
+    }
+
+}
