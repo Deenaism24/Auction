@@ -6,7 +6,6 @@ export const routes = {
   openLot: '/lot/:lot?',
   article: '/article/:id?',
   personalAccount: '/profile',
-  cart: '/cart',
   // Header
   information: '/information',
   // Header anchors

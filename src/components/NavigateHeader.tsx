@@ -39,7 +39,6 @@ const NavigateHeader = () => {
 const getDisplayName = (path: string) => {
   const names: Record<string, string> = {
     'favorite': 'Избранное',
-    'cart': 'Корзина',
     'lots': 'Лоты',
     'profile': 'Профиль',
   };

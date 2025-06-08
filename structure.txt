@@ -1,71 +1,62 @@
-Auction/
+├── components/
+│   ├── Article.module.css
+│   ├── Article.tsx
+│   ├── AuctionLotGrid.tsx
+│   ├── Contacts.tsx
+│   ├── FavoritesGrid.tsx
+│   ├── FooterLinks.module.css
+│   ├── FooterLinks.tsx
+│   ├── HeroBanner.module.css
+│   ├── HeroBanner.tsx
+│   ├── Information.module.css
+│   ├── Information.tsx
+│   ├── InformationAddition.module.css
+│   ├── InformationAddition.tsx
+│   ├── LotGrid.module.css
+│   ├── LotGrid.tsx
+│   ├── NavigateHeader.module.css
+│   ├── NavigateHeader.tsx
+│   ├── Search.module.css
+│   └── Search.tsx
+├── contexts/
+│   ├── AddCardModalContext.tsx
+│   ├── AuthFlowModalContext.tsx
+│   ├── ConfirmationModalContext.tsx
+│   ├── DeleteFavoriteModalContext.tsx
+│   └── ZoomPhotoModalContext.tsx
+│
+├── icons/
+├── images/
+│
+├── pages/
+│   ├── favorite/
+│   ├── footerLinks/
+│   ├── home/
+│   ├── information/
+│   ├── openLot/
+│   └── personalAccount/
+├── popApps/
+│
+├── utils/
+│   └── downloadPDF.ts
+│
+├── widgets/
+│
+├── app.tsx
+├── decl.d.ts
+├── index.html
+├── index.tsx
+├── lotsList.tsx
+├── routes.ts
+├── style.css
+│
+├── .eslintcache
 ├── .gitignore
 ├── .prettierrc
-├── eslint.config.mjs
+├── esllnt.config.mjs
+├── favicon.ico
 ├── package.json
 ├── package-lock.json
+├── structure.txt
 ├── tsconfig.json
-├── webpack.config.js
-├── src/
-│   ├── app.tsx
-│   ├── decl.d.ts
-│   ├── index.html
-│   ├── ContentPage.tsx
-│   ├── routes.ts
-│   ├── style.css
-│   ├── contexts/
-│   │   ├── AuthFlowModalContext.tsx
-│   │   ├── AddCardModalContext.tsx
-│   │   ├── DeleteFavoriteModalContext.tsx
-│   │   └── ZoomPhotoModalContext.tsx
-│   ├── components/
-│   │   ├── Article.css
-│   │   ├── Article.tsx
-│   │   ├── Footer.css
-│   │   ├── Footer.tsx
-│   │   ├── HeroBanner.css
-│   │   ├── HeroBanner.tsx
-│   │   ├── InformationAddition.css
-│   │   ├── InformationAddition.tsx
-│   │   ├── LotGrid.css
-│   │   ├── LotGrid.tsx
-│   │   ├── Search.css
-│   │   └── Search.tsx
-│   ├── icons/
-│   ├── images/
-│   ├── pages/
-│   │   ├── cart/
-│   │   ├── catalog/
-│   │   ├── favorite/
-│   │   ├── home/
-│   │   ├── newsCatalog/
-│   │   ├── openLot/
-│   │   ├── personalAccount/
-│   │   ├── access/
-│   │   ├── about/
-│   │   ├── services/
-│   │   ├── instructions/
-│   │   ├── support/
-│   │   ├── corporate/
-│   │   ├── more/
-│   │   └── ContentPage.tsx
-│   ├── popApps/
-│   │   ├── accountRegistration.tsx
-│   │   ├── addCard.tsx
-│   │   ├── messageSend.tsx
-│   │   ├── deleteFavorite.tsx
-│   │   ├── forgottenPassword.tsx
-│   │   ├── login.tsx
-│   │   ├── cratePassword.tsx
-│   │   └── style.css
-│   └── widgets/
-│       ├── footer/
-│       │   ├── ContentPage.tsx
-│       │   └── Footer.css
-│       └── header/
-│           ├── ContentPage.tsx
-│           └── Header.css
-├── dist/
-├── node_modules/
-├── @types/
-└── idea/
+└── webpack.config.js

@@ -1,3 +1,4 @@
+// src/pages/favorite/index.tsx
 import React, { useRef } from 'react';
 import FavoritesGrid from '../../components/FavoritesGrid';
 import InformationAddition from '../../components/InformationAddition';

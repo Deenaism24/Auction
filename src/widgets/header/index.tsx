@@ -4,7 +4,6 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import AuthIcon from '../../icons/enter.svg';
 import SearchIcon from '../../icons/search.svg';
 import StarIcon from '../../icons/star.svg';
-import BagIcon from '../../icons/bag.svg';
 import BurgerIcon from '../../icons/burger.svg';
 import * as styles from './Header.module.css';
 import { useAuthModal } from '../../contexts/AuthFlowModalContext';
@@ -130,10 +129,7 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
             <img className={styles.icon} alt="Поиск" src={SearchIcon} />
           </HashLink>
           <NavLink to={routes.favorite} onClick={closeMenu}>
-            <img className={styles.icon} alt="Избранное" src={StarIcon} />
-          </NavLink>
-          <NavLink to={routes.cart} onClick={closeMenu}>
-            <img className={styles.bagIcon} alt="Корзина" src={BagIcon} />
+            <img className={styles.favIcon} alt="Избранное" src={StarIcon} />
           </NavLink>
           <img
             src={BurgerIcon}
@@ -190,9 +186,6 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
               <HashLink smooth to="#search-section" className={styles.burgerMenuLink} onClick={handleSearchClick}>
                 ПОИСК
               </HashLink>
-              <NavLink to={routes.favorite} className={styles.burgerMenuLink} onClick={closeMenu}>
-                ИЗБРАННОЕ
-              </NavLink>
             </>
           )}
         </div>

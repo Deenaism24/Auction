@@ -227,4 +227,18 @@
     .h2 {
         font-size: 31px;
     }
+    .pageBtn {
+        font-size: 12px;
+    }
+    .pageBtn img {
+        width: 12px;
+        height: 12px;
+    }
+    .pageNum {
+        font-size: 12px;
+    }
+    .pagination {
+        font-size: 12px;
+        gap: 6px;
+    }
 }

@@ -107,12 +107,9 @@
 @media (max-width: 1260px) {
     .sectionContainer {
         /* !!! ИСПРАВЛЕНИЕ: Адаптивные отступы как у хедера */
-        padding-left: 10%;
-        padding-right: 10%;
         margin: 0 auto; /* Центрирование на меньших экранах */
         max-width: none; /* Убираем ограничение ширины */
-        padding-top: 20px;
-        padding-bottom: 20px;
+        padding: 20px 10%;
     }
     .sectionTitle {
         margin-bottom: 15px;

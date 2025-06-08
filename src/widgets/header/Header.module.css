@@ -62,7 +62,7 @@
     text-decoration: underline;
 }
 
-.bagIcon,
+.favIcon,
 .burgerIcon,
 .icon {
     width: 18px;
@@ -152,7 +152,7 @@
         padding: 0 8px;
         gap: 0;
     }
-    .bagIcon {
+    .favIcon {
         padding-right: 20px;
     }
 }
