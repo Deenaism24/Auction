@@ -1,5 +1,5 @@
 // src/components/InformationAddition.tsx
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState, useEffect, forwardRef, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import * as styles from './InformationAddition.module.css';
 import Search from './Search';
@@ -20,40 +20,29 @@ import {
   toggleLocationFilter,
   toggleEventFilter,
   toggleCategoryFilter,
-  setSortOption,
-  setFilters, // Для очистки всех фильтров
-  setSearchTerm, // Для поискового запроса
+  setSortOption, // !!! ДОБАВЛЕНО !!!
+  setFilters,
+  // Удален setSearchTerm
 } from '../store/slices/filterSortSlice';
 // КОНЕЦ ИМПОРТОВ ДЛЯ REDUX
 
 
-interface FilterType {
-  name: string;
-  count: number; // Примечание: эти счетчики статичны. Для динамических счетчиков нужна другая логика.
+// Определяем тип лота (если есть в другом файле, импортируйте)
+interface Lot {
+  id: number;
+  number: string | number;
+  title: string;
+  price: string;
+  city: string | undefined;
+  event: string | undefined;
+  category: string | undefined;
+  image: string;
 }
 
-// Эти данные можно загрузить один раз при старте приложения или получить с сервера
-const locations: FilterType[] = [
-  { name: 'DUBAI', count: 2 },
-  { name: 'HONG KONG', count: 3 },
-  { name: 'LONDON', count: 8 },
-  { name: 'NEW YORK', count: 10 },
-  { name: 'PARIS', count: 8 },
-];
-
-const events: FilterType[] = [
-  { name: "Sotheby's", count: 9 },
-  { name: "Christie's", count: 10 },
-  { name: 'Phillips Contemporary', count: 3 },
-];
-
-const categories: FilterType[] = [
-  { name: 'COINS', count: 2 },
-  { name: 'STAMPS', count: 3 },
-  { name: 'PAINTINGS', count: 8 },
-  { name: 'PORCELAIN', count: 1 },
-  { name: 'GLASS, CRYSTAL', count: 12 },
-];
+interface FilterType {
+  name: string;
+  count: number;
+}
 
 const sortOptions = [
   { label: 'По названию (А-Я)', value: 'title-asc' },
@@ -72,7 +61,7 @@ const InformationAddition = forwardRef<HTMLInputElement, {}>(
 
     // !!! ЧТЕНИЕ СОСТОЯНИЯ ИЗ REDUX !!!
     const dispatch = useDispatch<AppDispatch>();
-    const { selectedLocations, selectedEvents, selectedCategories, selectedSort, searchTerm } = useSelector(
+    const { allLots, selectedLocations, selectedEvents, selectedCategories, selectedSort } = useSelector(
       (state: RootState) => state.filterSort
     );
     // !!! КОНЕЦ ЧТЕНИЯ СОСТОЯНИЯ ИЗ REDUX !!!
@@ -83,9 +72,9 @@ const InformationAddition = forwardRef<HTMLInputElement, {}>(
     const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
     const [eventDropdownOpen, setEventDropdownOpen] = useState(false);
     const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
-    const [infoDropdownOpen, setInfoDropdownOpen] = useState(true); // Убедитесь, что начальное состояние соответствует вашим нуждам
+    const [infoDropdownOpen, setInfoDropdownOpen] = useState(true);
 
-    // Эффект для адаптивности
+    // Эффект для адаптивности (оставляем как есть)
     useEffect(() => {
       const handleResize = () => {
         setShowFiltersMobile(window.innerWidth > 1260);
@@ -96,16 +85,82 @@ const InformationAddition = forwardRef<HTMLInputElement, {}>(
       return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // !!! ПЕРЕРАСЧЕТ HASFILTERS С УЧЕТОМ REDUX СОСТОЯНИЯ !!!
+    // ФУНКЦИЯ ДЛЯ ПРИМЕНЕНИЯ ДРУГИХ ФИЛЬТРОВ
+    const applyOtherFilters = (
+      lots: Lot[],
+      currentFilterType: 'location' | 'event' | 'category',
+      locs: string[],
+      events: string[],
+      cats: string[]
+    ): Lot[] => {
+      return lots.filter(lot => {
+        // Фильтруем по локациям, если текущий фильтр НЕ локация И выбраны локации (без учета регистра)
+        const matchLocation = currentFilterType === 'location' || locs.length === 0 || (lot.city !== undefined && locs.map(l => l.toLowerCase()).includes(lot.city.toLowerCase()));
+        // Фильтруем по событиям, если текущий фильтр НЕ событие И выбраны события (без учета регистра)
+        const matchEvent = currentFilterType === 'event' || events.length === 0 || (lot.event !== undefined && events.map(e => e.toLowerCase()).includes(lot.event.toLowerCase()));
+        // Фильтруем по категориям, если текущий фильтр НЕ категория И выбраны категории (без учета регистра)
+        const matchCategory = currentFilterType === 'category' || cats.length === 0 || (lot.category !== undefined && cats.map(c => c.toLowerCase()).includes(lot.category.toLowerCase()));
+
+        return matchLocation && matchEvent && matchCategory;
+      });
+    };
+
+
+    // !!! ДИНАМИЧЕСКИЕ СПИСКИ ФИЛЬТРОВ С КОЛИЧЕСТВОМ !!!
+    const dynamicLocations = useMemo(() => {
+      const lotsAfterOtherFilters = applyOtherFilters(allLots, 'location', selectedLocations, selectedEvents, selectedCategories);
+
+      const counts = lotsAfterOtherFilters.reduce((acc, lot) => {
+        if (lot.city !== undefined) {
+          acc[lot.city] = (acc[lot.city] || 0) + 1;
+        }
+        return acc;
+      }, {} as Record<string, number>);
+
+      return Object.keys(counts).map(name => ({ name, count: counts[name] })).sort((a, b) => a.name.localeCompare(b.name));
+
+    }, [allLots, selectedLocations, selectedEvents, selectedCategories]); // Добавлена selectedLocations как зависимость для корректного пересчета
+
+
+    const dynamicEvents = useMemo(() => {
+      const lotsAfterOtherFilters = applyOtherFilters(allLots, 'event', selectedLocations, selectedEvents, selectedCategories);
+
+      const counts = lotsAfterOtherFilters.reduce((acc, lot) => {
+        if (lot.event !== undefined) {
+          acc[lot.event] = (acc[lot.event] || 0) + 1;
+        }
+        return acc;
+      }, {} as Record<string, number>);
+
+      return Object.keys(counts).map(name => ({ name, count: counts[name] })).sort((a, b) => a.name.localeCompare(b.name));
+
+    }, [allLots, selectedLocations, selectedEvents, selectedCategories]); // Добавлена selectedEvents как зависимость
+
+
+    const dynamicCategories = useMemo(() => {
+      const lotsAfterOtherFilters = applyOtherFilters(allLots, 'category', selectedLocations, selectedEvents, selectedCategories);
+
+      const counts = lotsAfterOtherFilters.reduce((acc, lot) => {
+        if (lot.category !== undefined) {
+          acc[lot.category] = (acc[lot.category] || 0) + 1;
+        }
+        return acc;
+      }, {} as Record<string, number>);
+
+      return Object.keys(counts).map(name => ({ name, count: counts[name] })).sort((a, b) => a.name.localeCompare(b.name));
+
+    }, [allLots, selectedLocations, selectedEvents, selectedCategories]); // Добавлена selectedCategories как зависимость
+    // !!! КОНЕЦ ДИНАМИЧЕСКИХ СПИСКОВ !!!
+
+
+    // ПЕРЕРАСЧЕТ HASFILTERS
     const hasFilters =
       selectedLocations.length > 0 ||
       selectedEvents.length > 0 ||
-      selectedCategories.length > 0 ||
-      searchTerm !== '';
-    // !!! КОНЕЦ ПЕРЕРАСЧЕТА HASFILTERS !!!
+      selectedCategories.length > 0;
 
 
-    // ФУНКЦИЯ ДЛЯ ПЕРЕКЛЮЧЕНИЯ ФИЛЬТРА - ТЕПЕРЬ ДИСПАТЧИТ REDUX ЭКШЕНЫ
+    // ФУНКЦИЯ ДЛЯ ПЕРЕКЛЮЧЕНИЯ ФИЛЬТРА (оставляем как есть)
     const toggleFilter = (filter: string, type: 'location' | 'event' | 'category') => {
       switch (type) {
         case 'location':
@@ -121,11 +176,9 @@ const InformationAddition = forwardRef<HTMLInputElement, {}>(
     };
 
 
-    // ФУНКЦИЯ ДЛЯ ОЧИСТКИ ФИЛЬТРОВ - ТЕПЕРЬ ДИСПАТЧИТ REDUX ЭКШЕН
+    // ФУНКЦИЯ ДЛЯ ОЧИСТКИ ФИЛЬТРОВ (теперь без searchTerm)
     const clearFilters = () => {
-      // Очищаем все фильтры и поисковый запрос
       dispatch(setFilters({ locations: [], events: [], categories: [] }));
-      dispatch(setSearchTerm('')); // Сбрасываем поисковый запрос
     };
 
 
@@ -136,7 +189,7 @@ const InformationAddition = forwardRef<HTMLInputElement, {}>(
       isOpen: boolean,
       toggleOpen: () => void,
       onChange: (name: string, type: 'location' | 'event' | 'category') => void,
-      filterType: 'location' | 'event' | 'category' // Добавляем тип фильтра
+      filterType: 'location' | 'event' | 'category'
     ) => (
       <div className={styles.filterWrapper}>
         <div className={styles.sectionWrapper} onClick={toggleOpen}>
@@ -156,7 +209,7 @@ const InformationAddition = forwardRef<HTMLInputElement, {}>(
                     type="checkbox"
                     className={styles.checkbox}
                     checked={selectedItems.includes(item.name)}
-                    onChange={() => onChange(item.name, filterType)} // Передаем тип фильтра
+                    onChange={() => onChange(item.name, filterType)}
                   />
                   <div className={styles.filterItem}>
                     <span>{item.name}</span>
@@ -181,9 +234,8 @@ const InformationAddition = forwardRef<HTMLInputElement, {}>(
 
     return (
       <div className={styles.informationAddition}>
-        {/*<div>*/}
-          <Search ref={ref} />
-        {/*</div>*/}
+        <Search ref={ref} />
+
         <div className={styles.mobileAccordion} onClick={() => setShowFiltersMobile((prev) => !prev)}>
           <span>ИНФОРМАЦИЯ И ДОПОЛНЕНИЕ</span>
           <img
@@ -198,7 +250,6 @@ const InformationAddition = forwardRef<HTMLInputElement, {}>(
             <div className={styles.filterHeader}>
               <div className={styles.filterTitleRow}>
                 <div className={styles.filterTitle}>ФИЛЬТРАЦИЯ</div>
-                {/* Иконка галочки показывается, если есть ЛЮБЫЕ активные фильтры или поисковый запрос */}
                 {hasFilters && (
                   <img src={CheckmarkIcon} alt="Checkmark" className={styles.filterIcon} />
                 )}
@@ -232,6 +283,7 @@ const InformationAddition = forwardRef<HTMLInputElement, {}>(
                       selectedSort === option.value ? styles.activeOption : ''
                     }`}
                     onClick={() => {
+                      // !!! Диспатч setSortOption корректно импортирован и используется !!!
                       dispatch(setSortOption(option.value));
                       setSortDropdownOpen(false);
                     }}
@@ -242,10 +294,10 @@ const InformationAddition = forwardRef<HTMLInputElement, {}>(
               </ul>
             )}
 
-            {/* ФИЛЬТРЫ */}
+            {/* ФИЛЬТРЫ (ПЕРЕДАЕМ ДИНАМИЧЕСКИЕ СПИСКИ) */}
             {renderFilterSection(
               'ЛОКАЦИЯ',
-              locations,
+              dynamicLocations,
               selectedLocations,
               locationDropdownOpen,
               () => setLocationDropdownOpen((prev) => !prev),
@@ -255,7 +307,7 @@ const InformationAddition = forwardRef<HTMLInputElement, {}>(
 
             {renderFilterSection(
               'СОБЫТИЕ',
-              events,
+              dynamicEvents,
               selectedEvents,
               eventDropdownOpen,
               () => setEventDropdownOpen((prev) => !prev),
@@ -265,7 +317,7 @@ const InformationAddition = forwardRef<HTMLInputElement, {}>(
 
             {renderFilterSection(
               'КАТЕГОРИЯ',
-              categories,
+              dynamicCategories,
               selectedCategories,
               categoryDropdownOpen,
               () => setCategoryDropdownOpen((prev) => !prev),

@@ -1,25 +1,39 @@
 // src/store/slices/filterSortSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import lotsData from '../../lotsList'; // Импортируем исходный список лотов
 
-// Определяем тип состояния для фильтров и сортировки
+// Определяем тип лота (если у вас есть отдельный файл с типами, используйте его)
+interface Lot {
+  id: number;
+  number: string | number;
+  title: string;
+  price: string;
+  city: string | undefined; // Учитываем, что эти поля могут быть undefined
+  event: string | undefined;
+  category: string | undefined;
+  image: string;
+  // ... другие поля
+}
+
+// Определяем тип состояния
 interface FilterSortState {
+  allLots: Lot[]; // Храним исходные данные лотов
   selectedLocations: string[];
   selectedEvents: string[];
   selectedCategories: string[];
-  selectedSort: string; // Например, 'name-asc', 'price-desc' и т.д.
-  searchTerm: string; // Добавляем поле для поискового запроса
+  selectedSort: string;
 }
 
 // Начальное состояние
 const initialState: FilterSortState = {
+  allLots: lotsData as Lot[], // Загружаем исходные данные при старте
   selectedLocations: [],
   selectedEvents: [],
   selectedCategories: [],
-  selectedSort: 'name-asc', // Начальная сортировка по умолчанию
-  searchTerm: '',
+  selectedSort: 'title-asc', // Начальная сортировка по умолчанию
 };
 
-// Создаем срез состояния с помощью createSlice
+// Создаем срез состояния
 const filterSortSlice = createSlice({
   name: 'filterSort',
   initialState,
@@ -39,8 +53,12 @@ const filterSortSlice = createSlice({
       if (action.payload.categories !== undefined) {
         state.selectedCategories = action.payload.categories;
       }
+      // !!! УДАЛЕНО: Некорректные сравнения с [] !!!
+      // if (action.payload.locations === []) state.selectedLocations = [];
+      // if (action.payload.events === []) state.selectedEvents = [];
+      // if (action.payload.categories === []) state.selectedCategories = [];
     },
-    // Редьюсер для переключения (добавления/удаления) локации
+    // Редьюсеры для переключения фильтров (оставляем как есть)
     toggleLocationFilter: (state, action: PayloadAction<string>) => {
       const location = action.payload;
       if (state.selectedLocations.includes(location)) {
@@ -49,7 +67,6 @@ const filterSortSlice = createSlice({
         state.selectedLocations.push(location);
       }
     },
-    // Редьюсер для переключения (добавления/удаления) события
     toggleEventFilter: (state, action: PayloadAction<string>) => {
       const event = action.payload;
       if (state.selectedEvents.includes(event)) {
@@ -58,7 +75,6 @@ const filterSortSlice = createSlice({
         state.selectedEvents.push(event);
       }
     },
-    // Редьюсер для переключения (добавления/удаления) категории
     toggleCategoryFilter: (state, action: PayloadAction<string>) => {
       const category = action.payload;
       if (state.selectedCategories.includes(category)) {
@@ -67,13 +83,9 @@ const filterSortSlice = createSlice({
         state.selectedCategories.push(category);
       }
     },
-    // Редьюсер для установки опции сортировки
+    // Редьюсер для установки опции сортировки (оставляем как есть)
     setSortOption: (state, action: PayloadAction<string>) => {
       state.selectedSort = action.payload;
-    },
-    // Редьюсер для установки поискового запроса
-    setSearchTerm: (state, action: PayloadAction<string>) => {
-      state.searchTerm = action.payload;
     },
   },
 });
@@ -85,7 +97,6 @@ export const {
   toggleEventFilter,
   toggleCategoryFilter,
   setSortOption,
-  setSearchTerm,
 } = filterSortSlice.actions;
 
 // Экспортируем редьюсер

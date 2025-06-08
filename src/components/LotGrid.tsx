@@ -9,16 +9,29 @@ import BackPageDIcon from '../icons/backpageD.svg';
 import NextPageAIcon from '../icons/nextpageA.svg';
 import NextPageDIcon from '../icons/nextpageD.svg';
 import DollarIcon from '../icons/dollar.svg';
-import lotsData from '../lotsList'; // Используем другое имя, чтобы не конфликтовать с filteredLots
+// Удален import lotsData from '../lotsList';
 import { useZoomPhotoModal } from '../contexts/ZoomPhotoModalContext';
 
 // ИМПОРТЫ ДЛЯ REDUX
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { addFavorite, removeFavorite } from '../store/slices/favoritesSlice';
-// !!! УДАЛЯЕМ ИМПОРТЫ НЕСУЩЕСТВУЮЩИХ СЕЛЕКТОРОВ !!!
-// import { selectSelectedLocations, selectSelectedEvents, selectSelectedCategories, selectSelectedSort, selectSearchTerm } from '../store/slices/filterSortSlice';
-// !!! КОНЕЦ УДАЛЕНИЯ ИМПОРТОВ !!!
+// Удалены специфические импорты, используем state.filterSort напрямую
+// import { ... } from '../store/slices/filterSortSlice';
+
+
+// Определяем тип лота (если есть в другом файле, импортируйте)
+interface Lot {
+  id: number;
+  number: string | number;
+  title: string;
+  price: string;
+  city: string | undefined;
+  event: string | undefined;
+  category: string | undefined;
+  image: string;
+  // ... другие поля
+}
 
 
 // Предположим, у вас есть иконки для избранного
@@ -45,7 +58,7 @@ const getPaginationItems = (currentPage: number, totalPages: number): (number | 
   if (C > 1 && C < T) {
     visiblePages.add(C);
   }
-  if (T > 1) visiblePages.add(T); // Добавляем последнюю страницу, если она > 1
+  if (T > 1) visiblePages.add(T);
 
 
   const sortedVisiblePages = Array.from(visiblePages).sort((a, b) => a - b);
@@ -73,64 +86,56 @@ const LotGrid = () => {
   const [windowWidth] = React.useState(getWindowWidth());
   const lotsPerPage = windowWidth >= 600 ? 9 : 4;
 
-  // !!! ЧТЕНИЕ СОСТОЯНИЯ ФИЛЬТРОВ/СОРТИРОВКИ ИЗ REDUX (прямой доступ к state) !!!
+  // ЧТЕНИЕ СОСТОЯНИЯ ФИЛЬТРОВ/СОРТИРОВКИ И ИСХОДНЫХ ЛОТОВ ИЗ REDUX
+  const allLots = useSelector((state: RootState) => state.filterSort.allLots) as Lot[];
   const selectedLocations = useSelector((state: RootState) => state.filterSort.selectedLocations);
   const selectedEvents = useSelector((state: RootState) => state.filterSort.selectedEvents);
   const selectedCategories = useSelector((state: RootState) => state.filterSort.selectedCategories);
   const selectedSort = useSelector((state: RootState) => state.filterSort.selectedSort);
-  const searchTerm = useSelector((state: RootState) => state.filterSort.searchTerm);
-  // !!! КОНЕЦ ЧТЕНИЯ СОСТОЯНИЯ !!!
+  // КОНЕЦ ЧТЕНИЯ СОСТОЯНИЯ
 
 
-  // !!! ЛОГИКА ФИЛЬТРАЦИИ И СОРТИРОВКИ !!!
+  // ЛОГИКА ФИЛЬТРАЦИИ И СОРТИРОВКИ (оставляем как есть)
   const filteredAndSortedLots = useMemo(() => {
-    let filteredLots = lotsData; // Начинаем с полного списка
+    let filteredLots = allLots;
 
-    // 1. Применяем фильтры по категориям, событиям, локациям
     if (selectedLocations.length > 0) {
-      // !!! ИСПРАВЛЕНИЕ: Проверка на undefined перед includes !!!
-      filteredLots = filteredLots.filter(lot => lot.city !== undefined && selectedLocations.includes(lot.city));
+      const lowerSelectedLocations = selectedLocations.map(loc => loc.toLowerCase());
+      filteredLots = filteredLots.filter(lot =>
+        lot.city !== undefined && lowerSelectedLocations.includes(lot.city.toLowerCase())
+      );
     }
     if (selectedEvents.length > 0) {
-      // !!! ИСПРАВЛЕНИЕ: Проверка на undefined перед includes !!!
-      filteredLots = filteredLots.filter(lot => lot.event !== undefined && selectedEvents.includes(lot.event));
+      const lowerSelectedEvents = selectedEvents.map(event => event.toLowerCase());
+      filteredLots = filteredLots.filter(lot =>
+        lot.event !== undefined && lowerSelectedEvents.includes(lot.event.toLowerCase())
+      );
     }
     if (selectedCategories.length > 0) {
-      // !!! ИСПРАВЛЕНИЕ: Проверка на undefined перед includes !!!
-      filteredLots = filteredLots.filter(lot => lot.category !== undefined && selectedCategories.includes(lot.category));
-    }
-
-    // 2. Применяем фильтр по поисковому запросу
-    if (searchTerm) {
-      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+      const lowerSelectedCategories = selectedCategories.map(cat => cat.toLowerCase());
       filteredLots = filteredLots.filter(lot =>
-        (lot.title && lot.title.toLowerCase().includes(lowerCaseSearchTerm)) || // Поиск по названию (с проверкой на existence)
-        (lot.number && lot.number.toString().includes(lowerCaseSearchTerm)) // Поиск по номеру (с проверкой на existence)
+        lot.category !== undefined && lowerSelectedCategories.includes(lot.category.toLowerCase())
       );
     }
 
-
-    // 3. Применяем сортировку
-    const sortedLots = [...filteredLots]; // Создаем копию для сортировки
+    const sortedLots = [...filteredLots];
     switch (selectedSort) {
       case 'title-asc':
-        sortedLots.sort((a, b) => (a.title || '').localeCompare(b.title || '')); // Сортировка строк, обрабатывая null/undefined
+        sortedLots.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
         break;
       case 'title-desc':
-        sortedLots.sort((a, b) => (b.title || '').localeCompare(a.title || '')); // Сортировка строк, обрабатывая null/undefined
+        sortedLots.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
         break;
       case 'city-asc':
-        sortedLots.sort((a, b) => (a.city || '').localeCompare(b.city || '')); // Сортировка строк, обрабатывая null/undefined
+        sortedLots.sort((a, b) => (a.city || '').localeCompare(b.city || ''));
         break;
       case 'city-desc':
-        sortedLots.sort((a, b) => (b.city || '').localeCompare(a.city || '')); // Сортировка строк, обрабатывая null/undefined
+        sortedLots.sort((a, b) => (b.city || '').localeCompare(a.city || ''));
         break;
       case 'price-asc':
-        // Убедимся, что price можно безопасно преобразовать
         sortedLots.sort((a, b) => {
           const priceA = parseFloat(a.price);
           const priceB = parseFloat(b.price);
-          // Считаем NaN больше любого числа для консистентности при сортировке
           if (isNaN(priceA) && isNaN(priceB)) return 0;
           if (isNaN(priceA)) return 1;
           if (isNaN(priceB)) return -1;
@@ -141,7 +146,6 @@ const LotGrid = () => {
         sortedLots.sort((a, b) => {
           const priceA = parseFloat(a.price);
           const priceB = parseFloat(b.price);
-          // Считаем NaN меньше любого числа для консистентности при сортировке
           if (isNaN(priceA) && isNaN(priceB)) return 0;
           if (isNaN(priceA)) return -1;
           if (isNaN(priceB)) return 1;
@@ -149,42 +153,49 @@ const LotGrid = () => {
         });
         break;
       default:
-        // Сортировка по умолчанию (например, по id)
         sortedLots.sort((a, b) => a.id - b.id);
         break;
     }
 
     return sortedLots;
 
-  }, [selectedLocations, selectedEvents, selectedCategories, selectedSort, searchTerm]); // Зависимости useMemo
-  // !!! КОНЕЦ ЛОГИКИ ФИЛЬТРАЦИИ И СОРТИРОВКИ !!!
+  }, [allLots, selectedLocations, selectedEvents, selectedCategories, selectedSort]);
+  // КОНЕЦ ЛОГИКИ ФИЛЬТРАЦИИ И СОРТИРОВКИ
 
 
-  // !!! ЭФФЕКТ ДЛЯ СБРОСА СТРАНИЦЫ ПРИ ИЗМЕНЕНИИ ФИЛЬТРОВ/СОРТИРОВКИ/ПОИСКА !!!
-  // Этот эффект должен запускаться, когда изменяются зависимости фильтрации/сортировки/поиска
+  // !!! ЭФФЕКТ 1: СБРОС СТРАНИЦЫ И ПРОКРУТКА ВВЕРХ ПРИ ИЗМЕНЕНИИ СОРТИРОВКИ !!!
   useEffect(() => {
-    setCurrentPage(1); // Сбрасываем на первую страницу
-    // Опционально: прокрутить страницу вверх при сбросе фильтров
+    // Если сортировка изменилась, сбрасываем страницу и прокручиваем наверх
+    setCurrentPage(1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [selectedLocations, selectedEvents, selectedCategories, selectedSort, searchTerm]);
-  // !!! КОНЕЦ ЭФФЕКТА !!!
+  }, [selectedSort]); // Зависит только от выбранной опции сортировки
+  // !!! КОНЕЦ ЭФФЕКТА 1 !!!
 
-  // !!! РАСЧЕТ HASFILTERS ЛОКАЛЬНО !!!
+  // !!! ЭФФЕКТ 2: СБРОС СТРАНИЦЫ (БЕЗ ПРОКРУТКИ) ПРИ ИЗМЕНЕНИИ ФИЛЬТРОВ !!!
+  useEffect(() => {
+    // Если изменились фильтры, сбрасываем страницу на 1
+    // (Прокрутку вверх не делаем здесь)
+    setCurrentPage(1);
+  }, [selectedLocations, selectedEvents, selectedCategories]); // Зависит только от выбранных фильтров
+  // !!! КОНЕЦ ЭФФЕКТА 2 !!!
+
+
+  // РАСЧЕТ HASFILTERS ЛОКАЛЬНО (оставляем как есть)
   const hasActiveFilters = selectedLocations.length > 0 || selectedEvents.length > 0 || selectedCategories.length > 0;
-  const hasActiveSearch = searchTerm !== '';
-  // !!! КОНЕЦ РАСЧЕТА HASFILTERS ЛОКАЛЬНО !!!
+  // Удален hasActiveSearch
 
 
   // Общее количество страниц теперь зависит от filteredAndSortedLots
   const totalPages = filteredAndSortedLots.length === 0 ? 1 : Math.ceil(filteredAndSortedLots.length / lotsPerPage);
-  // Если текущая страница стала больше нового общего количества страниц (после фильтрации),
-  // нужно скорректировать ее. Хотя useEffect выше уже сбрасывает на 1,
-  // эта проверка может быть полезна в других сценариях или как дополнительная подстраховка.
+  // Если текущая страница стала больше нового общего количества страниц (после фильтрации)
+  // Этот эффект остается для корректировки номера страницы, если лоты сильно отфильтровались
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
+    } else if (currentPage === 0 && totalPages > 0) {
+      setCurrentPage(1);
     }
-  }, [currentPage, totalPages]); // Зависит от текущей страницы и общего количества страниц
+  }, [currentPage, totalPages]);
 
 
   const startIndex = (currentPage - 1) * lotsPerPage;
@@ -194,9 +205,9 @@ const LotGrid = () => {
 
   const handlePageChange = (page: number) => {
     // Убеждаемся, что страница находится в допустимом диапазоне нового totalPages
+    // Прокрутка вверх остается здесь для кликов по номерам страниц пагинации
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
-      // Опционально: прокрутить страницу вверх при смене страницы
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -206,10 +217,10 @@ const LotGrid = () => {
     open(imageUrl);
   };
 
-  // !!! REDUX ХУКИ ДЛЯ ИЗБРАННОГО (оставляем их) !!!
+  // REDUX ХУКИ ДЛЯ ИЗБРАННОГО (оставляем их)
   const dispatch = useDispatch<AppDispatch>();
   const favoriteLotIds = useSelector((state: RootState) => state.favorites.items);
-  // !!! REDUX ХУКИ !!!
+  // REDUX ХУКИ
 
 
   // Генерируем элементы пагинации для отображения, основываясь на новом totalPages
@@ -218,21 +229,18 @@ const LotGrid = () => {
 
   return (
     <div>
-      {/* !!! Отображаем сообщение, если лоты не найдены после фильтрации/поиска !!! */}
+      {/* Отображаем сообщение, если лоты не найдены после фильтрации */}
       {filteredAndSortedLots.length === 0 && (
         <div className={styles.noResults}>
-          {lotsData.length === 0 ? (
-            'Данные о лотах отсутствуют.' // Если исходный список пуст
-          ) : hasActiveSearch ? (
-            `Поиск по запросу "${searchTerm}" не дал результатов.`
+          {allLots.length === 0 ? (
+            'Данные о лотах отсутствуют.'
           ) : hasActiveFilters ? (
             `Нет лотов, соответствующих выбранным фильтрам.`
           ) : (
-            'Нет лотов для отображения.' // Этот случай маловероятен, если lotsData не пуст
+            'Нет лотов для отображения.'
           )}
         </div>
       )}
-      {/* !!! КОНЕЦ СООБЩЕНИЯ !!! */}
 
       {/* Рендерим сетку, только если есть лоты для текущей страницы */}
       {currentLots.length > 0 && (

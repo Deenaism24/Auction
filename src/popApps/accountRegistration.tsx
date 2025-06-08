@@ -127,6 +127,12 @@ const RegisterPopup: React.FC<RegistrationProps> = ({ onClose, onSuccess, prefil
             </button>
           </div>
           <div className={styles.checkboxContainer}>
+            *
+            <label htmlFor="agreement" className={ styles.additionalLabel }>
+              Ваш логин формируется автоматически по названию электронной почты
+            </label>
+          </div>
+          <div className={styles.checkboxContainer}>
             <input
               type="checkbox"
               name="agreed"
@@ -143,12 +149,6 @@ const RegisterPopup: React.FC<RegistrationProps> = ({ onClose, onSuccess, prefil
                 ПРАВИЛАМИ ИСПОЛЬЗОВАНИЯ ПЕРСОНАЛЬНЫХ ДАННЫХ
               </span>
               </div>
-            </label>
-          </div>
-          <div className={styles.checkboxContainer}>
-            *
-            <label htmlFor="agreement" className={ styles.additionalLabel }>
-              Ваш логин формируется автоматически по названию электронной почты
             </label>
           </div>
           <button type="submit" className={`${styles.mainButton} ${styles.active}`}>
