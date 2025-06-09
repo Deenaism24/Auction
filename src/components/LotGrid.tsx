@@ -92,10 +92,11 @@ const LotGrid = () => {
   const selectedEvents = useSelector((state: RootState) => state.filterSort.selectedEvents);
   const selectedCategories = useSelector((state: RootState) => state.filterSort.selectedCategories);
   const selectedSort = useSelector((state: RootState) => state.filterSort.selectedSort);
+  const searchTerm = useSelector((state: RootState) => state.filterSort.searchTerm); // ЧИТАЕМ SEARCHTERM
   // КОНЕЦ ЧТЕНИЯ СОСТОЯНИЯ
 
 
-  // ЛОГИКА ФИЛЬТРАЦИИ И СОРТИРОВКИ (оставляем как есть)
+  // ЛОГИКА ФИЛЬТРАЦИИ И СОРТИРОВКИ (оставляем как есть, с учетом searchTerm)
   const filteredAndSortedLots = useMemo(() => {
     let filteredLots = allLots;
 
@@ -118,6 +119,17 @@ const LotGrid = () => {
       );
     }
 
+    // ПРИМЕНЯЕМ ФИЛЬТР ПО ПОИСКОВОМУ ЗАПРОСУ
+    if (searchTerm) {
+      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+      filteredLots = filteredLots.filter(lot =>
+        (lot.title && lot.title.toLowerCase().includes(lowerCaseSearchTerm)) ||
+        (lot.number !== undefined && lot.number.toString().toLowerCase().includes(lowerCaseSearchTerm))
+      );
+    }
+
+
+    // Применяем сортировку (оставляем как есть)
     const sortedLots = [...filteredLots];
     switch (selectedSort) {
       case 'title-asc':
@@ -159,7 +171,7 @@ const LotGrid = () => {
 
     return sortedLots;
 
-  }, [allLots, selectedLocations, selectedEvents, selectedCategories, selectedSort]);
+  }, [allLots, selectedLocations, selectedEvents, selectedCategories, selectedSort, searchTerm]);
   // КОНЕЦ ЛОГИКИ ФИЛЬТРАЦИИ И СОРТИРОВКИ
 
 
@@ -171,24 +183,25 @@ const LotGrid = () => {
   }, [selectedSort]); // Зависит только от выбранной опции сортировки
   // !!! КОНЕЦ ЭФФЕКТА 1 !!!
 
-  // !!! ЭФФЕКТ 2: СБРОС СТРАНИЦЫ (БЕЗ ПРОКРУТКИ) ПРИ ИЗМЕНЕНИИ ФИЛЬТРОВ !!!
+  // !!! ЭФФЕКТ 2: СБРОС СТРАНИЦЫ (БЕЗ ПРОКРУТКИ) ПРИ ИЗМЕНЕНИИ ФИЛЬТРОВ ИЛИ ПОИСКА !!!
   useEffect(() => {
-    // Если изменились фильтры, сбрасываем страницу на 1
-    // (Прокрутку вверх не делаем здесь)
+    // Если изменились фильтры (локация, событие, категория) ИЛИ ПОИСКОВЫЙ ЗАПРОС,
+    // сбрасываем страницу на 1.
+    // Прокрутку вверх НЕ делаем здесь.
     setCurrentPage(1);
-  }, [selectedLocations, selectedEvents, selectedCategories]); // Зависит только от выбранных фильтров
+  }, [selectedLocations, selectedEvents, selectedCategories, searchTerm]); // !!! ДОБАВЛЕН SEARCHTERM В ЗАВИСИМОСТИ !!!
   // !!! КОНЕЦ ЭФФЕКТА 2 !!!
 
 
-  // РАСЧЕТ HASFILTERS ЛОКАЛЬНО (оставляем как есть)
+  // РАСЧЕТ HASFILTERS ЛОКАЛЬНО (теперь включает searchTerm для сообщения)
   const hasActiveFilters = selectedLocations.length > 0 || selectedEvents.length > 0 || selectedCategories.length > 0;
-  // Удален hasActiveSearch
+  const hasActiveSearch = searchTerm !== '';
 
 
   // Общее количество страниц теперь зависит от filteredAndSortedLots
   const totalPages = filteredAndSortedLots.length === 0 ? 1 : Math.ceil(filteredAndSortedLots.length / lotsPerPage);
   // Если текущая страница стала больше нового общего количества страниц (после фильтрации)
-  // Этот эффект остается для корректировки номера страницы, если лоты сильно отфильтровались
+  // Этот эффект остается для корректировки номера страницы
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
@@ -204,7 +217,6 @@ const LotGrid = () => {
 
 
   const handlePageChange = (page: number) => {
-    // Убеждаемся, что страница находится в допустимом диапазоне нового totalPages
     // Прокрутка вверх остается здесь для кликов по номерам страниц пагинации
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -229,11 +241,13 @@ const LotGrid = () => {
 
   return (
     <div>
-      {/* Отображаем сообщение, если лоты не найдены после фильтрации */}
+      {/* Отображаем сообщение, если лоты не найдены после фильтрации/поиска */}
       {filteredAndSortedLots.length === 0 && (
         <div className={styles.noResults}>
           {allLots.length === 0 ? (
             'Данные о лотах отсутствуют.'
+          ) : hasActiveSearch ? (
+            `Поиск по запросу "${searchTerm}" не дал результатов.`
           ) : hasActiveFilters ? (
             `Нет лотов, соответствующих выбранным фильтрам.`
           ) : (

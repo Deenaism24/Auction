@@ -8,7 +8,7 @@ interface Lot {
   number: string | number;
   title: string;
   price: string;
-  city: string | undefined; // Учитываем, что эти поля могут быть undefined
+  city: string | undefined;
   event: string | undefined;
   category: string | undefined;
   image: string;
@@ -21,7 +21,8 @@ interface FilterSortState {
   selectedLocations: string[];
   selectedEvents: string[];
   selectedCategories: string[];
-  selectedSort: string;
+  selectedSort: string; // Например, 'title-asc', 'price-desc' и т.д.
+  searchTerm: string; // !!! ВЕРНУЛИ SEARCHTERM !!!
 }
 
 // Начальное состояние
@@ -31,6 +32,7 @@ const initialState: FilterSortState = {
   selectedEvents: [],
   selectedCategories: [],
   selectedSort: 'title-asc', // Начальная сортировка по умолчанию
+  searchTerm: '', // !!! НАЧАЛЬНОЕ ЗНАЧЕНИЕ SEARCHTERM !!!
 };
 
 // Создаем срез состояния
@@ -53,10 +55,7 @@ const filterSortSlice = createSlice({
       if (action.payload.categories !== undefined) {
         state.selectedCategories = action.payload.categories;
       }
-      // !!! УДАЛЕНО: Некорректные сравнения с [] !!!
-      // if (action.payload.locations === []) state.selectedLocations = [];
-      // if (action.payload.events === []) state.selectedEvents = [];
-      // if (action.payload.categories === []) state.selectedCategories = [];
+      // Не нужны сравнения с []
     },
     // Редьюсеры для переключения фильтров (оставляем как есть)
     toggleLocationFilter: (state, action: PayloadAction<string>) => {
@@ -87,17 +86,23 @@ const filterSortSlice = createSlice({
     setSortOption: (state, action: PayloadAction<string>) => {
       state.selectedSort = action.payload;
     },
+    // !!! ВЕРНУЛИ РЕДЬЮСЕР ДЛЯ SEARCHTERM !!!
+    setSearchTerm: (state, action: PayloadAction<string>) => {
+      state.searchTerm = action.payload;
+    },
+    // !!! КОНЕЦ РЕДЬЮСЕРА ДЛЯ SEARCHTERM !!!
   },
 });
 
-// Экспортируем экшены
+// Экспортируем экшены (добавляем setSearchTerm)
 export const {
   setFilters,
   toggleLocationFilter,
   toggleEventFilter,
   toggleCategoryFilter,
   setSortOption,
+  setSearchTerm, // !!! ЭКСПОРТИРОВАНО !!!
 } = filterSortSlice.actions;
 
-// Экспортируем редьюсер
+// Экспортируем редьюсер (оставляем как есть)
 export default filterSortSlice.reducer;
