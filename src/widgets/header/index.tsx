@@ -1,3 +1,4 @@
+// src/widgets/header/index.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { HashLink } from 'react-router-hash-link';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
@@ -49,19 +50,43 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
     setIsMenuOpen(false);
   };
 
+  // !!! ИЗМЕНЕННЫЙ БЛОК HANDLESEARCHCLICK !!!
   const handleSearchClick = () => {
-    closeMenu();
-    const searchSection = document.getElementById('search-section');
+    closeMenu(); // Закрываем меню
 
-    if (searchSection && (location.pathname === routes.home || location.pathname === routes.favorite)) {
-      searchSection.scrollIntoView({ behavior: 'smooth' });
-      setTimeout(() => {
-        searchInputRef.current?.focus();
-      }, 500);
+    const targetPath = routes.home; // Главная страница
+    const targetHash = '#search-section'; // ID секции поиска
+
+    // Если мы уже на главной странице, просто прокручиваем и фокусируем
+    if (location.pathname === targetPath) {
+      const searchSection = document.getElementById('search-section');
+      if (searchSection) {
+        // Используем setTimeout, чтобы дать браузеру время обновить DOM, если это необходимо
+        setTimeout(() => {
+          searchSection.scrollIntoView({ behavior: 'smooth' });
+          // Дополнительный setTimeout для фокуса, чтобы гарантировать, что прокрутка завершилась
+          setTimeout(() => {
+            searchInputRef.current?.focus();
+          }, 300); // Небольшая задержка
+        }, 0); // Запускаем в следующем цикле событий
+      }
     } else {
-      navigate(`${routes.home}#search-section`);
+      // Если мы НЕ на главной, сначала навигируем на главную
+      // Важно: navigate не блокирует выполнение, прокрутка должна произойти ПОСЛЕ навигации.
+      // Мы можем использовать state или useEffect в компоненте главной страницы для прокрутки после загрузки,
+      // но самый простой способ - навигация с хешем, на которую HashLink реагирует,
+      // и убедиться, что на главной странице есть соответствующий элемент и Search принимает реф.
+
+      // Используем navigate с хешем. React Router и HashLink должны справиться с прокруткой.
+      // Мы все равно можем добавить логику фокуса на главной странице, если нужно.
+      navigate(`${targetPath}${targetHash}`);
+
+      // ВАЖНО: Фокусировка не сработает МГНОВЕННО здесь, т.к. страница переключается.
+      // Фокус должен быть установлен на главной странице после того, как она загрузится и прокрутится.
+      // Это можно сделать в useEffect на главной странице, реагируя на изменение location.hash.
     }
   };
+  // !!! КОНЕЦ ИЗМЕНЕННОГО БЛОКА !!!
 
 
   useEffect(() => {
@@ -125,9 +150,11 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
             АВТОРИЗАЦИЯ
             <img src={AuthIcon} alt="Вход" className={styles.icon} />
           </div>
-          <HashLink smooth to="#search-section" onClick={handleSearchClick}>
+          {/* Используем div для вызова обработчика */}
+          <div onClick={handleSearchClick} className={styles.searchAction}>
             <img className={styles.icon} alt="Поиск" src={SearchIcon} />
-          </HashLink>
+          </div>
+
           <NavLink to={routes.favorite} onClick={closeMenu}>
             <img className={styles.favIcon} alt="Избранное" src={StarIcon} />
           </NavLink>
@@ -160,32 +187,33 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
             КАК КУПИТЬ ИЛИ ПРОДАТЬ
           </HashLink>
 
-            <HashLink
-              smooth
-              to={routes.ROUTE_TO_FOOTER_LINKS_SUPPORT}
-              className={styles.burgerMenuLink}
-              onClick={closeMenu}
-            >
-              ПОДДЕРЖКА
-            </HashLink>
+          <HashLink
+            smooth
+            to={routes.ROUTE_TO_FOOTER_LINKS_SUPPORT}
+            className={styles.burgerMenuLink}
+            onClick={closeMenu}
+          >
+            ПОДДЕРЖКА
+          </HashLink>
 
-            <HashLink
-              smooth
-              to={routes.ROUTE_TO_FOOTER_LINKS_CORPORATE}
-              className={styles.burgerMenuLink}
-              onClick={closeMenu}
-            >
-              СОТРУДНИЧЕСТВО
-            </HashLink>
+          <HashLink
+            smooth
+            to={routes.ROUTE_TO_FOOTER_LINKS_CORPORATE}
+            className={styles.burgerMenuLink}
+            onClick={closeMenu}
+          >
+            СОТРУДНИЧЕСТВО
+          </HashLink>
 
           {window.innerWidth <= 650 && (
             <>
               <span className={styles.burgerMenuLink} onClick={handleLoginClick}>
                 АВТОРИЗАЦИЯ
               </span>
-              <HashLink smooth to="#search-section" className={styles.burgerMenuLink} onClick={handleSearchClick}>
+              {/* Используем div в бургер-меню тоже */}
+              <div className={styles.burgerMenuLink} onClick={handleSearchClick}>
                 ПОИСК
-              </HashLink>
+              </div>
             </>
           )}
         </div>

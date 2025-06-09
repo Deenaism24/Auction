@@ -60,10 +60,6 @@
     text-decoration: none;
 }
 
-.card:hover .magnifier {
-    display: block;
-}
-
 .card:hover .title {
     text-decoration: underline;
 }
@@ -81,13 +77,22 @@
     position: relative;
 }
 
-.magnifier {
+.favoriteIcon{
     position: absolute;
     top: 16px;
     right: 16px;
     width: 40px;
     height: 40px;
     display: none;
+}
+
+.favoriteIcon.active {
+    display: block;
+}
+
+.card:hover .favoriteIcon {
+    right: 66px;
+    display: block;
 }
 
 .info {

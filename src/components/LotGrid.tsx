@@ -3,21 +3,21 @@ import React, { useState, useEffect, useMemo } from 'react';
 import * as styles from './LotGrid.module.css';
 import { generatePath, NavLink } from 'react-router';
 import { routes } from '../routes';
-import MagnifierIcon from '../icons/magnifier.svg';
+import FavoriteLotIcon from '../icons/favoriteLot.svg'; // Иконка для "в избранном"
+import AddFavoriteLotIcon from '../icons/addFavoriteLot.svg'; // Иконка для "добавить в избранное"
+import MagnifierIcon from '../icons/magnifier.svg'; // Иконка увеличительного стекла
 import BackPageAIcon from '../icons/backpageA.svg';
 import BackPageDIcon from '../icons/backpageD.svg';
 import NextPageAIcon from '../icons/nextpageA.svg';
 import NextPageDIcon from '../icons/nextpageD.svg';
 import DollarIcon from '../icons/dollar.svg';
-// Удален import lotsData from '../lotsList';
+// Удален import lotsData from '../lotsList'; // Больше не импортируем напрямую здесь
 import { useZoomPhotoModal } from '../contexts/ZoomPhotoModalContext';
 
 // ИМПОРТЫ ДЛЯ REDUX
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { addFavorite, removeFavorite } from '../store/slices/favoritesSlice';
-// Удалены специфические импорты, используем state.filterSort напрямую
-// import { ... } from '../store/slices/filterSortSlice';
 
 
 // Определяем тип лота (если есть в другом файле, импортируйте)
@@ -33,50 +33,29 @@ interface Lot {
   // ... другие поля
 }
 
-
-// Предположим, у вас есть иконки для избранного
-// import FavoriteIconEmpty from '../icons/favorite-empty.svg';
-// import FavoriteIconFilled from '../icons/favorite-filled.svg';
-
-
 function getWindowWidth() {
   return window.innerWidth;
 }
 
-// ФУНКЦИЯ ДЛЯ ГЕНЕРАЦИИ ЭЛЕМЕНТОВ ПАГИНАЦИИ (оставляем как есть)
 const getPaginationItems = (currentPage: number, totalPages: number): (number | string)[] => {
   const T = totalPages;
   const C = currentPage;
   const items: (number | string)[] = [];
-
-  if (T <= 1) {
-    return [1];
-  }
-
+  if (T <= 1) { return [1]; }
   const visiblePages = new Set<number>();
   visiblePages.add(1);
-  if (C > 1 && C < T) {
-    visiblePages.add(C);
-  }
+  if (C > 1 && C < T) { visiblePages.add(C); }
   if (T > 1) visiblePages.add(T);
-
-
   const sortedVisiblePages = Array.from(visiblePages).sort((a, b) => a - b);
-
   if (sortedVisiblePages.length > 0) {
     items.push(sortedVisiblePages[0]);
-
     for (let i = 1; i < sortedVisiblePages.length; i++) {
       const prev = sortedVisiblePages[i - 1];
       const current = sortedVisiblePages[i];
-
-      if (current - prev > 1) {
-        items.push('...');
-      }
+      if (current - prev > 1) { items.push('...'); }
       items.push(current);
     }
   }
-
   return items;
 };
 
@@ -86,40 +65,27 @@ const LotGrid = () => {
   const [windowWidth] = React.useState(getWindowWidth());
   const lotsPerPage = windowWidth >= 600 ? 9 : 4;
 
-  // ЧТЕНИЕ СОСТОЯНИЯ ФИЛЬТРОВ/СОРТИРОВКИ И ИСХОДНЫХ ЛОТОВ ИЗ REDUX
   const allLots = useSelector((state: RootState) => state.filterSort.allLots) as Lot[];
   const selectedLocations = useSelector((state: RootState) => state.filterSort.selectedLocations);
   const selectedEvents = useSelector((state: RootState) => state.filterSort.selectedEvents);
   const selectedCategories = useSelector((state: RootState) => state.filterSort.selectedCategories);
   const selectedSort = useSelector((state: RootState) => state.filterSort.selectedSort);
-  const searchTerm = useSelector((state: RootState) => state.filterSort.searchTerm); // ЧИТАЕМ SEARCHTERM
-  // КОНЕЦ ЧТЕНИЯ СОСТОЯНИЯ
+  const searchTerm = useSelector((state: RootState) => state.filterSort.searchTerm);
 
-
-  // ЛОГИКА ФИЛЬТРАЦИИ И СОРТИРОВКИ (оставляем как есть, с учетом searchTerm)
   const filteredAndSortedLots = useMemo(() => {
     let filteredLots = allLots;
-
     if (selectedLocations.length > 0) {
       const lowerSelectedLocations = selectedLocations.map(loc => loc.toLowerCase());
-      filteredLots = filteredLots.filter(lot =>
-        lot.city !== undefined && lowerSelectedLocations.includes(lot.city.toLowerCase())
-      );
+      filteredLots = filteredLots.filter(lot => lot.city !== undefined && lowerSelectedLocations.includes(lot.city.toLowerCase()));
     }
     if (selectedEvents.length > 0) {
       const lowerSelectedEvents = selectedEvents.map(event => event.toLowerCase());
-      filteredLots = filteredLots.filter(lot =>
-        lot.event !== undefined && lowerSelectedEvents.includes(lot.event.toLowerCase())
-      );
+      filteredLots = filteredLots.filter(lot => lot.event !== undefined && lowerSelectedEvents.includes(lot.event.toLowerCase()));
     }
     if (selectedCategories.length > 0) {
       const lowerSelectedCategories = selectedCategories.map(cat => cat.toLowerCase());
-      filteredLots = filteredLots.filter(lot =>
-        lot.category !== undefined && lowerSelectedCategories.includes(lot.category.toLowerCase())
-      );
+      filteredLots = filteredLots.filter(lot => lot.category !== undefined && lowerSelectedCategories.includes(lot.category.toLowerCase()));
     }
-
-    // ПРИМЕНЯЕМ ФИЛЬТР ПО ПОИСКОВОМУ ЗАПРОСУ
     if (searchTerm) {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
       filteredLots = filteredLots.filter(lot =>
@@ -127,81 +93,32 @@ const LotGrid = () => {
         (lot.number !== undefined && lot.number.toString().toLowerCase().includes(lowerCaseSearchTerm))
       );
     }
-
-
-    // Применяем сортировку (оставляем как есть)
     const sortedLots = [...filteredLots];
     switch (selectedSort) {
-      case 'title-asc':
-        sortedLots.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-        break;
-      case 'title-desc':
-        sortedLots.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
-        break;
-      case 'city-asc':
-        sortedLots.sort((a, b) => (a.city || '').localeCompare(b.city || ''));
-        break;
-      case 'city-desc':
-        sortedLots.sort((a, b) => (b.city || '').localeCompare(a.city || ''));
-        break;
-      case 'price-asc':
-        sortedLots.sort((a, b) => {
-          const priceA = parseFloat(a.price);
-          const priceB = parseFloat(b.price);
-          if (isNaN(priceA) && isNaN(priceB)) return 0;
-          if (isNaN(priceA)) return 1;
-          if (isNaN(priceB)) return -1;
-          return priceA - priceB;
-        });
-        break;
-      case 'price-desc':
-        sortedLots.sort((a, b) => {
-          const priceA = parseFloat(a.price);
-          const priceB = parseFloat(b.price);
-          if (isNaN(priceA) && isNaN(priceB)) return 0;
-          if (isNaN(priceA)) return -1;
-          if (isNaN(priceB)) return 1;
-          return priceB - priceA;
-        });
-        break;
-      default:
-        sortedLots.sort((a, b) => a.id - b.id);
-        break;
+      case 'title-asc': sortedLots.sort((a, b) => (a.title || '').localeCompare(b.title || '')); break;
+      case 'title-desc': sortedLots.sort((a, b) => (b.title || '').localeCompare(a.title || '')); break;
+      case 'city-asc': sortedLots.sort((a, b) => (a.city || '').localeCompare(b.city || '')); break;
+      case 'city-desc': sortedLots.sort((a, b) => (b.city || '').localeCompare(a.city || '')); break;
+      case 'price-asc': sortedLots.sort((a, b) => { const priceA = parseFloat(a.price); const priceB = parseFloat(b.price); if (isNaN(priceA) && isNaN(priceB)) return 0; if (isNaN(priceA)) return 1; if (isNaN(priceB)) return -1; return priceA - priceB; }); break;
+      case 'price-desc': sortedLots.sort((a, b) => { const priceA = parseFloat(a.price); const priceB = parseFloat(b.price); if (isNaN(priceA) && isNaN(priceB)) return 0; if (isNaN(priceA)) return -1; if (isNaN(priceB)) return 1; return priceB - priceA; }); break;
+      default: sortedLots.sort((a, b) => a.id - b.id); break;
     }
-
     return sortedLots;
-
   }, [allLots, selectedLocations, selectedEvents, selectedCategories, selectedSort, searchTerm]);
-  // КОНЕЦ ЛОГИКИ ФИЛЬТРАЦИИ И СОРТИРОВКИ
 
-
-  // !!! ЭФФЕКТ 1: СБРОС СТРАНИЦЫ И ПРОКРУТКА ВВЕРХ ПРИ ИЗМЕНЕНИИ СОРТИРОВКИ !!!
   useEffect(() => {
-    // Если сортировка изменилась, сбрасываем страницу и прокручиваем наверх
     setCurrentPage(1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [selectedSort]); // Зависит только от выбранной опции сортировки
-  // !!! КОНЕЦ ЭФФЕКТА 1 !!!
+  }, [selectedSort]);
 
-  // !!! ЭФФЕКТ 2: СБРОС СТРАНИЦЫ (БЕЗ ПРОКРУТКИ) ПРИ ИЗМЕНЕНИИ ФИЛЬТРОВ ИЛИ ПОИСКА !!!
   useEffect(() => {
-    // Если изменились фильтры (локация, событие, категория) ИЛИ ПОИСКОВЫЙ ЗАПРОС,
-    // сбрасываем страницу на 1.
-    // Прокрутку вверх НЕ делаем здесь.
     setCurrentPage(1);
-  }, [selectedLocations, selectedEvents, selectedCategories, searchTerm]); // !!! ДОБАВЛЕН SEARCHTERM В ЗАВИСИМОСТИ !!!
-  // !!! КОНЕЦ ЭФФЕКТА 2 !!!
+  }, [selectedLocations, selectedEvents, selectedCategories, searchTerm]);
 
-
-  // РАСЧЕТ HASFILTERS ЛОКАЛЬНО (теперь включает searchTerm для сообщения)
   const hasActiveFilters = selectedLocations.length > 0 || selectedEvents.length > 0 || selectedCategories.length > 0;
   const hasActiveSearch = searchTerm !== '';
 
-
-  // Общее количество страниц теперь зависит от filteredAndSortedLots
   const totalPages = filteredAndSortedLots.length === 0 ? 1 : Math.ceil(filteredAndSortedLots.length / lotsPerPage);
-  // Если текущая страница стала больше нового общего количества страниц (после фильтрации)
-  // Этот эффект остается для корректировки номера страницы
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
@@ -210,14 +127,10 @@ const LotGrid = () => {
     }
   }, [currentPage, totalPages]);
 
-
   const startIndex = (currentPage - 1) * lotsPerPage;
-  // Получаем лоты для текущей страницы ИЗ отфильтрованного и отсортированного списка
   const currentLots = filteredAndSortedLots.slice(startIndex, startIndex + lotsPerPage);
 
-
   const handlePageChange = (page: number) => {
-    // Прокрутка вверх остается здесь для кликов по номерам страниц пагинации
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -229,19 +142,16 @@ const LotGrid = () => {
     open(imageUrl);
   };
 
-  // REDUX ХУКИ ДЛЯ ИЗБРАННОГО (оставляем их)
   const dispatch = useDispatch<AppDispatch>();
   const favoriteLotIds = useSelector((state: RootState) => state.favorites.items);
-  // REDUX ХУКИ
 
 
-  // Генерируем элементы пагинации для отображения, основываясь на новом totalPages
+  // Генерируем элементы пагинации для отображения
   const paginationItems = totalPages > 1 ? getPaginationItems(currentPage, totalPages) : [];
 
 
   return (
     <div>
-      {/* Отображаем сообщение, если лоты не найдены после фильтрации/поиска */}
       {filteredAndSortedLots.length === 0 && (
         <div className={styles.noResults}>
           {allLots.length === 0 ? (
@@ -256,7 +166,6 @@ const LotGrid = () => {
         </div>
       )}
 
-      {/* Рендерим сетку, только если есть лоты для текущей страницы */}
       {currentLots.length > 0 && (
         <div className={styles.grid}>
           {currentLots.map((lot) => {
@@ -264,6 +173,7 @@ const LotGrid = () => {
 
             const handleToggleFavorite = (event: React.MouseEvent) => {
               event.preventDefault();
+              event.stopPropagation(); // Останавливаем всплытие клика
               if (isFavorite) {
                 dispatch(removeFavorite(lot.id));
               } else {
@@ -273,18 +183,32 @@ const LotGrid = () => {
 
             return (
               <div key={lot.id} className={styles.card}>
-                <button
-                  className={styles.favoriteButton}
-                  onClick={handleToggleFavorite}
-                  aria-label={isFavorite ? 'Удалить из избранного' : 'Добавить в избранное'}
+                {/* Единый контейнер изображения с обработчиком клика для попапа */}
+                <div
+                  className={styles.imageWrapper}
+                  onClick={() => openImagePopup(lot.image)} // Клик по обертке вызывает попап
                 >
-                  {isFavorite ? '❤️' : '🤍'}
-                </button>
-
-                <div className={styles.imageWrapper} onClick={() => openImagePopup(lot.image)}>
                   <img src={lot.image} alt={lot.title} className={styles.image} />
-                  <img src={MagnifierIcon} alt="Посмотреть" className={styles.magnifier} />
+
+                  <img
+                    src={isFavorite ? FavoriteLotIcon : AddFavoriteLotIcon} // Выбираем иконку
+                    alt={isFavorite ? 'В избранном' : 'Добавить в избранное'} // Alt-текст
+                    className={`${styles.favoriteIcon} ${isFavorite? styles.active : ''}`}
+                    onClick={handleToggleFavorite}
+                  />
+                  {/* !!! КОНЕЦ ИКОНКИ ИЗБРАННОГО !!! */}
+
+                  {/* ИКОНКА УВЕЛИЧИТЕЛЬНОГО СТЕКЛА: Управление видимостью через CSS !!! */}
+                  <img
+                    src={MagnifierIcon}
+                    alt="Увеличить"
+                    className={styles.magnifier} // Используем существующий класс .magnifier
+                    // Для управления видимостью при наведении потребуется CSS правило на .imageWrapper:hover
+                  />
+                  {/* !!! КОНЕЦ ИКОНКИ УВЕЛИЧИТЕЛЬНОГО СТЕКЛА !!! */}
+
                 </div>
+
                 <NavLink
                   to={generatePath(routes.openLot, { lot: lot.number })}
                   className={styles.info}
@@ -313,30 +237,15 @@ const LotGrid = () => {
       )}
 
 
-      {/* Рендерим пагинацию только если страниц больше одной */}
       {totalPages > 1 && (
         <div className={styles.pagination}>
-          {/* Кнопка "Назад" */}
-          <button
-            className={`${styles.pageBtn} ${currentPage === 1 ? styles.disabled : ''}`}
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
+          <button className={`${styles.pageBtn} ${currentPage === 1 ? styles.disabled : ''}`} onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
             <img src={currentPage === 1 ? BackPageAIcon : BackPageDIcon} alt="Назад" />
             Назад
           </button>
-
           {paginationItems.map((item, index) => {
             const key = typeof item === 'number' ? item : `ellipsis-${index}`;
-
-            if (item === '...') {
-              return (
-                <span key={key} className={styles.ellipsis}>
-                    ...
-                  </span>
-              );
-            }
-
+            if (item === '...') { return (<span key={key} className={styles.ellipsis}>...</span>); }
             const pageNumber = item as number;
             return (
               <button
@@ -349,13 +258,7 @@ const LotGrid = () => {
               </button>
             );
           })}
-
-          {/* Кнопка "Вперед" */}
-          <button
-            className={`${styles.pageBtn} ${currentPage === totalPages ? styles.disabled : ''}`}
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
+          <button className={`${styles.pageBtn} ${currentPage === totalPages ? styles.disabled : ''}`} onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
             Вперед
             <img src={currentPage === totalPages ? NextPageAIcon : NextPageDIcon} alt="Вперед" />
           </button>
