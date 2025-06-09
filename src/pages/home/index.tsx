@@ -38,8 +38,6 @@ const HomePage: React.FC = () => {
         <div className="auctionContainer">
           <AuctionLotGrid />
           <div className="sidebarContainer"> {/* Возможно, вам нужен отдельный CSS класс */}
-            {/* Рендерим Search и InformationAddition отдельно */}
-            {/* Передаем реф и обработчик onSearch в Search */}
             <Search
               ref={searchInputRef}
               onSearch={(value) => dispatch(setSearchTerm(value))}
