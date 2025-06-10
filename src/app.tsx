@@ -4,6 +4,7 @@ import HomePage from './pages/home';
 import FavoritePage from './pages/favorite';
 import InformationPage from './pages/information';
 import FooterLinksPage from './pages/footerLinks';
+import ArticlePage from './pages/article';
 import { AuthModalProvider } from './contexts/AuthFlowModalContext';
 import { AddCardModalProvider } from './contexts/AddCardModalContext';
 import { DeleteFavoriteModalProvider } from './contexts/DeleteFavoriteModalContext';
@@ -24,6 +25,7 @@ const App = () => {
                   <Route path="/" element={<HomePage />} />
                   <Route path="/favorite" element={<FavoritePage />} />
                   <Route path={routes.information} element={<InformationPage />} />
+                  <Route path={routes.article} element={<ArticlePage />} />
                   <Route path={routes.footerLinksPage} element={<FooterLinksPage />} />
                 </Routes>
                 <ModalManager />

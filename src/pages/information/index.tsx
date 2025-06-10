@@ -8,7 +8,7 @@ const InformationPage: React.FC = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <>
+    <div className="pageLayout">
       {/* Main content area for the Information page */}
       <main className="mainContent">
         <Header searchInputRef={searchInputRef} />
@@ -16,7 +16,7 @@ const InformationPage: React.FC = () => {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 };
 

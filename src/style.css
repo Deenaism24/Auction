@@ -1,6 +1,13 @@
-body {
+html, body {
     font-family: 'Gilroy', sans-serif;
     margin: 0;
+    height: 100%;
+}
+
+.pageLayout {
+    display: flex; /* Включаем Flexbox */
+    flex-direction: column; /* Располагаем элементы вертикально */
+    min-height: 100vh; /* Минимальная высота равна высоте окна просмотра */
 }
 
 #search-section {
@@ -8,6 +15,7 @@ body {
 }
 
 .main {
+    flex-grow: 1; /*Растягивает контент, чтобы футер оказался прикреплен к нижней границе страницы*/
     font-family: 'Gilroy', sans-serif;
     background-color: #FFFFFF;
     padding-left: calc((100% - 1220px)/2) ;

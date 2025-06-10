@@ -21,7 +21,7 @@ const FavoritePage: React.FC = () => {
   const dispatch = useDispatch();
 
   return (
-    <>
+    <div className="pageLayout">
       <Header searchInputRef={searchInputRef} />
       <main className="main">
         <NavigateHeader/>
@@ -39,7 +39,7 @@ const FavoritePage: React.FC = () => {
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 

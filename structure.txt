@@ -1,6 +1,6 @@
 ├── components/
-│   ├── Article.module.css
-│   ├── Article.tsx
+│   ├── HomeArticle.module.css
+│   ├── HomeArticle.tsx
 │   ├── AuctionLotGrid.tsx
 │   ├── Contacts.tsx
 │   ├── FavoritesGrid.tsx

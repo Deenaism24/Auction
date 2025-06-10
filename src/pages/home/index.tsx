@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import HeroBanner from '../../components/HeroBanner';
 import AuctionLotGrid from '../../components/AuctionLotGrid';
 import InformationAddition from '../../components/InformationAddition';
-import Article from '../../components/Article';
+import HomeArticle from '../../components/HomeArticle';
 import Footer from '../../widgets/footer';
 import Header from '../../widgets/header';
 import Search from '../../components/Search';
@@ -31,7 +31,7 @@ const HomePage: React.FC = () => {
   }, [location.hash]); // Зависимость от location.hash
 
   return (
-    <>
+    <div className="pageLayout">
       <Header searchInputRef={searchInputRef} />
       <HeroBanner />
       <main className="main">
@@ -45,10 +45,10 @@ const HomePage: React.FC = () => {
             <InformationAddition/>
           </div>
         </div>
-        <Article />
+        <HomeArticle />
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 
