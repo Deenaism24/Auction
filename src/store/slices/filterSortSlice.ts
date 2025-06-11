@@ -1,63 +1,58 @@
 // src/store/slices/filterSortSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import lotsData from '../../lotsList'; // Импортируем исходный список лотов
+import lotsData from '../../lotsList'; // Ensure this imports your full list of lots data
 
-// Определяем тип лота (если у вас есть отдельный файл с типами, используйте его)
-interface Lot {
+// !!! IMPORTANT: Ensure the Lot interface is defined and exported here !!!
+export interface Lot { // Exporting the interface
   id: number;
   number: string | number;
   title: string;
-  price: string;
+  price: string; // Assuming price is stored as a string with currency, e.g., "50,000$"
   city: string | undefined;
   event: string | undefined;
   category: string | undefined;
   image: string;
-  // ... другие поля
+  // Add any other properties present in your lotsList.tsx here
+  // description?: string; // Example if you have a description field
 }
+// !!! END IMPORTANT !!!
 
-// Определяем тип состояния
+
+// Define the state type
 interface FilterSortState {
-  allLots: Lot[]; // Храним исходные данные лотов
+  allLots: Lot[]; // Stores the full list of lots
   selectedLocations: string[];
   selectedEvents: string[];
   selectedCategories: string[];
-  selectedSort: string; // Например, 'title-asc', 'price-desc' и т.д.
-  searchTerm: string; // !!! ВЕРНУЛИ SEARCHTERM !!!
+  selectedSort: string;
+  searchTerm: string;
 }
 
-// Начальное состояние
+// Initial state
 const initialState: FilterSortState = {
-  allLots: lotsData as Lot[], // Загружаем исходные данные при старте
+  allLots: lotsData as Lot[], // Load the initial data here
   selectedLocations: [],
   selectedEvents: [],
   selectedCategories: [],
-  selectedSort: 'title-asc', // Начальная сортировка по умолчанию
-  searchTerm: '', // !!! НАЧАЛЬНОЕ ЗНАЧЕНИЕ SEARCHTERM !!!
+  selectedSort: 'title-asc',
+  searchTerm: '',
 };
 
-// Создаем срез состояния
+// Create the slice
 const filterSortSlice = createSlice({
   name: 'filterSort',
   initialState,
   reducers: {
-    // Общий редьюсер для установки фильтров (например, для очистки)
+    // Reducers for managing filters and sort (these are already implemented)
     setFilters: (state, action: PayloadAction<{
       locations?: string[];
       events?: string[];
       categories?: string[];
     }>) => {
-      if (action.payload.locations !== undefined) {
-        state.selectedLocations = action.payload.locations;
-      }
-      if (action.payload.events !== undefined) {
-        state.selectedEvents = action.payload.events;
-      }
-      if (action.payload.categories !== undefined) {
-        state.selectedCategories = action.payload.categories;
-      }
-      // Не нужны сравнения с []
+      if (action.payload.locations !== undefined) { state.selectedLocations = action.payload.locations; }
+      if (action.payload.events !== undefined) { state.selectedEvents = action.payload.events; }
+      if (action.payload.categories !== undefined) { state.selectedCategories = action.payload.categories; }
     },
-    // Редьюсеры для переключения фильтров (оставляем как есть)
     toggleLocationFilter: (state, action: PayloadAction<string>) => {
       const location = action.payload;
       if (state.selectedLocations.includes(location)) {
@@ -82,27 +77,24 @@ const filterSortSlice = createSlice({
         state.selectedCategories.push(category);
       }
     },
-    // Редьюсер для установки опции сортировки (оставляем как есть)
     setSortOption: (state, action: PayloadAction<string>) => {
       state.selectedSort = action.payload;
     },
-    // !!! ВЕРНУЛИ РЕДЬЮСЕР ДЛЯ SEARCHTERM !!!
     setSearchTerm: (state, action: PayloadAction<string>) => {
       state.searchTerm = action.payload;
     },
-    // !!! КОНЕЦ РЕДЬЮСЕРА ДЛЯ SEARCHTERM !!!
   },
 });
 
-// Экспортируем экшены (добавляем setSearchTerm)
+// Export actions
 export const {
   setFilters,
   toggleLocationFilter,
   toggleEventFilter,
   toggleCategoryFilter,
   setSortOption,
-  setSearchTerm, // !!! ЭКСПОРТИРОВАНО !!!
+  setSearchTerm,
 } = filterSortSlice.actions;
 
-// Экспортируем редьюсер (оставляем как есть)
+// Export the reducer
 export default filterSortSlice.reducer;

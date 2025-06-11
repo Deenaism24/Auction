@@ -1,0 +1,146 @@
+/* src/components/Lot.module.css */
+
+/* Адаптация articleContainer */
+.lotContainer {
+    max-width: 800px; /* Ограничиваем ширину контента лота */
+    margin: 40px auto; /* Центрируем и добавляем отступы */
+    padding: 0 20px; /* Внутренние отступы по бокам */
+}
+
+/* Адаптация articleHeader */
+.lotHeader {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px; /* Отступ под заголовком */
+    width: 100%;
+}
+
+/* Используем существующий стиль для основного заголовка (Название лота) */
+.h2 {
+    font-size: 41px;
+    font-weight: 600;
+    }
+
+/* Адаптация subHeader */
+.subHeader {
+    display: flex;
+    justify-content: space-between; /* Разносим номер лота и, возможно, дату */
+    align-items: center;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px; /* Отступ под h2 */
+    color: #555; /* Цвет текста */
+}
+
+.lotNumber {
+    display: flex;
+    width: 100%;
+}
+
+.lotNumberValue {
+    font-weight: bold;
+    color: #000;
+}
+
+
+/* Адаптация articleImage */
+.lotImage {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 20px auto; /* Центрируем и добавляем отступы */
+    border: 1px solid #eee; /* Пример рамки для изображения */
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.1); /* Пример тени */
+}
+
+/* Стиль для заглушки изображения */
+.noImage {
+    text-align: center;
+    font-size: 18px;
+    color: #888;
+    margin: 20px auto;
+    padding: 30px;
+    border: 1px dashed #ccc;
+    max-width: 100%;
+}
+
+/* Адаптация articleContent для деталей лота */
+.lotDetails {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+    margin-top: 20px; /* Отступ над блоком деталей */
+    border-top: 1px solid #DBDBDB; /* Разделитель сверху */
+    padding-top: 20px; /* Отступ после разделителя */
+    /* display: flex; */ /* Если хотите детали в несколько колонок */
+    /* flex-wrap: wrap; */
+    /* gap: 10px 30px; */ /* Отступ между деталями */
+}
+
+/* Стили для каждой строки детали (метка: значение) */
+.detailRow {
+    display: flex;
+    align-items: baseline;
+    align-content: space-between;
+}
+
+.detailLabel {
+    font-weight: bold;
+    color: #555;
+    flex-shrink: 0;
+    min-width: 120px; /* Минимальная ширина для меток */
+}
+
+.detailValue {
+    color: #000;
+}
+
+.priceRow { /* Используем этот класс как Flex-контейнер */
+    display: flex; /* Включаем Flexbox */
+    align-items: center;
+    gap: 5px; /* Отступ внутри строки (иконка-метка) */
+    font-size: 16px;
+    margin-bottom: 10px; /* Отступ между строкой цены и следующей деталью */
+}
+
+.dollarIcon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    flex-shrink: 0; /* Иконка не сжимается */
+}
+
+.priceLabel {
+    font-size: 16px;
+    color: #555;
+    flex-shrink: 0;
+}
+
+.priceValue {
+    font-weight: bold;
+    color: #000;
+    font-size: 16px;
+}
+
+/* Адаптация стиля "не найдено" */
+.notFound {
+    text-align: center;
+    font-size: 32px;
+    color: #d9534f;
+    margin: 50px 0;
+}
+
+/* Медиазапросы для адаптивности, если нужно адаптировать внутренний макет лота */
+@media (max-width: 768px) {
+    .h2 {
+        font-size: 32px; /* Меньший размер заголовка на телефонах */
+    }
+    .subHeader {
+        flex-direction: column; /* Номер лота и дата друг под другом */
+        align-items: flex-start;
+        gap: 5px;
+    }
+    .detailLabel {
+        min-width: 100px; /* Меньшая минимальная ширина меток */
+    }
+}
