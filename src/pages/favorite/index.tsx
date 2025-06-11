@@ -13,7 +13,6 @@ import { setSearchTerm } from '../../store/slices/filterSortSlice';
 // Другие импорты
 import Footer from '../../widgets/footer';
 import Header from '../../widgets/header';
-import NavigateHeader from '../../components/NavigateHeader';
 
 
 const FavoritePage: React.FC = () => {
@@ -24,7 +23,6 @@ const FavoritePage: React.FC = () => {
     <div className="pageLayout">
       <Header searchInputRef={searchInputRef} />
       <main className="main">
-        <NavigateHeader/>
         <div className="auctionContainer">
           <FavoritesGrid />
 

@@ -1,10 +1,11 @@
 // src/components/Article.tsx
 import React from 'react';
 import * as styles from './Article.module.css';
-import { ArticleType } from '../articlesList'; // Убедитесь, что путь правильный
+import { ArticleType } from '../articlesList';
+import CalendarIcon from '../icons/calendar.svg';
 
 interface ArticleProps {
-  article: ArticleType | undefined; // Проп может быть undefined, если статья не найдена
+  article: ArticleType | undefined;
 }
 
 const Article: React.FC<ArticleProps> = ({ article }) => {
@@ -12,9 +13,6 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
     return <div className={styles.notFound}>Статья не найдена</div>;
   }
 
-  // Если content содержит HTML, используем dangerouslySetInnerHTML.
-  // Будьте осторожны с этим, убедитесь, что контент статей безопасен (не содержит вредоносный HTML/скрипты).
-  // Если контент - это просто текст или массив параграфов, используйте другой подход.
   const renderContent = () => {
     if (article.content) {
       return <div className={styles.articleContent} dangerouslySetInnerHTML={{ __html: article.content }} />;
@@ -27,10 +25,13 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
     <article className={styles.articleContainer}>
       <div className={styles.articleHeader}>
         <div className={styles.h2}>{article.title}</div>
-      </div>
-
-      <div className={styles.articleMeta}>
-        Дата публикации: {article.date}
+        <div className={styles.subHeader}>
+          <div className={styles.articleDate}>
+            <img src={CalendarIcon} alt="Дата публикации" />
+            ДАТА ПУБЛИКАЦИИ
+          </div>
+          <div className={styles.dateRange}>{article.date}</div>
+        </div>
       </div>
 
       {/* Изображение статьи, отображаем только если оно есть */}
@@ -40,18 +41,6 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
 
       {/* Содержимое статьи */}
       {renderContent()}
-
-      {/* Если content не HTML, а просто текст, используйте так: */}
-      {/* <div className={styles.articleContent}>{article.content}</div> */}
-
-      {/* Если content - массив параграфов: */}
-      {/* {Array.isArray(article.content) && (
-          <div className={styles.articleContent}>
-              {article.content.map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-              ))}
-          </div>
-      )} */}
 
     </article>
   );

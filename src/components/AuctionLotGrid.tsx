@@ -10,7 +10,7 @@ const AuctionLotGrid = () => {
         <div className={styles.h2}>Аукцион картин автора</div>
         <div className={styles.subHeader}>
           <div className={styles.auctionDate}>
-            <img src={CalendarIcon} alt="ДАТА АУКЦИОНА" />
+            <img src={CalendarIcon} alt="Дата аукциона" />
             ДАТА АУКЦИОНА
           </div>
           <div className={styles.dateRange}>10–13 ЯНВАРЯ</div>

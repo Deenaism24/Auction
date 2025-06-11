@@ -9,7 +9,6 @@
     box-sizing: border-box; /* Учитываем padding в ширине */
 }
 
-
 /* Общий стиль для заголовка секции (h2) */
 .sectionTitle {
     font-size: 31px;
@@ -20,7 +19,6 @@
 
 /* Общий стиль для основного текста (p) */
 .sectionText {
-    /* !!! ИСПРАВЛЕНИЕ: Базовый размер текста */
     font-size: 16px; /* Увеличим базовый размер текста */
     line-height: 1.6; /* Чуть увеличим межстрочный интервал для лучшей читаемости */
     color: #9C9C9C;
@@ -43,7 +41,7 @@
 /* Специфический стиль для подзаголовка (h3 в "Как купить или продать") */
 .stepTitle {
     font-size: 21px;
-    font-weight: 600;
+    font-weight: normal;
     margin-bottom: 15px;
     text-transform: uppercase;
 }

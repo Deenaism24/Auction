@@ -3,35 +3,15 @@ import React from 'react';
 import * as styles from './HomeArticle.module.css';
 import ArticleIcon from '../icons/article.svg';
 import { routes } from '../routes';
-import articles, { ArticleType } from '../articlesList'; // Убедитесь, что ArticleType правильно импортируется, если articlesList экспортирует только массив
-
-// Если ArticleType не экспортируется из articlesList, определите его здесь:
-// interface ArticleType {
-//   id: string;
-//   title: string;
-//   author?: string;
-//   date?: string;
-//   quote: string;
-//   quoteAuthor: string;
-//   content: string;
-//   image?: string;
-// }
+import articles, { ArticleType } from '../articlesList';
 
 import { generatePath, NavLink } from 'react-router-dom';
 
 const HomeArticle: React.FC = () => {
-  // На главной странице отображаем первую статью из списка (или другую логику выбора)
-  // Убедитесь, что articles не пуст перед доступом к articles[0]
   const articleToShow: ArticleType | undefined = articles.length > 0 ? articles[0] : undefined;
-
-
-  // !!! ИСПРАВЛЕНО: ИСПОЛЬЗУЕМ ИМЯ ПАРАМЕТРА 'id' !!!
-  const articlePath = articleToShow ? generatePath(routes.article, { id: articleToShow.id }) : '#'; // Используем 'id'
-  // !!! КОНЕЦ ИСПРАВЛЕНИЯ !!!
-
+  const articlePath = articleToShow ? generatePath(routes.article, { id: articleToShow.id }) : '#';
 
   if (!articleToShow) {
-    // Если нет статей для отображения, можно вернуть null или другое сообщение
     return (
       <article className={ styles.article }>
         <div className={ styles.articleContent }>

@@ -157,7 +157,7 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
           {/* Login */}
           <div onClick={handleLoginClick} className={styles.login}> АВТОРИЗАЦИЯ <img src={AuthIcon} alt="Вход" className={styles.icon} /> </div>
           {/* Иконка поиска в ОСНОВНОМ хедере */}
-          <div onClick={handleSearchClick} className={styles.searchAction}> <img className={styles.icon} alt="Поиск" src={SearchIcon} /> </div>
+          <div onClick={handleSearchClick} className={styles.icon}> <img className={styles.icon} alt="Поиск" src={SearchIcon} /> </div>
           {/* Избранное */}
           <NavLink to={routes.favorite} onClick={closeMenu}> <img className={styles.favIcon} alt="Избранное" src={StarIcon} /> </NavLink>
           {/* Burger Icon */}

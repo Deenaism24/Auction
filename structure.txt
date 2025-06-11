@@ -14,8 +14,6 @@
 │   ├── InformationAddition.tsx
 │   ├── LotGrid.module.css
 │   ├── LotGrid.tsx
-│   ├── NavigateHeader.module.css
-│   ├── NavigateHeader.tsx
 │   ├── Search.module.css
 │   └── Search.tsx
 ├── contexts/

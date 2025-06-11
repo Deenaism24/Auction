@@ -5,7 +5,6 @@ import Footer from '../../widgets/footer';
 import Article from '../../components/Article'; // Импортируем компонент статьи
 import articlesList from '../../articlesList'; // Импортируем список статей (путь может отличаться)
 import { useParams } from 'react-router-dom'; // Импортируем useParams для получения ID из URL
-import NavigateHeader from '../../components/NavigateHeader';
 
 
 // Определяем тип статьи (если есть в другом файле)
@@ -47,9 +46,6 @@ const ArticlePage: React.FC = () => {
       {/* Передаем реф в Header */}
       <Header searchInputRef={searchInputRef} />
       <main className="main">
-        {/* NavigateHeader может быть опционален или адаптирован для страницы статьи */}
-        {/* Например, он может показывать "Главная > Статьи > [Название статьи]" */}
-        <NavigateHeader />
         <div className="container"> {/* Используйте ваш основной контейнер для контента страницы */}
           {/* Рендерим компонент Article, передавая ему найденную статью */}
           {/* Сообщение "Статья не найдена" отобразится внутри Article, если article === undefined */}

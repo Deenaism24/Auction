@@ -4,8 +4,6 @@ import * as styles from './Information.module.css';
 import { routes } from '../routes';
 
 const InformationPage: React.FC = () => {
-  const dummySearchInputRef = useRef<HTMLInputElement>(null);
-
   return (
     <>
       <section id={routes.ANCHOR_PREFERRED_ACCESS} className={styles.sectionContainer}>
