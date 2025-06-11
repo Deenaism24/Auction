@@ -1,0 +1,21 @@
+/* src/components/PersonalData.module.css */
+
+.personalData {
+    /* Стили для контейнера персональных данных */
+    padding: 20px; /* Пример внутренних отступов */
+    border: 1px solid #ddd; /* Пример рамки */
+    border-radius: 4px; /* Пример скругления углов */
+    background-color: #fff;
+}
+
+.personalData h2 {
+    margin-top: 0;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.personalData p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}

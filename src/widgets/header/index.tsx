@@ -1,7 +1,6 @@
 // src/widgets/header/index.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { HashLink } from 'react-router-hash-link';
-// !!! ИМПОРТИРУЕМ NavLink, useLocation, useNavigate, generatePath !!!
 import { NavLink, useLocation, useNavigate, generatePath } from 'react-router-dom';
 import AuthIcon from '../../icons/enter.svg';
 import SearchIcon from '../../icons/search.svg';
@@ -10,13 +9,14 @@ import BurgerIcon from '../../icons/burger.svg';
 import * as styles from './Header.module.css';
 import { useAuthModal } from '../../contexts/AuthFlowModalContext';
 import { routes } from '../../routes';
-// !!! ИМПОРТИРУЕМ СПИСОК СТАТЕЙ !!!
-import articlesList from '../../articlesList'; // Убедитесь, что путь правильный
+import articlesList from '../../articlesList';
+// !!! ИМПОРТ ДЛЯ ЧТЕНИЯ СОСТОЯНИЯ ПОЛЬЗОВАТЕЛЯ ИЗ REDUX !!!
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 // !!! КОНЕЦ ИМПОРТА !!!
 
 
 interface HeaderProps {
-  // searchInputRef все еще нужен для логики handleSearchClick
   searchInputRef: React.RefObject<HTMLInputElement | null>;
   onLoginClick?: () => void;
 }
@@ -27,18 +27,20 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const burgerRef = useRef<HTMLImageElement>(null);
   const location = useLocation();
-  const navigate = useNavigate(); // Убедитесь, что useNavigate импортирован
+  const navigate = useNavigate();
 
-  // Находится ли текущая страница на маршруте информации
+  // !!! ЧТЕНИЕ СОСТОЯНИЯ АВТОРИЗАЦИИ ИЗ REDUX !!!
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+  // !!! КОНЕЦ ЧТЕНИЯ СОСТОЯНИЯ АВТОРИЗАЦИИ !!!
+
+
   const isInformationPage = location.pathname === routes.information;
 
 
   const handleLogoClick = () => {
     if (location.pathname === routes.home) {
-      // Если уже на главной - скроллим наверх
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // переходим на главную
       navigate(routes.home);
     }
     closeMenu();
@@ -46,8 +48,15 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
 
   const handleLoginClick = () => {
     setIsMenuOpen(false);
-    open('login');
+    open('login'); // Открываем модалку авторизации/регистрации
   };
+
+  // Функция для перехода в личный кабинет
+  const handlePersonalAccountClick = () => {
+    closeMenu();
+    navigate(routes.personalAccount);
+  };
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -57,56 +66,39 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
     setIsMenuOpen(false);
   };
 
-  // !!! handleSearchClick - ОСТАВЛЯЕМ БЕЗ ИЗМЕНЕНИЙ, как вы просили !!!
   const handleSearchClick = () => {
-    closeMenu(); // Закрываем меню
-
-    const targetPath = routes.home; // Главная страница
-    const targetHash = '#search-section'; // ID секции поиска
-
-    // Если мы уже на главной странице, просто прокручиваем и фокусируем
+    closeMenu();
+    const targetPath = routes.home;
+    const targetHash = '#search-section';
     if (location.pathname === targetPath) {
       const searchSection = document.getElementById('search-section');
       if (searchSection) {
-        // Используем setTimeout, чтобы дать браузеру время обновить DOM, если это необходимо
         setTimeout(() => {
           searchSection.scrollIntoView({ behavior: 'smooth' });
-          // Дополнительный setTimeout для фокуса, чтобы гарантировать, что прокрутка завершилась
           setTimeout(() => {
-            // searchInputRef может быть null, если компонент размонтирован или ref не был передан (хотя по типу он сейчас обязателен)
             searchInputRef.current?.focus();
-          }, 300); // Небольшая задержка
-        }, 0); // Запускаем в следующем цикле событий
+          }, 300);
+        }, 0);
       }
     } else {
       navigate(`${targetPath}${targetHash}`);
     }
   };
-  // !!! КОНЕЦ handleSearchClick - БЕЗ ИЗМЕНЕНИЙ !!!
 
 
-  // !!! НОВАЯ ЛОГИКА ДЛЯ КЛИКА НА "DISCOVER" (выбирает случайную статью) !!!
   const handleDiscoverClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault(); // Отменяем стандартное поведение NavLink
-    closeMenu(); // Закрываем меню
+    event.preventDefault();
+    closeMenu();
 
-    // Проверяем, что список статей не пуст
     if (articlesList && articlesList.length > 0) {
-      // Выбираем случайный индекс
       const randomIndex = Math.floor(Math.random() * articlesList.length);
-      // Получаем случайную статью
       const randomArticle = articlesList[randomIndex];
-      // Навигируем на страницу этой статьи, используя ее ID
-      // Важно: имя параметра в routes.ts должно совпадать ('id' в маршруте /article/:id?)
-      const articlePath = generatePath(routes.article, { id: randomArticle.id });
+      const articlePath = generatePath(routes.article, { articleId: randomArticle.id });
       navigate(articlePath);
     } else {
       console.warn('Список статей пуст, невозможно выбрать случайную статью.');
-      // Возможно, навигация на страницу каталога статей или просто ничего не делать
-      // navigate(routes.article); // Например, на пустую страницу со списком
     }
   };
-  // !!! КОНЕЦ НОВОЙ ЛОГИКИ ДЛЯ DISCOVER !!!
 
 
   useEffect(() => {
@@ -146,16 +138,29 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
           <div className={styles.centerNav}>
             <HashLink smooth to={routes.access} className={styles.link} onClick={closeMenu}> PREFERED ACCESS </HashLink>
             <HashLink smooth to={routes.about} className={styles.link} onClick={closeMenu}> ABOUT </HashLink>
-            {/* !!! ПРИВЯЗЫВАЕМ handleDiscoverClick К NAVLINK !!! */}
-            {/* У NavLink оставляем 'to' для семантики и правильного URL в статус-баре, но переопределяем onClick */}
+            {/* Ссылка "DISCOVER" */}
             <NavLink to={routes.article} className={styles.link} onClick={handleDiscoverClick}> DISCOVER </NavLink>
             <HashLink smooth to={routes.services} className={styles.link} onClick={closeMenu}> SERVICES </HashLink>
             <HashLink smooth to={routes.instructions} className={styles.link} onClick={closeMenu}> КАК КУПИТЬ ИЛИ ПРОДАТЬ </HashLink>
           </div>
         )}
         <div className={styles.actions}>
-          {/* Login */}
-          <div onClick={handleLoginClick} className={styles.login}> АВТОРИЗАЦИЯ <img src={AuthIcon} alt="Вход" className={styles.icon} /> </div>
+          {/* !!! УСЛОВНЫЙ РЕНДЕРИНГ: Авторизация ИЛИ Личный кабинет !!! */}
+          {isAuthenticated ? (
+            // Если авторизован - кнопка Личный кабинет
+            <div onClick={handlePersonalAccountClick} className={styles.login}> {/* Можно использовать тот же стиль login или создать personalAccount */}
+              ЛИЧНЫЙ КАБИНЕТ
+              <img src={AuthIcon} alt="Личный кабинет" className={styles.icon} />
+            </div>
+          ) : (
+            // Если не авторизован - кнопка Авторизация
+            <div onClick={handleLoginClick} className={styles.login}>
+              АВТОРИЗАЦИЯ
+              <img src={AuthIcon} alt="Вход" className={styles.icon} />
+            </div>
+          )}
+          {/* !!! КОНЕЦ УСЛОВНОГО РЕНДЕРИНГА !!! */}
+
           {/* Иконка поиска в ОСНОВНОМ хедере */}
           <div onClick={handleSearchClick} className={styles.icon}> <img className={styles.icon} alt="Поиск" src={SearchIcon} /> </div>
           {/* Избранное */}
@@ -171,7 +176,7 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
           {/* ... другие ссылки ... */}
           <HashLink smooth to={routes.access} className={styles.burgerMenuLink} onClick={closeMenu}> PREFERED ACCESS </HashLink>
           <HashLink smooth to={routes.about} className={styles.burgerMenuLink} onClick={closeMenu}> ABOUT </HashLink>
-          {/* !!! ПРИВЯЗЫВАЕМ handleDiscoverClick К NAVLINK В БУРГЕРЕ !!! */}
+          {/* Ссылка "DISCOVER" в бургере */}
           <NavLink to={routes.article} className={styles.burgerMenuLink} onClick={handleDiscoverClick}> DISCOVER </NavLink>
           <HashLink smooth to={routes.services} className={styles.burgerMenuLink} onClick={closeMenu}> SERVICES </HashLink>
           <HashLink smooth to={routes.instructions} className={styles.burgerMenuLink} onClick={closeMenu}> КАК КУПИТЬ ИЛИ ПРОДАТЬ </HashLink>
@@ -180,7 +185,20 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
 
           {window.innerWidth <= 650 && (
             <>
-              <span className={styles.burgerMenuLink} onClick={handleLoginClick}> АВТОРИЗАЦИЯ </span>
+              {/* !!! УСЛОВНЫЙ РЕНДЕРИНГ В БУРГЕР-МЕНЮ !!! */}
+              {isAuthenticated ? (
+                // Если авторизован - ссылка Личный кабинет
+                <NavLink to={routes.personalAccount} className={styles.burgerMenuLink} onClick={closeMenu}>
+                  ЛИЧНЫЙ КАБИНЕТ
+                </NavLink>
+              ) : (
+                // Если не авторизован - ссылка Авторизация
+                <span className={styles.burgerMenuLink} onClick={handleLoginClick}>
+                     АВТОРИЗАЦИЯ
+                 </span>
+              )}
+              {/* !!! КОНЕЦ УСЛОВНОГО РЕНДЕРИНГА В БУРГЕР-МЕНЮ !!! */}
+
               {/* Ссылка "ПОИСК" в бургер-меню */}
               <div className={styles.burgerMenuLink} onClick={handleSearchClick}> ПОИСК </div>
             </>

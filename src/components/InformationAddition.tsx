@@ -1,8 +1,7 @@
 // src/components/InformationAddition.tsx
-import React, { useState, useEffect, useMemo } from 'react'; // Удаляем forwardRef
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom'; // Импортируем useNavigate
 import * as styles from './InformationAddition.module.css';
-// Удаляем import Search from './Search'; // Search больше не импортируется здесь
 import Contacts from './Contacts';
 import CollectedIcon from '../icons/collected.svg';
 import ExpendedIcon from '../icons/expended.svg';
@@ -22,10 +21,8 @@ import {
   toggleCategoryFilter,
   setSortOption,
   setFilters,
-  setSearchTerm, // Все еще используем setSearchTerm в clearFilters
+  setSearchTerm,
 } from '../store/slices/filterSortSlice';
-// КОНЕЦ ИМПОРТОВ ДЛЯ REDUX
-
 
 // Определяем тип лота (если есть в другом файле, импортируйте)
 interface Lot {
@@ -37,7 +34,6 @@ interface Lot {
   event: string | undefined;
   category: string | undefined;
   image: string;
-  // ... другие поля
 }
 
 interface FilterType {
@@ -54,18 +50,24 @@ const sortOptions = [
   { label: 'По убыванию стартовой стоимости', value: 'price-desc' },
 ];
 
-// Компонент теперь просто функциональный, без forwardRef
+
+// Компонент теперь просто функциональный
 const InformationAddition = () => {
   const location = useLocation();
+  const navigate = useNavigate(); // Импортируем useNavigate для перехода в ЛК
   const isFavoritePage = location.pathname === routes.favorite;
   const { open } = useAuthModal();
 
-  // ЧТЕНИЕ СОСТОЯНИЯ ИЗ REDUX
+  // ЧТЕНИЕ СОСТОЯНИЯ ИЗ REDUX (фильтры/сортировка/поиск)
   const dispatch = useDispatch<AppDispatch>();
   const { allLots, selectedLocations, selectedEvents, selectedCategories, selectedSort, searchTerm } = useSelector(
     (state: RootState) => state.filterSort
   );
-  // КОНЕЦ ЧТЕНИЯ СОСТОЯНИЯ ИЗ REDUX
+
+  // !!! ЧТЕНИЕ СОСТОЯНИЯ АВТОРИЗАЦИИ ИЗ REDUX !!!
+  // Используем псевдоним, чтобы не конфликтовать с useSelector из filterSortSlice
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+  // !!! КОНЕЦ ЧТЕНИЯ СОСТОЯНИЯ АВТОРИЗАЦИИ !!!
 
 
   // Локальное состояние для UI (открытие/закрытие выпадающих списков)
@@ -262,7 +264,7 @@ const InformationAddition = () => {
       {isFavoritePage ? (
         <Contacts />
       ) : (
-        // Рендерим фильтры, сортировку и остальную информацию на других страницах
+        // Рендерим фильтры, сортировку и остальную информацию на других страницах (кроме регистрации/ЛК)
         <>
           <div className={styles.mobileAccordion} onClick={() => setShowFiltersMobile((prev) => !prev)}>
             <span>ИНФОРМАЦИЯ И ДОПОЛНЕНИЕ</span>
@@ -390,17 +392,33 @@ const InformationAddition = () => {
                 )}
               </div>
 
-              {/* СЕКЦИЯ РЕГИСТРАЦИИ */}
+              {/* !!! СЕКЦИЯ РЕГИСТРАЦИИ / ЛИЧНОГО КАБИНЕТА (АДАПТИРОВАНО) !!! */}
               <div className={styles.infoSection}>
-                <h3 className={styles.registrationHeader}>РЕГИСТРАЦИЯ ОТКРЫТА</h3>
-                <p className={styles.infoText}>
-                  Зарегистрируйтесь сейчас, чтобы делать предварительные ставки или делать ставки в
-                  реальном времени в нашем цифровом зале продаж.
-                </p>
-                <button onClick={() => open('register')} className={styles.registerButton}>
-                  Зарегистрироваться
-                </button>
+                {isAuthenticated ? (
+                  // Если авторизован - кнопка Личный кабинет
+                  <>
+                    <h3 className={styles.registrationHeader}>ЛИЧНЫЙ КАБИНЕТ</h3> {/* Можно адаптировать стиль заголовка */}
+                    <p className={styles.infoText}>Управляйте вашим профилем, историей покупок и избранными лотами.</p> {/* Пример текста */}
+                    <button onClick={() => navigate(routes.personalAccount)} className={styles.registerButton}> {/* Переиспользуем стиль кнопки */}
+                      Перейти в кабинет
+                    </button>
+                  </>
+                ) : (
+                  // Если не авторизован - кнопка Регистрация
+                  <>
+                    <h3 className={styles.registrationHeader}>РЕГИСТРАЦИЯ ОТКРЫТА</h3>
+                    <p className={styles.infoText}>
+                      Зарегистрируйтесь сейчас, чтобы делать предварительные ставки или делать ставки в
+                      реальном времени в нашем цифровом зале продаж.
+                    </p>
+                    <button onClick={() => open('register')} className={styles.registerButton}>
+                      Зарегистрироваться
+                    </button>
+                  </>
+                )}
               </div>
+              {/* !!! КОНЕЦ АДАПТАЦИИ !!! */}
+
               <Contacts />
             </div>
           )}

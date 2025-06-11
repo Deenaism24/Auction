@@ -1,3 +1,5 @@
+/* src/style.css */
+
 html, body {
     font-family: 'Gilroy', sans-serif;
     margin: 0;
@@ -11,51 +13,174 @@ html, body {
 }
 
 #search-section {
-    scroll-margin-top: 80px;
+    scroll-margin-top: 80px; /* Учитывает высоту хедера при прокрутке к элементу */
 }
 
 .main {
-    flex-grow: 1; /*Растягивает контент, чтобы футер оказался прикреплен к нижней границе страницы*/
+    flex-grow: 1; /* Растягивает контент, чтобы футер оказался прикреплен к нижней границе страницы */
     font-family: 'Gilroy', sans-serif;
     background-color: #FFFFFF;
-    padding-left: calc((100% - 1220px)/2) ;
-    padding-right: calc((100% - 1220px)/2);
+    /* Паддинги, которые у вас были, применяются к .main.
+       Для Personal Account Page контейнер будет внутри main и иметь свои паддинги/центрирование */
+    /* padding-left: calc((100% - 1220px)/2) ; */
+    /* padding-right: calc((100% - 1220px)/2); */
 }
 
+/* Стили для Auction/Favorite Grid на главной и избранном */
 .auctionContainer {
-    padding: 30px calc((100% - 1220px) / 2);
+    padding: 30px calc((100% - 1220px) / 2); /* Паддинги вашего контейнера лотов */
     display: flex;
     justify-content: space-between;
+    /* Переход в колонну на 1260px перенесен в медиазапрос ниже, как у вас уже было */
 }
+
+/* !!! СТИЛИ ДЛЯ ЛИЧНОГО КАБИНЕТА (ПЕРЕНЕСЕНЫ ИЗ PersonalAccountPage.module.css) !!! */
+
+.accountContainer {
+    /* Основной контейнер для макета 2 колонки */
+    display: flex;
+    /* gap: 40px; */ /* Можно использовать gap вместо margin между колонками */
+    padding: 30px calc((100% - 1220px) / 2); /* Аналогично auctionContainer для выравнивания */
+}
+
+.leftColumn {
+    /* Левая колонка: заголовок */
+    flex-shrink: 0; /* Левая колонка не сжимается */
+    width: 250px; /* Пример фиксированной ширины левой колонки */
+    /* margin-right: 40px; */ /* Или используйте gap на .accountContainer */
+}
+
+.accountTitle {
+    /* Стили для заголовка "Личный кабинет" */
+    font-size: 24px; /* Пример */
+    font-weight: bold;
+    margin-bottom: 20px; /* Отступ под заголовком */
+}
+
+.rightColumn {
+    /* Правая колонка: выбор секции и контент */
+    flex-grow: 1; /* Правая колонка занимает все оставшееся пространство */
+    /* min-width: 0; */ /* Важно для flex-grow, чтобы контент правильно сжимался */
+}
+
+.sectionToggle {
+    /* Контейнер для кнопок переключения секций */
+    display: flex;
+    gap: 10px; /* Отступ между кнопками */
+    margin-bottom: 20px; /* Отступ под блоком выбора */
+}
+
+.toggleButton {
+    /* Стили для кнопок "История покупок" и "Персональные данные" */
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    background-color: #eee;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.toggleButton.active {
+    /* Стили для активной (выбранной) кнопки */
+    background-color: #007bff; /* Пример активного цвета */
+    color: white;
+    border-color: #007bff;
+}
+
+.sectionContent {
+    /* Контейнер для отображаемого контента секции (PersonalData или PurchaseHistory) */
+    /* padding: 20px; */ /* Внутренний отступ, если нужен */
+    /* border: 1px solid #ddd; */ /* Рамка, если нужна */
+    /* border-radius: 4px; */
+}
+
+
+/* Медиазапросы (АДАПТИРОВАНЫ) */
 
 @media (max-width: 1260px) {
     .main {
+        /* Паддинги main на планшетах */
         padding-right: 10%;
         padding-left: 10%;
     }
+
+    /* Макет Auction/Favorite Grid на планшетах */
     .auctionContainer {
         flex-direction: column;
         gap: 40px;
+        /* Переупорядочивание блоков */
+        /* В Personal Account Page мы управляем порядком flex-direction: column напрямую */
     }
-
+    /* Эти правила для Auction/Favorite Grid */
     .auctionContainer > :first-child {
         order: 2;
     }
-
     .auctionContainer > :nth-child(2) {
         order: 1;
     }
+
+
+    /* !!! Макет ЛИЧНОГО КАБИНЕТА на планшетах (переход в колонну) !!! */
+    .accountContainer {
+        flex-direction: column; /* Левая и правая колонки становятся одной колонной */
+        padding-left: 10%; /* Унаследовать паддинги main или задать свои */
+        padding-right: 10%;
+    }
+
+    .leftColumn {
+        width: 100%; /* Заголовок на всю ширину */
+        margin-right: 0; /* Убрать margin, если был */
+        margin-bottom: 20px; /* Отступ под заголовком */
+        text-align: center; /* Центрируем заголовок */
+    }
+
+    .rightColumn {
+        width: 100%; /* Правая часть на всю ширину */
+    }
+
+    .sectionToggle {
+        /* Возможно, сделайте кнопки выбора секции flexbox или grid, чтобы они были в ряд или сеткой на телефонах */
+        display: flex;
+        gap: 10px; /* Отступ между кнопками */
+        justify-content: center; /* Центрирование кнопок */
+        margin-bottom: 20px; /* Отступ под кнопками */
+    }
+
+    /* !!! КОНЕЦ Макет ЛИЧНОГО КАБИНЕТА на планшетах !!! */
+
 }
 
 @media (max-width: 768px) {
     .main {
+        /* Паддинги main на телефонах */
         padding-left: 20px;
         padding-right: 20px;
+    }
+    /* Паддинги контейнеров на телефонах унаследуют от main или задать явно */
+    .auctionContainer,
+    .accountContainer {
+        padding-left: 20px; /* Или 0, если внутренний контент имеет паддинги */
+        padding-right: 20px;
+    }
+    /* Кнопки переключения могут потребовать стилей для адаптивности */
+    .sectionToggle {
+        flex-wrap: wrap; /* Если кнопок много, они будут переноситься */
+        justify-content: center;
+    }
+    .toggleButton {
+        flex-grow: 1; /* Кнопки могут растягиваться */
+        text-align: center;
     }
 }
 
 @media (max-width: 425px) {
     .main {
+        padding-left: max(20px, calc((100% - 335px)/2));
+        padding-right: max(20px, calc((100% - 335px)/2));
+    }
+    .auctionContainer,
+    .accountContainer {
         padding-left: max(20px, calc((100% - 335px)/2));
         padding-right: max(20px, calc((100% - 335px)/2));
     }

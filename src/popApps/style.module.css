@@ -21,6 +21,14 @@
     margin: 0;
 }
 
+.errorMessage {
+    color: red; /* Красный цвет текста */
+    font-size: 14px; /* Размер шрифта */
+    margin-top: 10px; /* Отступ сверху */
+    text-align: center; /* Центрирование текста */
+    /* Возможно, добавьте margin-bottom, если под ним есть другие элементы */
+}
+
 .content {
     width: 350px;
     margin: auto;

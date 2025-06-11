@@ -1,0 +1,139 @@
+/* src/components/PurchaseHistory.module.css */
+
+.purchaseHistory {
+    margin-top: 0;
+}
+
+.lotList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lotListItem {
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    /* display: flex; <-- Включается в .lotLinkContent */
+}
+
+.lotLinkContent {
+    text-decoration: none;
+    color: inherit;
+    display: flex; /* Flexbox для макета изображение + информация */
+    flex-direction: row; /* По умолчанию: изображение слева, информация справа */
+    align-items: flex-start; /* Выравнивание по верху, т.к. изображение может быть выше */
+    padding: 15px;
+    gap: 15px;
+}
+
+/* !!! СТИЛИ ДЛЯ ИЗОБРАЖЕНИЯ (СКОПИРОВАНО ИЗ LotGrid.module.css) !!! */
+.imageWrapper {
+    flex-shrink: 0;
+    width: 150px; /* Фиксированная ширина для изображения на широких экранах */
+    height: 100px; /* Фиксированная высота */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 4px;
+    /* В LotGrid у imageWrapper может быть position: relative для абсолютных иконок.
+       Здесь, если иконки не нужны, можно обойтись без него или оставить, если структура такая же. */
+    position: relative; /* Оставляем, если будут иконки или позиционирование */
+}
+
+.image {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover; /* Или contain, в зависимости от того, как хотите масштабировать */
+    /* В LotGrid image может быть абсолютно позиционировано или нет. Адаптируйте. */
+    /* position: absolute; top: 0; left: 0; width: 100%; height: 100%; */
+}
+/* !!! КОНЕЦ СТИЛЕЙ ДЛЯ ИЗОБРАЖЕНИЯ !!! */
+
+
+.lotInfo {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* !!! СТИЛИ ДЛЯ ДАТЫ ПОКУПКИ (АДАПТАЦИЯ СТИЛЕЙ ДАТЫ АУКЦИОНА) !!! */
+.auctionDateRow { /* Новый класс для строки даты покупки */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px; /* Размер метки "ДАТА ПОКУПКИ:" */
+    color: #555; /* Цвет метки */
+    /* Возможно, стили для иконки календаря, если она добавлена */
+    /* .icon { width: 16px; height: 16px; } */
+}
+
+.dateRange { /* Используем существующий класс для значения даты */
+    font-weight: bold; /* Жирный шрифт для значения */
+    color: #000; /* Цвет значения */
+}
+/* !!! КОНЕЦ СТИЛЕЙ ДЛЯ ДАТЫ ПОКУПКИ !!! */
+
+
+/* !!! СТИЛИ ДЛЯ НАЗВАНИЯ И СТОИМОСТИ (СКОПИРОВАНО ИЗ LotGrid.module.css) !!! */
+.lotName { /* Используем существующий класс */
+    font-size: 16px; /* Размер заголовка лота */
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.priceLabelRow { /* Новый класс для строки стоимости */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px; /* Размер метки "Стоимость:" */
+    color: #555; /* Цвет метки */
+}
+
+.dollarIcon { /* Используем существующий класс */
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+
+.priceLabel { /* Используем существующий класс */
+    /* Стили для текста "Стоимость:" (уже могут быть определены) */
+    font-size: 14px; /* Размер метки */
+    color: #555; /* Цвет метки */
+}
+
+.priceValue { /* Используем существующий класс */
+    font-weight: bold; /* Жирный шрифт для значения */
+    color: #000; /* Цвет значения */
+}
+/* !!! КОНЕЦ СТИЛЕЙ ДЛЯ НАЗВАНИЯ И СТОИМОСТИ !!! */
+
+
+/* МЕДИАЗАПРОС ДЛЯ ТЕЛЕФОНОВ (переход в колонну) - Адаптируем */
+@media (max-width: 768px) {
+    .lotLinkContent {
+        flex-direction: column;
+        align-items: flex-start; /* Выравнивание по левому краю */
+    }
+
+    .lotImageWrapper {
+        width: 100%;
+        height: auto;
+        max-height: 200px;
+        margin-bottom: 10px;
+    }
+
+    .lotImage {
+        width: 100%;
+        height: auto;
+        object-fit: contain; /* Или cover */
+    }
+
+    .lotInfo {
+        width: 100%;
+    }
+}
