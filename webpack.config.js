@@ -8,7 +8,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'docs'),
-    publicPath: '/',
+    publicPath: '/Auction/', // <-- Имя репозитория
     clean: true,
   },
   devServer: {
