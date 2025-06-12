@@ -25,13 +25,13 @@ const PersonalAccountPage: React.FC = () => {
           {selectedSection === 'data' && <PersonalData />}
 
           <div className="sidebarContainer">
-            <div className={`$"toggleButton" ${selectedSection === 'data' ? "active" : ''}`}
+            <div className={`toggleButton ${selectedSection === 'data' ? "active" : ''}`}
                  onClick={() => setSelectedSection('data')}>
               <img src={selectedSection === 'data' ? PersonWhiteIcon : PersonIcon}
                    alt="Персональные данные" className={styles.icon} />
               Персональные данные
             </div>
-            <div className={`$"toggleButton" ${selectedSection === 'history' ? "active" : ''}`}
+            <div className={`toggleButton ${selectedSection === 'history' ? "active" : ''}`}
                  onClick={() => setSelectedSection('history')}>
               <img src={selectedSection === 'history' ? HistoryWhiteIcon : HistoryIcon}
                    alt="История покупок" className={styles.icon} />

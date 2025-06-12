@@ -87,9 +87,8 @@ html, body {
 
 .toggleButton.active {
     /* Стили для активной (выбранной) кнопки */
-    background-color: black; /* Пример активного цвета */
+    background-color: black;
     color: white;
-
 }
 
 .sectionContent {
