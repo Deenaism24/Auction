@@ -26,7 +26,7 @@ export default defineConfig([
   },
   eslintPluginPrettierRecommended,
   {
-    ignores: ['dist/', 'node_modules/'],
+    ignores: ['docs/', 'node_modules/'],
   },
   {
     settings: {
