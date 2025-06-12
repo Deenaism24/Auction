@@ -20,10 +20,6 @@ html, body {
     flex-grow: 1; /* Растягивает контент, чтобы футер оказался прикреплен к нижней границе страницы */
     font-family: 'Gilroy', sans-serif;
     background-color: #FFFFFF;
-    /* Паддинги, которые у вас были, применяются к .main.
-       Для Personal Account Page контейнер будет внутри main и иметь свои паддинги/центрирование */
-    /* padding-left: calc((100% - 1220px)/2) ; */
-    /* padding-right: calc((100% - 1220px)/2); */
 }
 
 /* Стили для Auction/Favorite Grid на главной и избранном */
@@ -38,8 +34,10 @@ html, body {
     /* Контейнер для кнопок переключения секций */
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 10px;
     margin-bottom: 20px;
+    width: 355px;
 }
 
 .toggleButton {
@@ -94,6 +92,7 @@ html, body {
         gap: 10px; /* Отступ между кнопками */
         justify-content: center; /* Центрирование кнопок */
         margin-bottom: 20px; /* Отступ под кнопками */
+        width: 100%;
     }
 
     /* !!! КОНЕЦ Макет ЛИЧНОГО КАБИНЕТА на планшетах !!! */

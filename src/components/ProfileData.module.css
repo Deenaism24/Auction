@@ -69,7 +69,6 @@
 
 .lotLinkContent {
     text-decoration: none;
-    color: inherit;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -82,7 +81,6 @@
     width: 100%; /* Пример ширины с главной */
     height: 200px; /* Пример высоты с главной */
     display: flex;
-    justify-content: center;
     align-items: center;
     overflow: hidden;
     position: relative; /* Оставляем, если нужны абсолютные дочерние элементы */
