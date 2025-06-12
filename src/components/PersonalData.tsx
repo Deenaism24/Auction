@@ -10,8 +10,9 @@ const PersonalData: React.FC = () => {
         <div className={styles.h2}> Персональные данные </div>
       </div>
       <p>Имя: admin</p>
-      <p>Имя: admin</p>
+      <p>Почта: admin@a.ru</p>
       <p>Телефон: +7(777)777-77-77</p>
+      {/* Возможно, добавить другие поля пользователя */}
     </section>
   );
 };
