@@ -85,7 +85,6 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
     }
   };
 
-
   const handleDiscoverClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     closeMenu();
@@ -93,10 +92,10 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
     if (articlesList && articlesList.length > 0) {
       const randomIndex = Math.floor(Math.random() * articlesList.length);
       const randomArticle = articlesList[randomIndex];
-      const articlePath = generatePath(routes.article, { articleId: randomArticle.id });
+      const articlePath = generatePath(routes.article, { id: randomArticle.id });
       navigate(articlePath);
     } else {
-      console.warn('Список статей пуст, невозможно выбрать случайную статью.');
+      console.warn('Список статей пуст');
     }
   };
 
