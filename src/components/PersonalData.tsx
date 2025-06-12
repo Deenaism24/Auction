@@ -1,6 +1,6 @@
 // src/components/PersonalData.tsx
 import React from 'react';
-import * as styles from './PersonalData.module.css';
+import * as styles from './ProfileData.module.css';
 
 const PersonalData: React.FC = () => {
   return (

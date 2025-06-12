@@ -1,7 +1,7 @@
 // src/components/PurchaseHistory.tsx
 import React from 'react';
 // Используем стили из PurchaseHistory.module.css
-import * as styles from './PurchaseHistory.module.css';
+import * as styles from './ProfileData.module.css';
 import DollarIcon from '../icons/dollar.svg';
 // CalendarIcon не используется в этом компоненте, удалим импорт
 // import CalendarIcon from '../icons/calendar.svg';

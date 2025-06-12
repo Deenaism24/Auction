@@ -1,9 +1,11 @@
-/* src/components/PurchaseHistory.module.css */
+/* src/components/ProfileData.module.css */
 
 .historySection {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    max-width: 100%;
+    width: 825px;
+    box-sizing: border-box;
     font-family: 'Gilroy', sans-serif;
     margin-bottom: 40px;
     /* Возможно, здесь тоже нужен отступ сверху, как в .contactInfo */
@@ -32,6 +34,26 @@
     font-size: 32px;
     font-weight: normal;
 }
+
+.personalData {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.personalData h2 {
+    margin-top: 0;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.personalData p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
 
 .purchaseHistory {
     margin-top: 0; /* Не нужен, если historySection имеет margin-top */
@@ -134,10 +156,13 @@
     font-weight: bold;
     color: #000;
 }
-/* !!! КОНЕЦ СТИЛЕЙ ДЛЯ НАЗВАНИЯ И СТОИМОСТИ !!! */
 
+@media (max-width: 1260px) {
+    .historySection {
+        width: calc(100% + 20px);
+    }
+}
 
-/* МЕДИАЗАПРОС ДЛЯ ТЕЛЕФОНОВ (переход в колонну) - Адаптируем */
 @media (max-width: 768px) {
     .lotLinkContent {
         flex-direction: column;
@@ -162,4 +187,21 @@
     .lotInfo {
         width: 100%;
     }
+}
+
+@media (max-width: 600px) {
+    .historySection {
+        width: 100%;
+    }
+}
+/* Медиазапросы */
+@media (max-width: 425px) {
+    /* Возможно, адаптировать font-size для кнопок переключателя */
+    .toggleButton {
+        font-size: 14px;
+        padding: 5px;
+    }
+    /* Возможно, адаптировать font-size для h1, h2 */
+    .h1 { font-size: 32px; }
+    .h2 { font-size: 24px; }
 }
