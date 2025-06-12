@@ -4,6 +4,7 @@ html, body {
     font-family: 'Gilroy', sans-serif;
     margin: 0;
     height: 100%;
+    min-width: 320px;
 }
 
 .pageLayout {
@@ -41,6 +42,7 @@ html, body {
 }
 
 .toggleButton {
+    display: flex;
     padding: 10px 15px;
     cursor: pointer;
     gap: 10px;
@@ -49,11 +51,11 @@ html, body {
     text-transform: uppercase;
     border-top: 1px solid #DBDBDB;
     border-bottom: 1px solid #DBDBDB;
-
+    width: 100%
 }
 
 .toggleIcon {
-    padding: 10px;
+    padding-left: 10px;
     width: 18px;
     height: 18px;
 }
@@ -90,7 +92,6 @@ html, body {
         /* Возможно, сделайте кнопки выбора секции flexbox или grid, чтобы они были в ряд или сеткой на телефонах */
         display: flex;
         gap: 10px; /* Отступ между кнопками */
-        justify-content: center; /* Центрирование кнопок */
         margin-bottom: 20px; /* Отступ под кнопками */
         width: 100%;
     }
