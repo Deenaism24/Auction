@@ -4,7 +4,7 @@ export const routes = {
   register: '/register',
   favorite: '/favorite',
   openLot: '/lot/:lot?',
-  article: '/article/:id',
+  article: '/article/:id?',
   personalAccount: '/profile',
   // Header
   information: '/information',
