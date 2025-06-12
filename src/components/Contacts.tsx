@@ -1,4 +1,4 @@
-import * as styles from './Contacts.module.css';
+import * as styles from './InformationAddition.module.css';
 import PhoneIcon from '../icons/phone.svg';
 import MailIcon from '../icons/mail.svg';
 import React from 'react';

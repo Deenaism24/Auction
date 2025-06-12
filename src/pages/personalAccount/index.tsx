@@ -3,71 +3,45 @@ import React, { useRef, useState } from 'react'; // useRef все еще нуж�
 import Header from '../../widgets/header';
 import Footer from '../../widgets/footer';
 import PersonalData from '../../components/PersonalData'; // Компонент для персональных данных
-import PurchaseHistory from '../../components/PurchaseHistory'; // Компонент для истории покупок
-import * as personalDataStyles from '../../components/PersonalData.module.css'; // Используем алиас, чтобы не конфликтовать со стилями контента
+import PurchaseHistory from '../../components/PurchaseHistory';
+import PersonIcon from '../../icons/personal.svg';
+import PersonWhiteIcon from '../../icons/personWhite.svg';
+import HistoryIcon from '../../icons/history.svg';
+import HistoryWhiteIcon from '../../icons/historyWhite.svg';
+import * as styles from '../../widgets/header/Header.module.css'; // Компонент для истории покупок
 
 
 const PersonalAccountPage: React.FC = () => {
-  // searchInputRef все еще передается в Header, даже если Search не рендерится на этой странице
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [selectedSection, setSelectedSection] = useState<'history' | 'data'>('history'); // По умолчанию - история покупок
 
   return (
-    <>
-      {/* Header ожидает searchInputRef */}
+    <div className={"pageLayout"}>
       <Header searchInputRef={searchInputRef} />
-      <main className="main"> {/* Используем общий класс main */}
-        {/* auctionContainer - это ваш общий контейнер для макета.
-            Предполагаем, что он создает две колонки: одна основная (для сетки лотов на главной)
-            и одна для сайдбара (для фильтров/информации на главной).
-            На этой странице мы будем использовать ТОЛЬКО колонку сайдбара для всего контента ЛК.
-            Левая колонка останется пустой или будет невидимой в зависимости от CSS auctionContainer.
-        */}
+      <main className="main">
         <div className="auctionContainer">
-          {/* Левая колонка - на странице ЛК она пустая */}
-          <div className="mainContentColumn"> {/* Предполагаем, что у вас есть такой класс для левой колонки */}
-            {/* Этот div просто занимает место левой колонки в двухколоночном макете */ }
-            {/* Его стили (ширина, отступы) должны быть определены в вашем общем CSS для макета */}
-          </div>
-
-          {/* Правая колонка - здесь размещаем переключатель и контент ЛК */}
-          {/* Используем тот же класс сайдбара, что и на главной для консистентности */}
           <div className="sidebarContainer">
-            {/* Блок выбора секции */}
-            <div className={personalDataStyles.sectionToggle}> {/* Используем стили из PersonalData.module.css */}
-              <button
-                // !!! ИСПРАВЛЕНО: правильное использование классов стилей !!!
-                className={`${personalDataStyles.toggleButton} ${selectedSection === 'history' ? personalDataStyles.active : ''}`}
-                onClick={() => setSelectedSection('history')}
-              >
-                История покупок
-              </button>
-              <button
-                // !!! ИСПРАВЛЕНО: правильное использование классов стилей !!!
-                className={`${personalDataStyles.toggleButton} ${selectedSection === 'data' ? personalDataStyles.active : ''}`}
-                onClick={() => setSelectedSection('data')}
-              >
-                Персональные данные
-              </button>
+            <div className={`$"toggleButton" ${selectedSection === 'data' ? "active" : ''}`}
+                 onClick={() => setSelectedSection('data')}>
+              <img src={selectedSection === 'data' ? PersonWhiteIcon : PersonIcon}
+                   alt="Персональные данные" className={styles.icon} />
+              Персональные данные
             </div>
-
-            {/* Блок для рендеринга контента секции */}
-            {/* Не нужен отдельный div. Компоненты PurchaseHistory и PersonalData уже содержат свои секции. */}
-            {/* {selectedSection === 'history' ? (
-                <PurchaseHistory />
-              ) : (
-                <PersonalData />
-              )} */}
-
-            {/* Рендерим нужный компонент напрямую */}
-            {selectedSection === 'history' && <PurchaseHistory />}
-            {selectedSection === 'data' && <PersonalData />}
-
+            <div className={`$"toggleButton" ${selectedSection === 'history' ? "active" : ''}`}
+                 onClick={() => setSelectedSection('history')}>
+              <img src={selectedSection === 'history' ? HistoryWhiteIcon : HistoryIcon}
+                   alt="История покупок" className={styles.icon} />
+              История покупок
+            </div>
           </div>
+
+          {selectedSection === 'history' && <PurchaseHistory />}
+          {selectedSection === 'data' && <PersonalData />}
+
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 
