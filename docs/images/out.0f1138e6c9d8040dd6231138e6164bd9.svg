@@ -1,7 +1,0 @@
-<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g transform="translate(20,0) scale(-1,1)">
-        <path d="M9.7334 12.1833L11.8667 10.05L9.7334 7.91663" stroke="#171717" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M3.33301 10.05H11.808" stroke="#171717" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M10 3.33337C13.6833 3.33337 16.6667 5.83337 16.6667 10C16.6667 14.1667 13.6833 16.6667 10 16.6667" stroke="#171717" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
-</svg>
