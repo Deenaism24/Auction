@@ -4,7 +4,6 @@
     display: flex;
     flex-direction: column;
     max-width: 100%;
-    box-sizing: border-box;
     font-family: 'Gilroy', sans-serif;
     margin-bottom: 40px;
     /* Возможно, здесь тоже нужен отступ сверху, как в .contactInfo */
@@ -45,11 +44,7 @@
 }
 
 .lotListItem {
-    /* !!! УДАЛЕНИЕ РАМКИ !!! */
-    /* border: 1px solid #ccc; */ /* <-- УДАЛИТЬ ЭТУ СТРОКУ */
-    /* margin-bottom: 15px; <-- Оставляем или корректируем отступ между элементами */
     margin-bottom: 15px;
-    border-radius: 0; /* Возможно, сбросить скругление, если оно было */
     overflow: hidden; /* Оставить, если нужно обрезать что-то */
 }
 
@@ -61,7 +56,6 @@
     align-items: flex-start;
     padding: 15px; /* Внутренние отступы каждого элемента списка */
     gap: 15px; /* Отступ между изображением и инфо блоком */
-    border: none; /* <-- УДАЛИТЬ ЭТУ СТРОКУ, ЕСЛИ ВЫШЕ БЫЛА РАМКА */
 }
 
 
@@ -75,7 +69,6 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    border-radius: 4px;
     position: relative; /* Оставляем, если нужны абсолютные дочерние элементы */
 }
 

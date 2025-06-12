@@ -4,7 +4,6 @@ import Header from '../../widgets/header';
 import Footer from '../../widgets/footer';
 import PersonalData from '../../components/PersonalData'; // Компонент для персональных данных
 import PurchaseHistory from '../../components/PurchaseHistory'; // Компонент для истории покупок
-// Импортируем стили из PersonalData.module.css для переключателя секций
 import * as personalDataStyles from '../../components/PersonalData.module.css'; // Используем алиас, чтобы не конфликтовать со стилями контента
 
 

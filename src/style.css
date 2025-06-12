@@ -95,9 +95,6 @@ html, body {
     /* border-radius: 4px; */
 }
 
-
-/* Медиазапросы (АДАПТИРОВАНЫ) */
-
 @media (max-width: 1260px) {
     .main {
         /* Паддинги main на планшетах */
