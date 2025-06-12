@@ -20,6 +20,10 @@ const PersonalAccountPage: React.FC = () => {
       <Header searchInputRef={searchInputRef} />
       <main className="main">
         <div className="auctionContainer">
+
+          {selectedSection === 'history' && <PurchaseHistory />}
+          {selectedSection === 'data' && <PersonalData />}
+
           <div className="sidebarContainer">
             <div className={`$"toggleButton" ${selectedSection === 'data' ? "active" : ''}`}
                  onClick={() => setSelectedSection('data')}>
@@ -34,10 +38,6 @@ const PersonalAccountPage: React.FC = () => {
               История покупок
             </div>
           </div>
-
-          {selectedSection === 'history' && <PurchaseHistory />}
-          {selectedSection === 'data' && <PersonalData />}
-
         </div>
       </main>
       <Footer />
