@@ -12,7 +12,7 @@ const PersonalAccountPage: React.FC = () => {
 
   return (
     <>
-      <Header searchInputRef={searchInputRef} /> {/* Передайте searchInputRef если Header требует его */}
+      <Header searchInputRef={searchInputRef} />
       <main className="main"> {/* Используем общий класс main */}
         <div className="auctionContainer">
           <div className="rightColumn"> {/* Правая колонка (выбор секции и контент) */}
