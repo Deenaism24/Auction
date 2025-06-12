@@ -3658,7 +3658,7 @@ eval("module.exports = \"data:image/svg+xml,%3Csvg width=%2716%27 height=%2716%2
 /******/ 	
 /******/ 	/* webpack/runtime/publicPath */
 /******/ 	(() => {
-/******/ 		__webpack_require__.p = "/";
+/******/ 		__webpack_require__.p = "/Auction/";
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/react refresh */
