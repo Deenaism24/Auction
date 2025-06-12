@@ -5,7 +5,7 @@ import Footer from '../../widgets/footer';
 import PersonalData from '../../components/PersonalData'; // Компонент для персональных данных
 import PurchaseHistory from '../../components/PurchaseHistory';
 import PersonIcon from '../../icons/personal.svg';
-import PersonWhiteIcon from '../../icons/personWhite.svg';
+import PersonWhiteIcon from '../../icons/personalWhite.svg';
 import HistoryIcon from '../../icons/history.svg';
 import HistoryWhiteIcon from '../../icons/historyWhite.svg';
 import * as styles from '../../widgets/header/Header.module.css'; // Компонент для истории покупок
