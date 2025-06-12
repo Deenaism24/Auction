@@ -3,7 +3,7 @@
 .historySection {
     display: flex;
     flex-direction: column;
-    max-width: 100%;
+    width: 100%;
     font-family: 'Gilroy', sans-serif;
     margin-bottom: 40px;
     /* Возможно, здесь тоже нужен отступ сверху, как в .contactInfo */
