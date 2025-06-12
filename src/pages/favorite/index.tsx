@@ -2,7 +2,6 @@
 import React, { useRef } from 'react';
 import FavoritesGrid from '../../components/FavoritesGrid';
 
-// !!! ИМПОРТИРУЕМ FAVORITESEARCH !!!
 import FavoriteSearch from '../../components/FavoriteSearch';
 import InformationAddition from '../../components/InformationAddition';
 
@@ -30,8 +29,6 @@ const FavoritePage: React.FC = () => {
             <FavoriteSearch
               onSearch={(value) => dispatch(setSearchTerm(value))}
             />
-
-            {/* InformationAddition на этой странице рендерит только контакты */}
             <InformationAddition />
           </div>
         </div>

@@ -176,7 +176,7 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
           <HashLink smooth to={routes.access} className={styles.burgerMenuLink} onClick={closeMenu}> PREFERED ACCESS </HashLink>
           <HashLink smooth to={routes.about} className={styles.burgerMenuLink} onClick={closeMenu}> ABOUT </HashLink>
           {/* Ссылка "DISCOVER" в бургере */}
-          <NavLink to={routes.article} className={styles.burgerMenuLink} onClick={handleDiscoverClick}> DISCOVER </NavLink>
+          <span className={styles.burgerMenuLink} onClick={handleDiscoverClick}> DISCOVER </span>
           <HashLink smooth to={routes.services} className={styles.burgerMenuLink} onClick={closeMenu}> SERVICES </HashLink>
           <HashLink smooth to={routes.instructions} className={styles.burgerMenuLink} onClick={closeMenu}> КАК КУПИТЬ ИЛИ ПРОДАТЬ </HashLink>
           <HashLink smooth to={routes.ROUTE_TO_FOOTER_LINKS_SUPPORT} className={styles.burgerMenuLink} onClick={closeMenu}> ПОДДЕРЖКА </HashLink>

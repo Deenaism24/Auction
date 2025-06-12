@@ -14,11 +14,7 @@ const PersonalAccountPage: React.FC = () => {
     <>
       <Header searchInputRef={searchInputRef} /> {/* Передайте searchInputRef если Header требует его */}
       <main className="main"> {/* Используем общий класс main */}
-        <div className="accountContainer"> {/* Контейнер для макета личного кабинета */}
-          <div className="leftColumn"> {/* Левая колонка (заголовок) */}
-            <h1 className="accountTitle">Личный кабинет</h1>
-          </div>
-
+        <div className="auctionContainer">
           <div className="rightColumn"> {/* Правая колонка (выбор секции и контент) */}
             <div className="sectionToggle"> {/* Блок выбора секции */}
               <button

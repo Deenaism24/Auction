@@ -1,5 +1,37 @@
 /* src/components/PurchaseHistory.module.css */
 
+.historySection {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-family: 'Gilroy', sans-serif;
+    margin-bottom: 40px;
+}
+
+.historyHeader {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 32px;
+    width: 100%;
+}
+
+.h1 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid #DBDBDB;
+    font-size: 41px;
+    font-weight: 600;
+}
+
+.h2 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid #DBDBDB;
+    font-size: 32px;
+    font-weight: 600;
+}
+
 .purchaseHistory {
     margin-top: 0;
 }

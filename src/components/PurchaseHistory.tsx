@@ -11,8 +11,11 @@ const PurchaseHistory: React.FC = () => {
   const purchasedLotsData = boughtLots;
 
   return (
-    <div className={styles.purchaseHistory}>
-      <h2>История покупок</h2>
+    <section className={styles.historySection}>
+      <div className={styles.historyHeader}>
+        <div className={styles.h1}> Личный кабинет </div>
+        <div className={styles.h2}>История покупок</div>
+      </div>
       {purchasedLotsData.length === 0 ? (
         <p>У вас пока нет купленных лотов.</p>
       ) : (
@@ -55,7 +58,7 @@ const PurchaseHistory: React.FC = () => {
           ))}
         </ul>
       )}
-    </div>
+    </section>
   );
 };
 
