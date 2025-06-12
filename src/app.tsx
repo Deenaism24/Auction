@@ -19,7 +19,7 @@ import { routes } from './routes';
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/Auction/">
       <ConfirmationModalProvider>
         <AuthModalProvider>
           <AddCardModalProvider>
