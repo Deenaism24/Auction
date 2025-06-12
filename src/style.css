@@ -34,35 +34,6 @@ html, body {
     /* Переход в колонну на 1260px перенесен в медиазапрос ниже, как у вас уже было */
 }
 
-/* !!! СТИЛИ ДЛЯ ЛИЧНОГО КАБИНЕТА (ПЕРЕНЕСЕНЫ ИЗ PersonalAccountPage.module.css) !!! */
-
-.accountContainer {
-    /* Основной контейнер для макета 2 колонки */
-    display: flex;
-    /* gap: 40px; */ /* Можно использовать gap вместо margin между колонками */
-    padding: 30px calc((100% - 1220px) / 2); /* Аналогично auctionContainer для выравнивания */
-}
-
-.leftColumn {
-    /* Левая колонка: заголовок */
-    flex-shrink: 0; /* Левая колонка не сжимается */
-    width: 250px; /* Пример фиксированной ширины левой колонки */
-    /* margin-right: 40px; */ /* Или используйте gap на .accountContainer */
-}
-
-.accountTitle {
-    /* Стили для заголовка "Личный кабинет" */
-    font-size: 24px; /* Пример */
-    font-weight: bold;
-    margin-bottom: 20px; /* Отступ под заголовком */
-}
-
-.rightColumn {
-    /* Правая колонка: выбор секции и контент */
-    flex-grow: 1; /* Правая колонка занимает все оставшееся пространство */
-    /* min-width: 0; */ /* Важно для flex-grow, чтобы контент правильно сжимался */
-}
-
 .sectionToggle {
     /* Контейнер для кнопок переключения секций */
     display: flex;
@@ -73,10 +44,13 @@ html, body {
 .toggleButton {
     padding: 10px 15px;
     cursor: pointer;
+    gap: 10px;
+    align-items: center;
     font-size: 16px;
     text-transform: uppercase;
     border-top: 1px solid #DBDBDB;
     border-bottom: 1px solid #DBDBDB;
+
 }
 
 .toggleIcon {
@@ -89,13 +63,6 @@ html, body {
     /* Стили для активной (выбранной) кнопки */
     background-color: black;
     color: white;
-}
-
-.sectionContent {
-    /* Контейнер для отображаемого контента секции (PersonalData или PurchaseHistory) */
-    /* padding: 20px; */ /* Внутренний отступ, если нужен */
-    /* border: 1px solid #ddd; */ /* Рамка, если нужна */
-    /* border-radius: 4px; */
 }
 
 @media (max-width: 1260px) {
@@ -118,25 +85,6 @@ html, body {
     }
     .auctionContainer > :nth-child(2) {
         order: 1;
-    }
-
-
-    /* !!! Макет ЛИЧНОГО КАБИНЕТА на планшетах (переход в колонну) !!! */
-    .accountContainer {
-        flex-direction: column; /* Левая и правая колонки становятся одной колонной */
-        padding-left: 10%; /* Унаследовать паддинги main или задать свои */
-        padding-right: 10%;
-    }
-
-    .leftColumn {
-        width: 100%; /* Заголовок на всю ширину */
-        margin-right: 0; /* Убрать margin, если был */
-        margin-bottom: 20px; /* Отступ под заголовком */
-        text-align: center; /* Центрируем заголовок */
-    }
-
-    .rightColumn {
-        width: 100%; /* Правая часть на всю ширину */
     }
 
     .sectionToggle {

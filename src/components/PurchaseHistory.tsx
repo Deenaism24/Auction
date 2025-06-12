@@ -64,10 +64,12 @@ const PurchaseHistory: React.FC = () => {
                   {/* Название лота - используем тот же класс, что в LotGrid */}
                   <div className={styles.lotName}>{lot.title}</div> {/* Используем .lotName */}
                   {/* Стоимость - используем те же классы, что в LotGrid, адаптированные */}
-                  <div className={styles.priceLabelRow}> {/* Используем .priceLabelRow */}
-                    <img src={DollarIcon} alt="Цена" className={styles.dollarIcon} /> {/* Используем .dollarIcon */}
-                    <span className={styles.priceLabel}>Стоимость:</span> {/* Используем .priceLabel */}
-                    <span className={styles.priceValue}>{lot.price}</span> {/* Используем .priceValue */}
+                  <div>
+                    <div className={styles.priceLabel}>
+                      <img src={DollarIcon} alt="Цена" />
+                      СТОИМОСТЬ:
+                      <div className={styles.priceValue}>{lot.price}</div>
+                    </div>
                   </div>
                 </div>
               </NavLink>

@@ -24,7 +24,7 @@ const PersonalAccountPage: React.FC = () => {
           {selectedSection === 'history' && <PurchaseHistory />}
           {selectedSection === 'data' && <PersonalData />}
 
-          <div className="sidebarContainer">
+          <div className="sectionToggle">
             <div className={`toggleButton ${selectedSection === 'data' ? "active" : ''}`}
                  onClick={() => setSelectedSection('data')}>
               <img src={selectedSection === 'data' ? PersonWhiteIcon : PersonIcon}
