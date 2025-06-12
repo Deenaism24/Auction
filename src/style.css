@@ -37,6 +37,7 @@ html, body {
 .sectionToggle {
     /* Контейнер для кнопок переключения секций */
     display: flex;
+    flex-direction: column;
     gap: 10px;
     margin-bottom: 20px;
 }
