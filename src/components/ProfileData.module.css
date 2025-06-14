@@ -109,10 +109,13 @@
     align-items: center;
     gap: 8px;
     text-transform: uppercase;
+    color: #171717;
+    justify-content: space-between;
 }
 
 .dateRange {
-    color: #4F7B9E;
+    color: #9C9C9C;
+    font-weight: 600;
     font-size: 16px;
     text-transform: uppercase;
     padding-right: 8px;
@@ -131,11 +134,12 @@
     gap: 6px;
     font-size: 16px;
     text-transform: uppercase;
+    justify-content: space-between;
 }
 
 .priceValue {
     font-size: 16px;
-    color: #4F7B9E;
+    color: #2D84CA;
 }
 
 @media (max-width: 1260px) {
@@ -156,7 +160,6 @@
     .imageWrapper {
         width: 100%; /* Изображение на всю ширину контейнера */
         height: auto; /* Высота автоматическая */
-        max-height: 200px; /* Ограничиваем максимальную высоту */
         margin-bottom: 0;
     }
 
