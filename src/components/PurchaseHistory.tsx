@@ -1,13 +1,10 @@
 // src/components/PurchaseHistory.tsx
 import React from 'react';
-// Используем стили из PurchaseHistory.module.css
 import * as styles from './ProfileData.module.css';
 import DollarIcon from '../icons/dollar.svg';
-// CalendarIcon не используется в этом компоненте, удалим импорт
-// import CalendarIcon from '../icons/calendar.svg';
 import { generatePath, NavLink } from 'react-router-dom';
 import { routes } from '../routes';
-import boughtLots from '../boughtLots'; // Предполагаем, что это ваш список купленных лотов
+import boughtLots from '../boughtLots';
 
 // Определяем тип купленного лота (может отличаться от типа Lot, если есть purchaseDate)
 interface PurchasedLot {

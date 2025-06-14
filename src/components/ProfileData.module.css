@@ -69,36 +69,39 @@
 
 .lotLinkContent {
     text-decoration: none;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 15px; /* Внутренние отступы каждого элемента списка */
+    display: flex; /* Используем Flexbox */
+    flex-direction: row; /* На десктопе - строка (изображение слева, инфо справа) */
+    align-items: flex-start; /* Выравнивание элементов в строке по верху */
+    padding: 15px; /* Внутренние отступы */
     gap: 15px; /* Отступ между изображением и инфо блоком */
 }
 
+/* !!! СТИЛИ ДЛЯ ОБЕРТКИ ИЗОБРАЖЕНИЯ (ДЕСКТОП) !!! */
 .imageWrapper {
-    flex-shrink: 0;
-    width: 100%; /* Пример ширины с главной */
-    height: 200px; /* Пример высоты с главной */
-    display: flex;
-    align-items: center;
-    overflow: hidden;
+    flex-shrink: 0; /* Запрещаем сжиматься */
+    width: 200px;  /* Пример ширины */
+    height: 200px; /* Пример высоты */
+    display: flex; /* Flexbox для центрирования изображения внутри обертки */
+    align-items: center; /* Центрирование по вертикали */
+    overflow: hidden; /* Обрезаем изображение, если оно больше обертки */
     position: relative; /* Оставляем, если нужны абсолютные дочерние элементы */
 }
 
+/* !!! СТИЛИ ДЛЯ САМОГО ИЗОБРАЖЕНИЯ !!! */
 .image {
     display: block;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover; /* Или contain, как на главной */
+    /* === Заполняем обертку и обрезаем края для квадрата === */
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Масштабирует изображение для заполнения, обрезая края */
 }
 
+/* Стили для блока информации */
 .lotInfo {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     gap: 5px;
-    justify-content: space-between;
 }
 
 .auctionDateRow {
@@ -115,11 +118,11 @@
     padding-right: 8px;
 }
 
-/* !!! СТИЛИ ДЛЯ НАЗВАНИЯ И СТОИМОСТИ (СКОПИРОВАНО ИЗ LotGrid.module.css) !!! */
+/* !!! СТИЛИ ДЛЯ НАЗВАНИЯ И СТОИМОСТИ */
 .lotName {
-    color: #171717;
+    color: #171717; /* Убедитесь, что цвет корректен */
     font-size: 19px;
-    text-decoration: none;
+    text-decoration: none; /* Название лота теперь внутри NavLink */
 }
 
 .priceLabel {
@@ -133,7 +136,6 @@
 .priceValue {
     font-size: 16px;
     color: #4F7B9E;
-    padding-left: 25px;
 }
 
 @media (max-width: 1260px) {
@@ -142,29 +144,31 @@
     }
 }
 
+/* !!! МЕДИА-ЗАПРОСЫ ДЛЯ МОБИЛЬНОЙ ВЕРСИИ (АДАПТИРОВАНЫ) !!! */
 @media (max-width: 768px) {
     .lotLinkContent {
-        flex-direction: column;
+        flex-direction: column; /* На мобилке - колонка (изображение сверху, инфо снизу) */
         align-items: flex-start;
-        padding: 10px; /* Возможно, уменьшить отступы */
-        gap: 10px; /* Возможно, уменьшить отступы */
+        padding: 10px;
+        gap: 10px;
     }
 
     .imageWrapper {
-        width: 100%;
-        height: auto; /* Убираем фиксированную высоту на мобильных */
+        width: 100%; /* Изображение на всю ширину контейнера */
+        height: auto; /* Высота автоматическая */
         max-height: 200px; /* Ограничиваем максимальную высоту */
-        margin-bottom: 10px;
+        margin-bottom: 0;
     }
 
     .image {
-        width: 100%; /* Изображение на всю ширину контейнера */
-        height: auto;
-        object-fit: contain; /* Или cover */
+        width: 100%; /* Изображение на всю ширину обертки */
+        height: auto; /* Высота автоматическая */
+        object-fit: cover; /* Или contain, в зависимости от желаемого отображения на мобилке */
     }
 
     .lotInfo {
-        width: 100%;
+        width: 100%; /* Блок инфо на всю ширину */
+        flex-grow: unset; /* Или flex-grow: 0; */
     }
 }
 
@@ -173,7 +177,7 @@
         width: 100%;
     }
 }
-/* Медиазапросы */
+
 @media (max-width: 425px) {
     /* Возможно, адаптировать font-size для кнопок переключателя */
     .toggleButton {
