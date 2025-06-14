@@ -137,6 +137,11 @@
     justify-content: space-between;
 }
 
+.priceLeft {
+    color: #171717;
+    gap: 10px;
+}
+
 .priceValue {
     font-size: 16px;
     color: #2D84CA;
