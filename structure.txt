@@ -14,19 +14,26 @@
 │   ├── InformationAddition.tsx
 │   ├── LotGrid.module.css
 │   ├── LotGrid.tsx
+│   ├── Article.module.css
+│   ├── Article.tsx
+│   ├── AuctionLotGrid.tsx
+│   ├── FavoriteSearch.tsx
+│   ├── Lot.module.css
+│   ├── Lot.tsx
+│   ├── PersonalData.module.css
+│   ├── PersonalData.tsx
 │   ├── Search.module.css
 │   └── Search.tsx
 ├── contexts/
-│   ├── AddCardModalContext.tsx
 │   ├── AuthFlowModalContext.tsx
 │   ├── ConfirmationModalContext.tsx
-│   ├── DeleteFavoriteModalContext.tsx
 │   └── ZoomPhotoModalContext.tsx
 │
 ├── icons/
 ├── images/
 │
 ├── pages/
+│   ├── article/
 │   ├── favorite/
 │   ├── footerLinks/
 │   ├── home/
@@ -34,16 +41,40 @@
 │   ├── openLot/
 │   └── personalAccount/
 ├── popApps/
+│   ├── accountRegistration.tsx
+│   ├── confirmation.tsx
+│   ├── createPassword.tsx
+│   ├── emailSent.tsx
+│   ├── forgottenPassword.tsx
+│   ├── login.tsx
+│   ├── messageSent.tsx
+│   ├── photo.tsx
+│   └── style.module.css
+├── store/
+│   ├── slices/
+│   │   ├── filterSortSlice.tsx
+│   │   ├── favorites.tsx
+│   │   └── userSlice.tsx
+│   └── index.tsx
 │
 ├── utils/
 │   └── downloadPDF.ts
 │
 ├── widgets/
+│   ├── footer/
+│   │   ├── Footer.model.css
+│   │   └── index.tsx
+│   ├── header/
+│   │   ├── Header.model.css
+│   │   └── index.tsx
+│   └── ModalManager.tsx
 │
 ├── app.tsx
 ├── decl.d.ts
 ├── index.html
 ├── index.tsx
+├── articlesList.tsx
+├── boughtLots.tsx
 ├── lotsList.tsx
 ├── routes.ts
 ├── style.css
@@ -55,6 +86,5 @@
 ├── favicon.ico
 ├── package.json
 ├── package-lock.json
-├── structure.txt
 ├── tsconfig.json
 └── webpack.config.js
