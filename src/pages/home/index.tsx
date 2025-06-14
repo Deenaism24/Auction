@@ -38,12 +38,10 @@ const HomePage: React.FC = () => {
         <div className="auctionContainer">
           <AuctionLotGrid />
           <div className="sidebarContainer">
-            {/*<Search*/}
-            {/*  ref={searchInputRef}*/}
-            {/*  onSearch={(value) => dispatch(setSearchTerm(value))}*/}
-            {/*/>*/}
-            <Search ref={searchInputRef} onSearch={(value) =>
-              dispatch(setSearchTerm(value))} isHomePage={true} />
+            <Search
+              ref={searchInputRef}
+              onSearch={(value) => dispatch(setSearchTerm(value))}
+            />
             <InformationAddition/>
           </div>
         </div>
