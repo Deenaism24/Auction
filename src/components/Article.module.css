@@ -1,8 +1,8 @@
 /* src/components/Article.module.css */
 .articleContainer {
-    max-width: 800px; /* Ограничиваем ширину текста для лучшей читаемости */
-    margin: 40px auto; /* Центрируем блок и добавляем отступы сверху/снизу */
-    padding: 0 20px; /* Внутренние отступы по бокам */
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
 }
 
 .articleHeader {
@@ -44,18 +44,16 @@
 }
 
 .articleImage {
-    display: block; /* Чтобы убрать лишние отступы снизу */
-    max-width: 100%; /* Гарантируем, что изображение не выйдет за пределы контейнера */
-    height: auto; /* Сохраняем пропорции */
-    margin: 20px auto; /* Центрируем изображение и добавляем отступы */
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 20px auto;
 }
 
 .articleContent {
     font-size: 16px;
-    line-height: 1.6; /* Межстрочный интервал */
+    line-height: 1.6;
     color: #333;
-    /* Стили для HTML внутри articleContent - вам нужно будет настроить их! */
-    /* Например: */
     & p {
         margin-bottom: 15px;
     }
@@ -77,6 +75,6 @@
 .notFound {
     text-align: center;
     font-size: 32px;
-    color: #d9534f; /* Красный цвет ошибки */
+    color: #d9534f;
     margin: 50px 0;
 }

@@ -1,6 +1,6 @@
 /* src/components/ProfileData.module.css */
 
-.historySection {
+.dataSection {
     display: flex;
     flex-direction: column;
     max-width: 100%;
@@ -10,7 +10,7 @@
     margin-bottom: 40px;
 }
 
-.historyHeader {
+.dataHeader {
     display: flex;
     flex-direction: column;
     margin-bottom: 32px;
@@ -33,27 +33,8 @@
     font-weight: normal;
 }
 
-.personalData {
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #fff;
-}
-
-.personalData h2 {
-    margin-top: 0;
-    font-size: 20px;
-    margin-bottom: 15px;
-}
-
-.personalData p {
-    margin-bottom: 10px;
-    font-size: 16px;
-    color: #333;
-}
-
 .purchaseHistory {
-    margin-top: 0; /* Не нужен, если historySection имеет margin-top */
+    margin-top: 0; /* Не нужен, если dataSection имеет margin-top */
 }
 
 .lotList {
@@ -64,33 +45,32 @@
 
 .lotListItem {
     margin-bottom: 15px;
-    overflow: hidden; /* Оставить, если нужно обрезать что-то */
+    overflow: hidden;
 }
 
-.lotLinkContent {
+.lotContent {
     text-decoration: none;
-    display: flex; /* Используем Flexbox */
+    display: flex;
     flex-direction: row; /* На десктопе - строка (изображение слева, инфо справа) */
     align-items: flex-start; /* Выравнивание элементов в строке по верху */
     padding: 15px; /* Внутренние отступы */
     gap: 15px; /* Отступ между изображением и инфо блоком */
 }
 
-/* !!! СТИЛИ ДЛЯ ОБЕРТКИ ИЗОБРАЖЕНИЯ (ДЕСКТОП) !!! */
+/* СТИЛИ ДЛЯ ОБЕРТКИ ИЗОБРАЖЕНИЯ */
 .imageWrapper {
     flex-shrink: 0; /* Запрещаем сжиматься */
-    width: 200px;  /* Пример ширины */
-    height: 200px; /* Пример высоты */
-    display: flex; /* Flexbox для центрирования изображения внутри обертки */
+    width: 200px;
+    height: 200px;
+    display: flex;
     align-items: center; /* Центрирование по вертикали */
     overflow: hidden; /* Обрезаем изображение, если оно больше обертки */
     position: relative; /* Оставляем, если нужны абсолютные дочерние элементы */
 }
 
-/* !!! СТИЛИ ДЛЯ САМОГО ИЗОБРАЖЕНИЯ !!! */
+/* СТИЛИ ДЛЯ САМОГО ИЗОБРАЖЕНИЯ */
 .image {
     display: block;
-    /* === Заполняем обертку и обрезаем края для квадрата === */
     width: 100%;
     height: 100%;
     object-fit: cover; /* Масштабирует изображение для заполнения, обрезая края */
@@ -121,11 +101,11 @@
     padding-right: 8px;
 }
 
-/* !!! СТИЛИ ДЛЯ НАЗВАНИЯ И СТОИМОСТИ */
+/* СТИЛИ ДЛЯ НАЗВАНИЯ И СТОИМОСТИ */
 .lotName {
-    color: #171717; /* Убедитесь, что цвет корректен */
+    color: #171717;
     font-size: 19px;
-    text-decoration: none; /* Название лота теперь внутри NavLink */
+    text-decoration: none; /* Название лота внутри NavLink */
 }
 
 .priceLabel {
@@ -146,20 +126,19 @@
 
 .priceValue {
     font-size: 16px;
-    color: #2D84CA;
+    color: #4F7B9E;
     font-weight: 600;
 }
 
 @media (max-width: 1260px) {
-    .historySection {
+    .dataSection {
         width: calc(100% + 20px);
     }
 }
 
-/* !!! МЕДИА-ЗАПРОСЫ ДЛЯ МОБИЛЬНОЙ ВЕРСИИ (АДАПТИРОВАНЫ) !!! */
 @media (max-width: 768px) {
-    .lotLinkContent {
-        flex-direction: column; /* На мобилке - колонка (изображение сверху, инфо снизу) */
+    .lotContent {
+        flex-direction: column; /* Колонка (изображение сверху, инфо снизу) */
         align-items: flex-start;
         padding: 10px;
         gap: 10px;
@@ -174,28 +153,26 @@
     .image {
         width: 100%; /* Изображение на всю ширину обертки */
         height: auto; /* Высота автоматическая */
-        object-fit: cover; /* Или contain, в зависимости от желаемого отображения на мобилке */
+        object-fit: cover;
     }
 
     .lotInfo {
         width: 100%; /* Блок инфо на всю ширину */
-        flex-grow: unset; /* Или flex-grow: 0; */
+        flex-grow: unset;
     }
 }
 
 @media (max-width: 600px) {
-    .historySection {
+    .dataSection {
         width: 100%;
     }
 }
 
 @media (max-width: 425px) {
-    /* Возможно, адаптировать font-size для кнопок переключателя */
     .toggleButton {
         font-size: 14px;
         padding: 5px;
     }
-    /* Возможно, адаптировать font-size для h1, h2 */
     .h1 { font-size: 32px; }
     .h2 { font-size: 24px; }
 }

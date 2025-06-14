@@ -7,7 +7,6 @@ interface SearchProps {
   onSearch?: (value: string) => void;
 }
 
-// !!! НЕ ИСПОЛЬЗУЕМ FORWARDREF !!!
 const FavoriteSearch: React.FC<SearchProps> = ({ onSearch }) => {
   const [searchValue, setSearchValue] = useState('');
 

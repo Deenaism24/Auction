@@ -2,7 +2,8 @@
 import React, { useRef } from 'react';
 import FavoritesGrid from '../../components/FavoritesGrid';
 
-import FavoriteSearch from '../../components/FavoriteSearch';
+// import FavoriteSearch from '../../components/FavoriteSearch';
+import Search from '../../components/Search'
 import InformationAddition from '../../components/InformationAddition';
 
 // ИМПОРТЫ ДЛЯ REDUX
@@ -26,9 +27,10 @@ const FavoritePage: React.FC = () => {
           <FavoritesGrid />
 
           <div className="sidebarContainer">
-            <FavoriteSearch
-              onSearch={(value) => dispatch(setSearchTerm(value))}
-            />
+            {/*<FavoriteSearch*/}
+            {/*  onSearch={(value) => dispatch(setSearchTerm(value))}*/}
+            {/*/>*/}
+            <Search onSearch={(value) => dispatch(setSearchTerm(value))} isHomePage={false} />
             <InformationAddition />
           </div>
         </div>

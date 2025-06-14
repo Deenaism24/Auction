@@ -24,6 +24,7 @@
 }
 
 .link {
+    cursor: pointer;
     font-size: 14px;
     color: #171717;
     text-decoration: none;

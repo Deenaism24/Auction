@@ -1,6 +1,6 @@
 // src/components/FooterLinks.tsx
 import React from 'react';
-import * as styles from './FooterLinks.module.css'; // Use component's styles
+import * as styles from './FooterLinks.module.css';
 import { routes } from '../routes';
 
 import { downloadEmptyPdf } from '../utils/downloadPDF';
@@ -33,9 +33,9 @@ const FooterLinks: React.FC = () => {
   };
 
   return (
-    <div className={styles.footerLinksContainer}> {/* Use component's container style */}
+    <div className={styles.footerLinksContainer}>
 
-      <h1 className={styles.footerLinksTitle}>Дополнительная информация</h1> {/* Use component's title style */}
+      <h1 className={styles.footerLinksTitle}>Дополнительная информация</h1>
 
       {Object.entries(routes.footerLinks).map(([groupKey, links]) => (
         <div
@@ -46,12 +46,11 @@ const FooterLinks: React.FC = () => {
           <h2 className={styles.groupTitle}>{groupKey.toUpperCase()}</h2>
           <ul className={styles.linksList}>
             {links.map(link => (
-              <li key={link.path} className={styles.linkItem}>
+              <li key={link.path}>
                 <div
                   key={link.path}
                   className={styles.link}
                   onClick={(e) => handleDownloadClick(link.text, e)}
-                  style={{ cursor: 'pointer' }}
                 >
                   {link.text}
                 </div>

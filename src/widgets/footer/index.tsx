@@ -78,7 +78,6 @@ const Footer: React.FC = () => {
               key={link.path}
               className={styles.link}
               onClick={(e) => handleDownloadClick(link.text, e)}
-              style={{ cursor: 'pointer' }}
             >
               {link.text}
             </div>
@@ -93,7 +92,6 @@ const Footer: React.FC = () => {
               key={link.path}
               className={styles.link}
               onClick={(e) => handleDownloadClick(link.text, e)}
-              style={{ cursor: 'pointer' }}
             >
               {link.text}
             </div>
@@ -108,7 +106,6 @@ const Footer: React.FC = () => {
               key={link.path}
               className={styles.link}
               onClick={(e) => handleDownloadClick(link.text, e)}
-              style={{ cursor: 'pointer' }}
             >
               {link.text}
             </div>

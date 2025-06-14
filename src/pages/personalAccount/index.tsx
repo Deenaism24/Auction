@@ -8,7 +8,6 @@ import PersonIcon from '../../icons/personal.svg';
 import PersonWhiteIcon from '../../icons/personalWhite.svg';
 import HistoryIcon from '../../icons/history.svg';
 import HistoryWhiteIcon from '../../icons/historyWhite.svg';
-import * as styles from '../../widgets/header/Header.module.css'; // Компонент для истории покупок
 
 
 const PersonalAccountPage: React.FC = () => {
@@ -28,13 +27,13 @@ const PersonalAccountPage: React.FC = () => {
             <div className={`toggleButton ${selectedSection === 'data' ? "active" : ''}`}
                  onClick={() => setSelectedSection('data')}>
               <img src={selectedSection === 'data' ? PersonWhiteIcon : PersonIcon}
-                   alt="Персональные данные" className={styles.icon} />
+                   alt="Персональные данные" className="icon" />
               Персональные данные
             </div>
             <div className={`toggleButton ${selectedSection === 'history' ? "active" : ''}`}
                  onClick={() => setSelectedSection('history')}>
               <img src={selectedSection === 'history' ? HistoryWhiteIcon : HistoryIcon}
-                   alt="История покупок" className={styles.icon} />
+                   alt="История покупок" className="icon" />
               История покупок
             </div>
           </div>

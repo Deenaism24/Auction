@@ -54,6 +54,12 @@ html, body {
     width: 100%
 }
 
+.icon {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
 .toggleIcon {
     padding-left: 10px;
     width: 18px;
@@ -120,6 +126,13 @@ html, body {
     .toggleButton {
         flex-grow: 1; /* Кнопки могут растягиваться */
         text-align: center;
+    }
+}
+
+@media (max-width: 650px) {
+    .icon {
+        display: none;
+        width: 0;
     }
 }
 

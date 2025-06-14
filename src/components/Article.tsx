@@ -38,10 +38,8 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
       {article.image && (
         <img src={article.image} alt={article.title} className={styles.articleImage} />
       )}
-
       {/* Содержимое статьи */}
       {renderContent()}
-
     </article>
   );
 };

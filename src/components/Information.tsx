@@ -1,5 +1,5 @@
 // src/pages/information/index.tsx
-import React, { useRef } from 'react';
+import React from 'react';
 import * as styles from './Information.module.css';
 import { routes } from '../routes';
 

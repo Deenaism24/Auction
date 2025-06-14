@@ -1,6 +1,6 @@
 // src/components/InformationAddition.tsx
 import React, { useState, useEffect, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'; // Импортируем useNavigate
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as styles from './InformationAddition.module.css';
 import Contacts from './Contacts';
 import CollectedIcon from '../icons/collected.svg';
@@ -24,7 +24,7 @@ import {
   setSearchTerm,
 } from '../store/slices/filterSortSlice';
 
-// Определяем тип лота (если есть в другом файле, импортируйте)
+// Определяем тип лота
 interface Lot {
   id: number;
   number: string | number;
@@ -50,8 +50,6 @@ const sortOptions = [
   { label: 'По убыванию стартовой стоимости', value: 'price-desc' },
 ];
 
-
-// Компонент теперь просто функциональный
 const InformationAddition = () => {
   const location = useLocation();
   const navigate = useNavigate(); // Импортируем useNavigate для перехода в ЛК
@@ -65,10 +63,7 @@ const InformationAddition = () => {
   );
 
   // !!! ЧТЕНИЕ СОСТОЯНИЯ АВТОРИЗАЦИИ ИЗ REDUX !!!
-  // Используем псевдоним, чтобы не конфликтовать с useSelector из filterSortSlice
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
-  // !!! КОНЕЦ ЧТЕНИЯ СОСТОЯНИЯ АВТОРИЗАЦИИ !!!
-
 
   // Локальное состояние для UI (открытие/закрытие выпадающих списков)
   const [showFiltersMobile, setShowFiltersMobile] = useState(true);
@@ -78,7 +73,7 @@ const InformationAddition = () => {
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
   const [infoDropdownOpen, setInfoDropdownOpen] = useState(true);
 
-  // Эффект для адаптивности (оставляем как есть)
+  // Эффект для адаптивности
   useEffect(() => {
     const handleResize = () => {
       setShowFiltersMobile(window.innerWidth > 1260);
@@ -89,7 +84,7 @@ const InformationAddition = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // ФУНКЦИЯ ДЛЯ ПРИМЕНЕНИЯ ДРУГИХ ФИЛЬТРОВ (оставляем как есть)
+  // ФУНКЦИЯ ДЛЯ ПРИМЕНЕНИЯ ДРУГИХ ФИЛЬТРОВ
   const applyOtherFilters = (
     lots: Lot[],
     currentFilterType: 'location' | 'event' | 'category',
@@ -107,7 +102,7 @@ const InformationAddition = () => {
   };
 
 
-  // ДИНАМИЧЕСКИЕ СПИСКИ ФИЛЬТРОВ С КОЛИЧЕСТВОМ (оставляем как есть, зависят от searchTerm)
+  // ДИНАМИЧЕСКИЕ СПИСКИ ФИЛЬТРОВ С КОЛИЧЕСТВОМ
   const filteredLotsForCounts = useMemo(() => {
     let lots = allLots;
 
@@ -178,10 +173,8 @@ const InformationAddition = () => {
     return Object.keys(counts).map(name => ({ name, count: counts[name] })).sort((a, b) => a.name.localeCompare(b.name));
 
   }, [filteredLotsForCounts, selectedLocations, selectedEvents]);
-  // КОНЕЦ ДИНАМИЧЕСКИХ СПИСКОВ
 
-
-  // ПЕРЕРАСЧЕТ HASFILTERS (оставляем как есть, включает searchTerm)
+  // ПЕРЕРАСЧЕТ HASFILTERS
   const hasFilters =
     selectedLocations.length > 0 ||
     selectedEvents.length > 0 ||
@@ -189,7 +182,7 @@ const InformationAddition = () => {
     searchTerm !== '';
 
 
-  // ФУНКЦИЯ ДЛЯ ПЕРЕКЛЮЧЕНИЯ ФИЛЬТРА (оставляем как есть)
+  // ФУНКЦИЯ ДЛЯ ПЕРЕКЛЮЧЕНИЯ ФИЛЬТРА
   const toggleFilter = (filter: string, type: 'location' | 'event' | 'category') => {
     switch (type) {
       case 'location':
@@ -205,7 +198,7 @@ const InformationAddition = () => {
   };
 
 
-  // ФУНКЦИЯ ДЛЯ ОЧИСТКИ ФИЛЬТРОВ (оставляем как есть, включает searchTerm)
+  // ФУНКЦИЯ ДЛЯ ОЧИСТКИ ФИЛЬТРОВ
   const clearFilters = () => {
     dispatch(setFilters({ locations: [], events: [], categories: [] }));
     dispatch(setSearchTerm(''));
@@ -258,13 +251,10 @@ const InformationAddition = () => {
   // Условный рендеринг содержимого InformationAddition
   return (
     <div className={styles.informationAddition}>
-      {/* Search больше не рендерится здесь */}
-
-      {/* Рендерим только Contacts на странице избранного */}
       {isFavoritePage ? (
         <Contacts />
       ) : (
-        // Рендерим фильтры, сортировку и остальную информацию на других страницах (кроме регистрации/ЛК)
+        // Рендерим фильтры, сортировку и остальную информацию на других страницах
         <>
           <div className={styles.mobileAccordion} onClick={() => setShowFiltersMobile((prev) => !prev)}>
             <span>ИНФОРМАЦИЯ И ДОПОЛНЕНИЕ</span>
@@ -392,14 +382,14 @@ const InformationAddition = () => {
                 )}
               </div>
 
-              {/* !!! СЕКЦИЯ РЕГИСТРАЦИИ / ЛИЧНОГО КАБИНЕТА (АДАПТИРОВАНО) !!! */}
+              {/* !!! СЕКЦИЯ РЕГИСТРАЦИИ / ЛИЧНОГО КАБИНЕТА */}
               <div className={styles.infoSection}>
                 {isAuthenticated ? (
                   // Если авторизован - кнопка Личный кабинет
                   <>
-                    <h3 className={styles.registrationHeader}>ЛИЧНЫЙ КАБИНЕТ</h3> {/* Можно адаптировать стиль заголовка */}
-                    <p className={styles.infoText}>Управляйте вашим профилем, историей покупок и избранными лотами.</p> {/* Пример текста */}
-                    <button onClick={() => navigate(routes.personalAccount)} className={styles.registerButton}> {/* Переиспользуем стиль кнопки */}
+                    <h3 className={styles.registrationHeader}>ЛИЧНЫЙ КАБИНЕТ</h3>
+                    <p className={styles.infoText}>Управляйте вашим профилем, историей покупок и избранными лотами.</p>
+                    <button onClick={() => navigate(routes.personalAccount)} className={styles.registerButton}>
                       Перейти в кабинет
                     </button>
                   </>
@@ -417,7 +407,6 @@ const InformationAddition = () => {
                   </>
                 )}
               </div>
-              {/* !!! КОНЕЦ АДАПТАЦИИ !!! */}
 
               <Contacts />
             </div>

@@ -14,19 +14,15 @@ const Lot: React.FC<LotProps> = ({ lot }) => {
     return <div className={styles.notFound}>Лот не найден</div>;
   }
 
-  // !!! ИЗМЕНЕННАЯ ФУНКЦИЯ renderDetail !!!
   const renderDetail = (label: string, value: string | number | undefined | null) => {
     const displayValue = (value !== undefined && value !== null && value !== '') ? value.toString() : 'не задано';
     return (
-      <div className={styles.detailRow}> {/* Контейнер строки с display: flex */}
+      <div className={styles.detailRow}>
         <span className={styles.detailLabel}>{label}:</span> {/* Метка */}
-        {/* !!! ЗНАЧЕНИЕ С margin-left: auto !!! */}
-        <span className={styles.detailValue} style={{ marginLeft: 'auto' }}>{displayValue}</span> {/* Значение */}
+        <span className={styles.detailValue}>{displayValue}</span> {/* Значение */}
       </div>
     );
   };
-  // !!! КОНЕЦ ИЗМЕНЕННОЙ renderDetail !!!
-
 
   return (
     <div className={styles.lotContainer}>
@@ -34,19 +30,11 @@ const Lot: React.FC<LotProps> = ({ lot }) => {
       {/* Заголовок лота */}
       <div className={styles.lotHeader}>
         <div className={styles.h2}>{lot.title || 'Название не задано'}</div>
-        {/* Номер лота в subHeader - можно оставить или перенести в детали */}
-        {/* Если оставляете здесь, возможно, придется применить Flexbox здесь тоже */}
         <div className={styles.subHeader}>
-          {/* Если хотите номер лота слева, а его значение справа: */}
-          <div className={styles.lotNumber} style={{ display: 'flex', width: '100%' }}> {/* Flex-контейнер для номера в subHeader */}
+          <div className={styles.lotNumber} >
             <span>НОМЕР ЛОТА:</span>
             <span style={{ marginLeft: 'auto' }}>{lot.number !== undefined && lot.number !== null ? lot.number.toString() : 'не задано'}</span>
           </div>
-          {/* Можно добавить дату здесь в отдельном блоке или тоже с flex/auto margin */}
-          {/* <div className={styles.lotDate} style={{ display: 'flex', width: '100%' }}>
-                 <span>ДАТА:</span>
-                 <span style={{ marginLeft: 'auto' }}>{lot.date || 'не задано'}</span>
-             </div> */}
         </div>
       </div>
 
@@ -60,13 +48,11 @@ const Lot: React.FC<LotProps> = ({ lot }) => {
       {/* Информация о лоте */}
       <div className={styles.lotDetails}>
 
-        {/* Стоимость лота - адаптируем Flexbox и auto margin */}
-        {/* Используем .priceRow как Flex-контейнер */}
-        <div className={styles.priceRow} style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+        <div className={styles.priceRow} >
           <img src={DollarIcon} alt="Цена" className={styles.dollarIcon} />
           <div className={styles.priceLabel}>СТАРТОВАЯ ЦЕНА:</div>
-          {/* !!! ЗНАЧЕНИЕ ЦЕНЫ С margin-left: auto !!! */}
-          <div className={styles.priceValue} style={{ marginLeft: 'auto' }}>{lot.price || 'не задано'}</div>
+          {/* !!! ЗНАЧЕНИЕ ЦЕНЫ */}
+          <div className={styles.priceValue} >{lot.price || 'не задано'}</div>
         </div>
 
 
@@ -75,7 +61,6 @@ const Lot: React.FC<LotProps> = ({ lot }) => {
         {renderDetail('СОБЫТИЕ', lot.event)}
         {renderDetail('КАТЕГОРИЯ', lot.category)}
 
-        {/* Добавьте другие детали лота */}
       </div>
 
     </div>

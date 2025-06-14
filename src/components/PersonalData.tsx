@@ -4,8 +4,8 @@ import * as styles from './ProfileData.module.css';
 
 const PersonalData: React.FC = () => {
   return (
-    <section className={styles.historySection}>
-      <div className={styles.historyHeader}>
+    <section className={styles.dataSection}>
+      <div className={styles.dataHeader}>
         <div className={styles.h1}> Личный кабинет </div>
         <div className={styles.h2}> Персональные данные </div>
       </div>

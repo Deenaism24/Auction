@@ -3,9 +3,9 @@ import React, { useState, useEffect, useMemo } from 'react';
 import * as styles from './LotGrid.module.css';
 import { generatePath, NavLink } from 'react-router';
 import { routes } from '../routes';
-import FavoriteLotIcon from '../icons/favoriteLot.svg'; // Иконка для "в избранном"
-import AddFavoriteLotIcon from '../icons/addFavoriteLot.svg'; // Иконка для "добавить в избранное"
-import MagnifierIcon from '../icons/magnifier.svg'; // Иконка увеличительного стекла
+import FavoriteLotIcon from '../icons/favoriteLot.svg';
+import AddFavoriteLotIcon from '../icons/addFavoriteLot.svg';
+import MagnifierIcon from '../icons/magnifier.svg';
 import BackPageAIcon from '../icons/backpageA.svg';
 import BackPageDIcon from '../icons/backpageD.svg';
 import NextPageAIcon from '../icons/nextpageA.svg';
@@ -18,8 +18,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { addFavorite, removeFavorite } from '../store/slices/favoritesSlice';
 
-
-// Определяем тип лота (если есть в другом файле, используйте его)
+// Определяем тип лота
 interface Lot {
   id: number;
   number: string | number;
@@ -29,7 +28,6 @@ interface Lot {
   event: string | undefined;
   category: string | undefined;
   image: string;
-  // ... другие поля
 }
 
 function getWindowWidth() {
@@ -59,30 +57,26 @@ const getPaginationItems = (currentPage: number, totalPages: number): (number | 
 };
 
 
-// !!! ДОБАВЛЕН ПРОП ISFAVORITEPAGE !!!
+// ПРОП ISFAVORITEPAGE
 interface LotGridProps {
   isFavoritePage?: boolean;
 }
 
 const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false }) => {
-// !!! КОНЕЦ ДОБАВЛЕННОГО ПРОПА !!!
-
   const [currentPage, setCurrentPage] = useState(1);
   const [windowWidth] = React.useState(getWindowWidth());
   const lotsPerPage = windowWidth >= 600 ? 9 : 4;
 
   // ЧТЕНИЕ ИЗ REDUX
   const allLots = useSelector((state: RootState) => state.filterSort.allLots) as Lot[];
-  const favoriteLotIds = useSelector((state: RootState) => state.favorites.items); // ID избранных лотов (нужны в обоих режимах)
+  const favoriteLotIds = useSelector((state: RootState) => state.favorites.items); // ID избранных лотов
   const selectedLocations = useSelector((state: RootState) => state.filterSort.selectedLocations);
   const selectedEvents = useSelector((state: RootState) => state.filterSort.selectedEvents);
   const selectedCategories = useSelector((state: RootState) => state.filterSort.selectedCategories);
   const selectedSort = useSelector((state: RootState) => state.filterSort.selectedSort);
   const searchTerm = useSelector((state: RootState) => state.filterSort.searchTerm);
-  // КОНЕЦ ЧТЕНИЯ ИЗ REDUX
 
-
-  // !!! ЛОГИКА ФИЛЬТРАЦИИ И СОРТИРОВКИ (АДАПТИРОВАНА) !!!
+  // ЛОГИКА ФИЛЬТРАЦИИ И СОРТИРОВКИ
   const filteredAndSortedLots = useMemo(() => {
     let workingLots = allLots; // Начинаем с полного списка
 
@@ -114,24 +108,17 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false }) => {
     }
 
 
-    // 3. Применяем фильтр по поисковому запросу (в обоих режимах)
+    // 3. Применяем фильтр по поисковому запросу
     if (searchTerm) {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
       workingLots = workingLots.filter(lot =>
           (lot.title && lot.title.toLowerCase().includes(lowerCaseSearchTerm)) ||
           (lot.number !== undefined && lot.number.toString().toLowerCase().includes(lowerCaseSearchTerm))
-        // Можно добавить поиск по другим полям, например, city, event, category,
-        // но только если это уместно для поиска (не для фильтров)
       );
     }
 
-
-    // 4. Применяем сортировку (используем Redux state, если применим)
+    // 4. Применяем сортировку (используем Redux state)
     const sortedLots = [...workingLots];
-    // На странице избранного можно использовать дефолтную сортировку или ту же selectedSort
-    // Если selectedSort должен влиять на страницу избранного, оставляем switch.
-    // Если нет, используйте дефолтную: sortedLots.sort((a,b) => ...);
-    // Пока оставим использование selectedSort в обоих режимах
     switch (selectedSort) {
       case 'title-asc': sortedLots.sort((a, b) => (a.title || '').localeCompare(b.title || '')); break;
       case 'title-desc': sortedLots.sort((a, b) => (b.title || '').localeCompare(a.title || '')); break;
@@ -144,20 +131,17 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false }) => {
 
     return sortedLots;
 
-  }, [allLots, favoriteLotIds, isFavoritePage, selectedLocations, selectedEvents, selectedCategories, selectedSort, searchTerm]); // !!! ДОБАВЛЕНЫ/ИЗМЕНЕНЫ ЗАВИСИМОСТИ !!!
-  // !!! КОНЕЦ ЛОГИКИ ФИЛЬТРАЦИИ И СОРТИРОВКИ !!!
+  }, [allLots, favoriteLotIds, isFavoritePage, selectedLocations, selectedEvents, selectedCategories, selectedSort, searchTerm]);
 
-
-  // !!! ЭФФЕКТЫ ДЛЯ СБРОСА СТРАНИЦЫ (АДАПТИРОВАНЫ) !!!
+  // ЭФФЕКТЫ ДЛЯ СБРОСА СТРАНИЦЫ
   // Сброс страницы при изменении списка избранного (только на странице избранного)
   useEffect(() => {
     if (isFavoritePage) {
       setCurrentPage(1);
-      // window.scrollTo({ top: 0, behavior: 'smooth' }); // Опционально, если нужен скролл при изменении избранного
     }
-  }, [favoriteLotIds, isFavoritePage]); // Зависит от списка избранных ID и режима страницы
+  }, [favoriteLotIds, isFavoritePage]);
 
-  // Сброс страницы и прокрутка вверх при изменении сортировки (в обоих режимах)
+  // Сброс страницы и прокрутка вверх при изменении сортировки
   useEffect(() => {
     setCurrentPage(1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -170,22 +154,18 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false }) => {
     }
   }, [selectedLocations, selectedEvents, selectedCategories, isFavoritePage]); // Зависит от фильтров и режима страницы
 
-  // Сброс страницы (без прокрутки) при изменении поиска (в обоих режимах)
+  // Сброс страницы при изменении поиска (в обоих режимах)
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]); // Зависит только от поискового запроса
-  // !!! КОНЕЦ ЭФФЕКТОВ !!!
 
-
-  // РАСЧЕТ HASFILTERS ЛОКАЛЬНО (АДАПТИРОВАН)
-  // На главной странице активные фильтры - это Локация/Событие/Категория ИЛИ поиск
-  // На странице избранного активные фильтры - это только поиск
+  // РАСЧЕТ HASFILTERS ЛОКАЛЬНО
   const hasActiveFilters = isFavoritePage
     ? searchTerm !== ''
     : selectedLocations.length > 0 || selectedEvents.length > 0 || selectedCategories.length > 0 || searchTerm !== '';
   const hasActiveSearch = searchTerm !== ''; // Этот флаг нужен для сообщения о поиске
 
-  // Общее количество страниц теперь зависит от filteredAndSortedLots
+  // Общее количество страниц зависит от filteredAndSortedLots
   const totalPages = filteredAndSortedLots.length === 0 ? 1 : Math.ceil(filteredAndSortedLots.length / lotsPerPage);
   // Если текущая страница стала больше нового общего количества страниц
   useEffect(() => {
@@ -217,8 +197,7 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false }) => {
   // В FavoriteGrid логика добавления в избранное не нужна, только удаление
   const handleToggleFavorite = (event: React.MouseEvent, lotId: number) => {
     event.preventDefault();
-    event.stopPropagation(); // Останавливаем всплытие клика
-    // В этом универсальном компоненте вызываем либо add, либо remove
+    event.stopPropagation();
     if (favoriteLotIds.includes(lotId)) {
       dispatch(removeFavorite(lotId));
     } else {
@@ -226,14 +205,13 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false }) => {
     }
   };
 
-
   // Генерируем элементы пагинации для отображения
   const paginationItems = totalPages > 1 ? getPaginationItems(currentPage, totalPages) : [];
 
 
   return (
     <div>
-      {/* !!! Отображаем сообщение, если лоты не найдены (АДАПТИРОВАНО) !!! */}
+      {/* Отображаем сообщение, если лоты не найдены */}
       {filteredAndSortedLots.length === 0 && (
         <div className={styles.noResults}>
           {allLots.length === 0 ? (
@@ -246,56 +224,42 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false }) => {
             ) : (
               `Поиск по запросу "${searchTerm}" не дал результатов.` // Поиск по всему списку
             )
-          ) : hasActiveFilters && !isFavoritePage ? ( // Если есть активные фильтры (кроме поиска) и это не страница избранного
+          ) : hasActiveFilters && !isFavoritePage ? ( // Если есть активные фильтры и это не страница избранного
             `Нет лотов, соответствующих выбранным фильтрам.`
           ) : (
             'Нет лотов для отображения.' // Этот случай маловероятен
           )}
         </div>
       )}
-      {/* !!! КОНЕЦ СООБЩЕНИЯ !!! */}
-
       {/* Рендерим сетку, только если есть лоты для текущей страницы */}
       {currentLots.length > 0 && (
         <div className={styles.grid}>
           {currentLots.map((lot) => {
-            // Проверяем, является ли этот лот избранным (для отображения иконки и логики remove/add)
+            // Проверяем, является ли этот лот избранным
             const isFavorite = favoriteLotIds.includes(lot.id);
-
-            // Здесь обработчик всегда один - переключение избранного
             const handleClickFavorite = (event: React.MouseEvent) => {
               handleToggleFavorite(event, lot.id);
             };
 
             return (
               <div key={lot.id} className={styles.card}>
-                {/* Единый контейнер изображения с обработчиком клика для попапа */}
                 <div
                   className={styles.imageWrapper}
                   onClick={() => openImagePopup(lot.image)} // Клик по обертке вызывает попап
                 >
                   <img src={lot.image} alt={lot.title} className={styles.image} />
 
-                  {/* !!! ИКОНКА ИЗБРАННОГО (IMG) - АДАПТИРОВАНО !!! */}
-                  {/* Используем класс .favoriteIcon. active, если лот в избранном */}
-                  {/* В FavoriteGrid иконка всегда .active */}
                   <img
-                    // Выбираем иконку: FavoriteLotIcon, если в избранном ИЛИ если это страница избранного
-                    // AddFavoriteLotIcon, если НЕ в избранном И НЕ страница избранного
                     src={(isFavorite || isFavoritePage) ? FavoriteLotIcon : AddFavoriteLotIcon}
-                    alt={isFavorite ? 'В избранном' : 'Добавить в избранное'} // Alt-текст
-                    // Добавляем класс .active, если лот в избранном ИЛИ если это страница избранного
+                    alt={isFavorite ? 'В избранном' : 'Добавить в избранное'}
                     className={`${styles.favoriteIcon} ${(isFavorite || isFavoritePage) ? styles.active : ''}`}
-                    onClick={handleClickFavorite} // Обработчик клика
+                    onClick={handleClickFavorite}
                   />
-                  {/* !!! КОНЕЦ ИКОНКИ ИЗБРАННОГО !!! */}
 
-                  {/* ИКОНКА УВЕЛИЧИТЕЛЬНОГО СТЕКЛА (IMG) - Оставляем как есть */}
                   <img
                     src={MagnifierIcon}
                     alt="Увеличить"
                     className={styles.magnifier}
-                    // Видимость управляется CSS .card:hover .magnifier
                   />
 
                 </div>

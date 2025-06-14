@@ -13,7 +13,7 @@ import { setSearchTerm } from '../../store/slices/filterSortSlice';
 const HomePage: React.FC = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
-  const location = useLocation(); // Получаем объект location
+  const location = useLocation();
 
   useEffect(() => {
     // Проверяем, что хеш соответствует секции поиска
@@ -37,11 +37,13 @@ const HomePage: React.FC = () => {
       <main className="main">
         <div className="auctionContainer">
           <AuctionLotGrid />
-          <div className="sidebarContainer"> {/* Возможно, вам нужен отдельный CSS класс */}
-            <Search
-              ref={searchInputRef}
-              onSearch={(value) => dispatch(setSearchTerm(value))}
-            />
+          <div className="sidebarContainer">
+            {/*<Search*/}
+            {/*  ref={searchInputRef}*/}
+            {/*  onSearch={(value) => dispatch(setSearchTerm(value))}*/}
+            {/*/>*/}
+            <Search ref={searchInputRef} onSearch={(value) =>
+              dispatch(setSearchTerm(value))} isHomePage={true} />
             <InformationAddition/>
           </div>
         </div>

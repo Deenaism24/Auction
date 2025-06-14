@@ -2,11 +2,9 @@
 import React from 'react';
 import * as styles from './ProfileData.module.css';
 import DollarIcon from '../icons/dollar.svg';
-import { generatePath, NavLink } from 'react-router-dom';
-import { routes } from '../routes';
 import boughtLots from '../boughtLots';
 
-// Определяем тип купленного лота (может отличаться от типа Lot, если есть purchaseDate)
+// Определяем тип купленного лота
 interface PurchasedLot {
   id: number;
   number: string | number;
@@ -17,15 +15,14 @@ interface PurchasedLot {
   // ... другие поля, если есть
 }
 
-// Предполагаем, что boughtLots содержит массив PurchasedLot
+// boughtLots содержит массив PurchasedLot
 const purchasedLotsData: PurchasedLot[] = boughtLots as PurchasedLot[];
 
 
 const PurchaseHistory: React.FC = () => {
   return (
-    // Использует .historySection и .historyHeader, .h1, .h2 из своего CSS
-    <section className={styles.historySection}>
-      <div className={styles.historyHeader}>
+    <section className={styles.dataSection}>
+      <div className={styles.dataHeader}>
         <div className={styles.h1}> Личный кабинет </div>
         <div className={styles.h2}>История покупок</div>
       </div>
@@ -35,26 +32,18 @@ const PurchaseHistory: React.FC = () => {
         <ul className={styles.lotList}>
           {purchasedLotsData.map(lot => (
             <li key={lot.id} className={styles.lotListItem}>
-              <NavLink
-                to={generatePath(routes.openLot, { lot: lot.number })}
-                className={styles.lotLinkContent}
-              >
-                {/* Изображение лота - используем те же классы, что в LotGrid,
-                    и убедимся, что стили для них в PurchaseHistory.module.css
-                    соответствуют размерам из LotGrid.module.css */}
+              <div className={styles.lotContent}>
                 {lot.image && (
-                  <div className={styles.imageWrapper}> {/* Используем .imageWrapper */}
-                    <img src={lot.image} alt={lot.title} className={styles.image} /> {/* Используем .image */}
+                  <div className={styles.imageWrapper}>
+                    <img src={lot.image} alt={lot.title} className={styles.image} />
                   </div>
                 )}
 
                 {/* Информация о лоте */}
                 <div className={styles.lotInfo}>
-                  {/* Дата покупки - используем стили, адаптированные в PurchaseHistory.module.css */}
-                  <div className={styles.auctionDateRow}> {/* Используем .auctionDateRow */}
-                    {/* Если нужна иконка календаря, импортируйте CalendarIcon и добавьте <img src={CalendarIcon} ... /> */}
+                  <div className={styles.auctionDateRow}>
                     ДАТА ПОКУПКИ:
-                    <span className={styles.dateRange}> {/* Используем .dateRange */}
+                    <span className={styles.dateRange}>
                       {lot.purchaseDate}
                     </span>
                   </div>
@@ -69,7 +58,7 @@ const PurchaseHistory: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              </NavLink>
+              </div>
             </li>
           ))}
         </ul>

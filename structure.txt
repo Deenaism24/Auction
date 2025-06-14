@@ -16,7 +16,6 @@
 │   ├── LotGrid.tsx
 │   ├── Article.module.css
 │   ├── Article.tsx
-│   ├── AuctionLotGrid.tsx
 │   ├── FavoriteSearch.tsx
 │   ├── Lot.module.css
 │   ├── Lot.tsx

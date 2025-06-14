@@ -34,7 +34,7 @@ const HomeArticle: React.FC = () => {
       {articleToShow.image && (
         <img
           src={articleToShow.image}
-          alt={`Иллюстрация к статье "${articleToShow.title}"`} // Более осмысленный alt-текст
+          alt={`Иллюстрация к статье "${articleToShow.title}"`}
           className={ styles.articleImage}
         />
       )}
@@ -43,12 +43,12 @@ const HomeArticle: React.FC = () => {
         <div className={ styles.articleHeader }>
           <img src={ArticleIcon} alt="Статья" className={ styles.articleIcon }/>
           {/* Заголовок берется из данных статьи */}
-          <div className={ styles.articleTitle }>Статья</div> {/* Или articleToShow.title, если здесь должен быть именно заголовок статьи */}
+          <div className={ styles.articleTitle }>Статья</div>
         </div>
         {/* Цитата берется из данных статьи */}
         {articleToShow.quote && (
           <div className={ styles.quote }>
-            "{articleToShow.quote}" {/* Добавим кавычки, если они не часть текста цитаты */}
+            "{articleToShow.quote}"
             {/* Автор цитаты, если есть */}
             {articleToShow.quoteAuthor && <p>– {articleToShow.quoteAuthor}</p>}
           </div>

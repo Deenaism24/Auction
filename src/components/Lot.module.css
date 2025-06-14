@@ -1,13 +1,11 @@
 /* src/components/Lot.module.css */
 
-/* Адаптация articleContainer */
 .lotContainer {
     max-width: 800px; /* Ограничиваем ширину контента лота */
     margin: 40px auto; /* Центрируем и добавляем отступы */
     padding: 0 20px; /* Внутренние отступы по бокам */
 }
 
-/* Адаптация articleHeader */
 .lotHeader {
     display: flex;
     flex-direction: column;
@@ -15,16 +13,15 @@
     width: 100%;
 }
 
-/* Используем существующий стиль для основного заголовка (Название лота) */
+/* Заголовок (Название лота) */
 .h2 {
     font-size: 41px;
     font-weight: 600;
     }
 
-/* Адаптация subHeader */
 .subHeader {
     display: flex;
-    justify-content: space-between; /* Разносим номер лота и, возможно, дату */
+    justify-content: space-between;
     align-items: center;
     font-size: 16px;
     width: 100%;
@@ -37,23 +34,13 @@
     width: 100%;
 }
 
-.lotNumberValue {
-    font-weight: bold;
-    color: #000;
-}
-
-
-/* Адаптация articleImage */
 .lotImage {
     display: block;
     max-width: 100%;
     height: auto;
     margin: 20px auto; /* Центрируем и добавляем отступы */
-    border: 1px solid #eee; /* Пример рамки для изображения */
-    box-shadow: 2px 2px 8px rgba(0,0,0,0.1); /* Пример тени */
 }
 
-/* Стиль для заглушки изображения */
 .noImage {
     text-align: center;
     font-size: 18px;
@@ -72,9 +59,6 @@
     margin-top: 20px; /* Отступ над блоком деталей */
     border-top: 1px solid #DBDBDB; /* Разделитель сверху */
     padding-top: 20px; /* Отступ после разделителя */
-    /* display: flex; */ /* Если хотите детали в несколько колонок */
-    /* flex-wrap: wrap; */
-    /* gap: 10px 30px; */ /* Отступ между деталями */
 }
 
 /* Стили для каждой строки детали (метка: значение) */
@@ -93,9 +77,11 @@
 
 .detailValue {
     color: #000;
+    margin-left: auto;
 }
 
-.priceRow { /* Используем этот класс как Flex-контейнер */
+.priceRow {
+    width: 100%;
     display: flex; /* Включаем Flexbox */
     align-items: center;
     gap: 5px; /* Отступ внутри строки (иконка-метка) */
@@ -117,12 +103,12 @@
 }
 
 .priceValue {
+    margin-left: auto;
     font-weight: bold;
     color: #000;
     font-size: 16px;
 }
 
-/* Адаптация стиля "не найдено" */
 .notFound {
     text-align: center;
     font-size: 32px;
@@ -130,7 +116,6 @@
     margin: 50px 0;
 }
 
-/* Медиазапросы для адаптивности, если нужно адаптировать внутренний макет лота */
 @media (max-width: 768px) {
     .h2 {
         font-size: 32px; /* Меньший размер заголовка на телефонах */
