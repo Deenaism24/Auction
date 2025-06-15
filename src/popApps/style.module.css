@@ -1,45 +1,56 @@
+/* src/popApps/style.module.css */
 .popup {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    width: 500px;
-    /*width: min(90vw, 430px);*/
+    /* Устанавливаем базовую ширину и ограничения */
+    width: 500px; /* Предпочтительная ширина */
+    max-width: 90vw; /* Не шире 90% ширины вьюпорта */
+    min-width: 310px; /* Не уже 310px */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     z-index: 1000;
+    /* Убираем padding из popup, чтобы контролировать его внутри */
+    padding: 0;
+    box-sizing: border-box; /* Убеждаемся, что padding и border включены в размер элемента */
 }
 
 .title {
-    padding-top: 30px;
-    padding-bottom: 30px;
-    padding-left: 30px;
+    /* Добавляем padding сюда */
+    padding: 30px 30px 0 30px; /* Отступы сверху, справа, снизу, слева */
     font-size: 31px;
     font-weight: 400;
     color: #171717;
     text-transform: uppercase;
     margin: 0;
+    box-sizing: border-box; /* Включаем padding в размер */
+    width: 100%; /* Занимает всю доступную ширину внутри .popup */
 }
 
 .errorMessage {
-    color: red; /* Красный цвет текста */
-    font-size: 14px; /* Размер шрифта */
-    margin-top: 10px; /* Отступ сверху */
-    text-align: center; /* Центрирование текста */
-    /* Возможно, добавьте margin-bottom, если под ним есть другие элементы */
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
 }
 
 .content {
-    width: 350px;
+    /* Добавляем padding и margin сюда */
+    width: 100%; /* Занимает всю доступную ширину внутри .popup */
+    padding: 0 30px 30px 30px; /* Отступы сверху (0), справа, снизу, слева */
     margin: auto;
-    gap: 30px;
+    gap: 24px; /* Уменьшим gap, так как у вас было 30px в описании, но 16px в форме */
+    box-sizing: border-box; /* Включаем padding в размер */
+    display: flex;
+    flex-direction: column;
 }
 
 .description {
     font-size: 18px;
     font-weight: 400;
     color: #171717;
-    margin: 0 0 30px 0; /* 30px до почты */
+    margin: 0; /* Убираем margin, gap в .content управляет отступами */
     line-height: 1.4;
     text-align: center;
 }
@@ -67,8 +78,6 @@
     border: none;
     cursor: pointer;
     padding: 0;
-    user-select: none;
-    -webkit-user-select: none;
 }
 
 .forgotPasswordButton {
@@ -91,6 +100,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-top: 10px; /* Добавим небольшой отступ перед кнопками */
 }
 
 .mainButton {
@@ -101,8 +111,8 @@
     background-color: white;
     color: #171717;
     border: 1px solid #171717;
-    user-select: none;
-    -webkit-user-select: none;
+    width: 100%; /* Кнопки должны занимать всю ширину */
+    box-sizing: border-box; /* Включаем padding и border в размер */
 }
 
 .mainButton.active {
@@ -111,14 +121,14 @@
 }
 
 .mainButton:last-child {
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */ /* Управляется padding-bottom в .content */
 }
 
 /* Стили для форм */
 .form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 16px; /* Отступы между элементами формы */
     width: 100%;
 }
 
@@ -127,31 +137,36 @@
     display: flex;
     flex-direction: row;
     gap: 10px;
-    /*align-items: center;*/
+    align-items: flex-start; /* Выравнивание по верху */
 }
 
 .checkbox {
     width: 18px;
     height: 18px;
-    min-width: 18px;
-    min-height: 18px;
+    min-width: 18px; /* Фиксированный размер */
+    min-height: 18px; /* Фиксированный размер */
     border: 1px solid #171717;
     appearance: none;
     cursor: pointer;
     margin-left: 0;
+    flex-shrink: 0; /* Запрещаем сжиматься */
 }
 
 .checkbox:checked {
-    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.6667 4.66663L6.83337 11.3333L3.33337 8.30299' stroke='%23171717' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.6667 4.66663L6.83337 11.3333L3.33337 8.30299' stroke='%23171717' stroke-linecap='round' stroke-linejoin='round'/%3E%3Csvg%3E");
     background-repeat: no-repeat;
     background-position: center;
+    background-size: 12px 12px; /* Добавим размер фона для лучшего отображения */
 }
 
 .checkboxLabel {
     display: flex;
+    flex-direction: column; /* Если текст длинный, переносим его */
     font-size: 12px;
     cursor: pointer;
     font-weight: 400;
+    line-height: 1.4; /* Улучшаем читаемость */
+    color: #171717; /* Цвет текста по умолчанию */
 }
 
 .underline {
@@ -162,26 +177,25 @@
     font-size: 12px;
     color: #171717;
     font-weight: 400;
+    /*margin-top: 4px;*/ /* Небольшой отступ от звездочки */
+    line-height: 1.4;
 }
+
 
 /* Стили для иконок */
 .closeIcon {
-    position: fixed;
-    top: 30px;
-    right: 30px;
+    position: absolute; /* Используем absolute вместо fixed, чтобы позиционирование было относительно popup */
+    top: 10px; /* Сдвигаем немного вниз */
+    right: 10px; /* Сдвигаем немного влево */
     width: 32px;
     height: 32px;
     cursor: pointer;
     z-index: 1200;
-    user-select: none;
-    -webkit-user-select: none;
 }
 
 .eyeIcon {
     width: 20px;
     height: 20px;
-    user-select: none;
-    -webkit-user-select: none;
 }
 
 .imagePopup {
@@ -190,19 +204,119 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* затемнение фона */
+    background-color: rgba(0, 0, 0, 0.8); /* Увеличим затемнение для фото */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-    user-select: none;
-    -webkit-user-select: none;
+    z-index: 2000; /* Увеличим z-index, чтобы был поверх других попапов */
+    cursor: zoom-out; /* Курсор, показывающий, что можно закрыть кликом */
 }
 
 .popupImage {
-    max-width: 100%;
-    max-height: 80vh;
+    max-width: 95%; /* Максимальная ширина изображения */
+    max-height: 95vh; /* Максимальная высота изображения */
     display: block;
     margin: 0 auto;
+    object-fit: contain; /* Масштабируем изображение, сохраняя пропорции */
+    /*user-select: none; /!* Предотвращаем выделение изображения *!/*/
+    /*-webkit-user-select: none;*/ /* Добавлено в предыдущем шаге в глобальные стили попапов */
 }
 
+
+/* --- Медиа-запросы для адаптивности --- */
+
+/* Стили для экранов шириной до 500px */
+@media (max-width: 500px) {
+    .title {
+        font-size: 24px; /* Уменьшаем заголовок */
+        padding: 20px 20px 0 20px;
+    }
+    .content {
+        padding: 0 20px 20px 20px;
+        gap: 20px; /* Уменьшаем отступы */
+    }
+    .description {
+        font-size: 16px; /* Уменьшаем текст описания */
+    }
+    .mainButton {
+        font-size: 14px; /* Уменьшаем текст кнопок */
+        padding: 10px;
+    }
+    .forgotPasswordButton {
+        font-size: 11px;
+    }
+    .checkboxLabel,
+    .additionalLabel {
+        font-size: 11px;
+    }
+    .closeIcon {
+        top: 8px;
+        right: 8px;
+        width: 28px;
+        height: 28px;
+    }
+    .eyeIcon {
+        width: 18px;
+        height: 18px;
+    }
+    .input {
+        padding: 10px 14px; /* Уменьшаем padding инпутов */
+    }
+    .passwordToggle {
+        right: 10px; /* Корректируем позицию иконки пароля */
+    }
+}
+
+
+/* Стили для экранов шириной меньше 330px */
+@media (max-width: 329px) {
+    .popup {
+        /* min-width: 310px; */ /* уже установлен */
+        /* max-width: 90vw; */ /* уже установлен */
+        /* При width: calc(100% - 40px), реальная ширина будет: */
+        /* max(min-width, min(max-width, calc(100% - 40px))) */
+        /* Что на экранах < 330px эффективно будет min(90vw, max(310px, ~100% - 40px)) */
+        /* Это соответствует логике: быть почти во весь экран, но не уже 310px */
+        width: calc(100% - 40px); /* Отступ 20px по бокам */
+    }
+
+    .title {
+        font-size: 20px; /* Еще меньше заголовок */
+        padding: 15px 15px 0 15px; /* Уменьшаем padding */
+    }
+
+    .content {
+        padding: 0 15px 15px 15px; /* Уменьшаем padding */
+        gap: 15px; /* Уменьшаем отступы */
+    }
+    .description {
+        font-size: 14px; /* Еще меньше текст описания */
+    }
+    .mainButton {
+        font-size: 12px; /* Еще меньше текст кнопок */
+        padding: 8px;
+    }
+    .forgotPasswordButton {
+        font-size: 9px;
+    }
+    .checkboxLabel,
+    .additionalLabel {
+        font-size: 9px;
+    }
+    .closeIcon {
+        top: 5px;
+        right: 5px;
+        width: 24px;
+        height: 24px;
+    }
+    .eyeIcon {
+        width: 16px;
+        height: 16px;
+    }
+    .input {
+        padding: 8px 12px; /* Уменьшаем padding инпутов */
+    }
+    .passwordToggle {
+        right: 8px; /* Корректируем позицию иконки пароля */
+    }
+}

@@ -30,13 +30,11 @@ const getPaginationItems = (currentPage: number, totalPages: number): (number | 
   const T = totalPages; // Total pages
   const C = currentPage; // Current page
 
-  const items = new Set<number>(); // Use a Set to automatically handle uniqueness
+  const items = new Set<number>();
 
   if (T <= 1) {
-    return [1]; // If only one page, just return [1]
+    return [1];
   }
-
-  // Always add the first page (1) and the last page (T)
   items.add(1);
   if (C > 1 && C < T) {
     items.add(C);

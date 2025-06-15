@@ -101,9 +101,6 @@ html, body {
         margin-bottom: 20px; /* Отступ под кнопками */
         width: 100%;
     }
-
-    /* !!! КОНЕЦ Макет ЛИЧНОГО КАБИНЕТА на планшетах !!! */
-
 }
 
 @media (max-width: 768px) {
@@ -126,13 +123,6 @@ html, body {
     .toggleButton {
         flex-grow: 1; /* Кнопки могут растягиваться */
         text-align: center;
-    }
-}
-
-@media (max-width: 650px) {
-    .icon {
-        display: none;
-        width: 0;
     }
 }
 
