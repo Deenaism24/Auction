@@ -40,6 +40,8 @@
     height: 16px;
     transition: opacity 0.2s ease;
     z-index: 3;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .searchInput:focus + .searchIcon {
@@ -59,6 +61,8 @@
     z-index: 1;
     opacity: 1;
     transition: transform 0.3s ease;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 /* Анимация запускается только при hover */

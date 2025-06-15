@@ -19,6 +19,8 @@
 .articleIcon {
     width: 24px;
     height: 24px;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .articleTitle {
@@ -26,6 +28,8 @@
     color: #9C9C9C;
     font-weight: normal;
     text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .articleContent {
@@ -38,6 +42,8 @@
     width: 479px;
     height: auto;
     object-fit: cover;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .quote {
@@ -60,6 +66,8 @@
     text-align: center;
     font-size: 16px;
     margin-top: 20px;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 @media (max-width: 1260px) {

@@ -25,44 +25,48 @@ function getWindowWidth() {
   return window.innerWidth;
 }
 
+// !!! ОБНОВЛЕННАЯ ЛОГИКА ГЕНЕРАЦИИ ЭЛЕМЕНТОВ ПАГИНАЦИИ !!!
 const getPaginationItems = (currentPage: number, totalPages: number): (number | string)[] => {
-  const T = totalPages;
-  const C = currentPage;
-  // const items: (number | string)[] = [];
-  if (T <= 1) { return [1]; }
+  const T = totalPages; // Total pages
+  const C = currentPage; // Current page
 
-  // Always include first and last pages
-  // items.push(1);
-  // if (T > 1) items.push(T);
+  const items = new Set<number>(); // Use a Set to automatically handle uniqueness
 
-  // Add pages around the current page for better navigation UX
-  const pagesToShowAroundCurrent: number[] = [];
-  if (C > 2) pagesToShowAroundCurrent.push(C - 1);
-  if (C > 1 && C < T) { pagesToShowAroundCurrent.push(C); }
-  if (C < T - 1) pagesToShowAroundCurrent.push(C + 1);
-
-  // Add 2 and T-1 if they are not close to the edge pages or current pages
-  if (T > 4) {
-    if (C > 3 && !pagesToShowAroundCurrent.includes(2)) pagesToShowAroundCurrent.push(2);
-    if (C < T - 2 && !pagesToShowAroundCurrent.includes(T - 1)) pagesToShowAroundCurrent.push(T - 1);
+  if (T <= 1) {
+    return [1]; // If only one page, just return [1]
   }
 
+  // Always add the first page (1) and the last page (T)
+  items.add(1);
+  if (C > 1 && C < T) {
+    items.add(C);
+  }
+  items.add(T);
 
-  const allRelevantPages = Array.from(new Set([1, ...pagesToShowAroundCurrent, T])).sort((a, b) => a - b);
+  // Convert Set to Array and sort numerically
+  const sortedUniquePages = Array.from(items).sort((a, b) => a - b);
 
   const finalItems: (number | string)[] = [];
-  if (allRelevantPages.length > 0) {
-    finalItems.push(allRelevantPages[0]);
-    for (let i = 1; i < allRelevantPages.length; i++) {
-      const prev = allRelevantPages[i - 1];
-      const current = allRelevantPages[i];
-      if (current - prev > 1) { finalItems.push('...'); }
-      finalItems.push(current);
+
+  if (sortedUniquePages.length > 0) {
+    // Add the first page
+    finalItems.push(sortedUniquePages[0]);
+
+    // Iterate through the sorted pages and add ellipses where there are gaps > 1
+    for (let i = 1; i < sortedUniquePages.length; i++) {
+      const prev = sortedUniquePages[i - 1] as number; // Ensure type is number for arithmetic
+      const current = sortedUniquePages[i] as number; // Ensure type is number for arithmetic
+
+      if (current - prev > 1) {
+        finalItems.push('...'); // Insert ellipsis
+      }
+      finalItems.push(current); // Add the current page number
     }
   }
 
   return finalItems;
 };
+// !!! КОНЕЦ ОБНОВЛЕННОЙ ЛОГИКИ !!!
 
 
 // ПРОП ISFAVORITEPAGE - ADD favoriteSearchTerm prop

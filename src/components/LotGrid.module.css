@@ -84,6 +84,8 @@
     width: 40px;
     height: 40px;
     display: none;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .favoriteIcon.active {
@@ -146,6 +148,8 @@
     width: 40px;
     height: 40px;
     display: none;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .card:hover .magnifier {
@@ -178,6 +182,8 @@
     font-weight: 600;
     text-transform: uppercase;
     color: #171717;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .pageBtn.disabled {
@@ -195,6 +201,7 @@
     /* Если хотите, чтобы многоточие не выделялось как текст при копировании */
     user-select: none;
     pointer-events: none; /* Гарантируем, что оно некликабельно */
+    -webkit-user-select: none;
 }
 
 /* !!! СТИЛИ ДЛЯ СООБЩЕНИЯ "НЕТ РЕЗУЛЬТАТОВ" !!! */
@@ -215,6 +222,8 @@
     text-transform: uppercase;
     color: #9C9C9C;
     border-color: #9C9C9C;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .pageNum.active {

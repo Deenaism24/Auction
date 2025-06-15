@@ -88,6 +88,8 @@
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
     margin-top: 10px;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .sectionLinkButton:hover {
