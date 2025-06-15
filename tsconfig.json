@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
-    "target": "es2022",
-    "jsx": "react",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "typeRoots": [".node_modules/@types", "@types"],
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "outDir": "./docs"
+    "moduleResolution": "node", //Указывает компилятору, как искать модули, используя стратегию, похожую на Node.js
+    "target": "es2022", //Определяет версию JavaScript, в которую компилируется TypeScript
+    "jsx": "react", //Указывает компилятору, как обрабатывать JSX синтаксис. Значение "react" означает, что JSX будет преобразован в вызовы React.createElement
+    "module": "commonjs", //Определяет систему модулей, которая будет использоваться в сгенерированном JavaScript-коде
+    "esModuleInterop": true, // Включает совместимость между модулями CommonJS (например, из node_modules) и модулями ES (импорты/экспорты)
+    "typeRoots": [".node_modules/@types", "@types"], // Указывает директории, где компилятор должен искать файлы определений типов (.d.ts)
+    "forceConsistentCasingInFileNames": true, //Требует, чтобы имена файлов в импортах точно совпадали с фактическим регистром файлов на диске
+    "strict": true, //Включает набор строгих проверок типов
+    "skipLibCheck": true, //Пропускает проверку типов файлов библиотек (.d.ts)
+    "outDir": "./docs" //Указывает директорию, куда должен быть помещен сгенерированный JavaScript-код
   },
-  "include": ["src/**/*", "src/decl.d.ts"],
+  "include": ["src/**/*", "src/decl.d.ts"], //Указывает компилятору TypeScript включать для компиляции все файлы (**/*) в папке src/ и все ее подпапки, а также конкретный файл src/decl.d.ts
 }

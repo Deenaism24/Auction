@@ -20,7 +20,6 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
     return null;
   };
 
-
   return (
     <article className={styles.articleContainer}>
       <div className={styles.articleHeader}>
@@ -33,8 +32,7 @@ const Article: React.FC<ArticleProps> = ({ article }) => {
           <div className={styles.dateRange}>{article.date}</div>
         </div>
       </div>
-
-      {/* Изображение статьи, отображаем только если оно есть */}
+      {/* Изображение */}
       {article.image && (
         <img src={article.image} alt={article.title} className={styles.articleImage} />
       )}

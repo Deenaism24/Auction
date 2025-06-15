@@ -5,17 +5,13 @@ import SearchIcon from '../icons/search.svg';
 
 interface SearchProps {
   onSearch?: (value: string) => void;
-  // !!! НОВЫЙ ПРОП ДЛЯ ТЕКСТА ПЛЕЙСХОЛДЕРА !!!
-  placeholderText?: string; // Делаем его опциональным
-  // -----------------------------------------
+  placeholderText?: string;
 }
 
 // Используем forwardRef, чтобы компонент мог принимать ref
 const Search = forwardRef<HTMLInputElement, SearchProps>(({ onSearch, placeholderText }, ref) => {
-  const [searchValue, setSearchValue] = useState(''); // Локальное состояние для значения в поле ввода
+  const [searchValue, setSearchValue] = useState('');
 
-  // Определяем текст плейсхолдера, используя переданный проп или дефолтный текст
-  // !!! ИСПОЛЬЗУЕМ НОВЫЙ ПРОП !!!
   const currentPlaceholderText = placeholderText || 'Для поиска введите номер лота или название'; // Дефолтный текст, если проп не передан
   // --------------------------
 
