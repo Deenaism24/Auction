@@ -1,6 +1,6 @@
 // app.tsx
 import React from 'react';
-import { BrowserRouter, Routes, Route, ScrollRestoration } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/home';
 import FavoritePage from './pages/favorite';
 import InformationPage from './pages/information';
@@ -18,8 +18,6 @@ import { routes } from './routes';
 const App = () => {
   return (
     <BrowserRouter basename="/Auction/">
-      {/* ScrollRestoration управляет прокруткой при навигации */}
-      <ScrollRestoration />
       <ConfirmationModalProvider>
         <AuthModalProvider>
           <ZoomPhotoModalProvider>

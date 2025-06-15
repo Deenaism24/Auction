@@ -1,5 +1,5 @@
 // src/components/Lot.tsx
-import React from 'react';
+import React, { useEffect } from 'react'; // <-- ИМПОРТИРУЕМ useEffect
 import * as styles from './Lot.module.css';
 import DollarIcon from '../icons/dollar.svg';
 import { Lot as LotType } from '../store/slices/filterSortSlice'; // Импорт типа лота из Redux slice
@@ -11,6 +11,11 @@ interface LotProps {
 
 // Функциональный компонент для отображения детальной информации об одном лоте
 const Lot: React.FC<LotProps> = ({ lot }) => {
+  useEffect(() => {
+    // Прокручиваем окно на самый верх
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [lot?.id]);
+
   // Если объект лота не передан, отображаем сообщение "Лот не найден"
   if (!lot) {
     return <div className={styles.notFound}>Лот не найден</div>;
