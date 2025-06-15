@@ -231,6 +231,16 @@
     font-weight: 700;
     border-color: #171717;
 }
+/* Если сенсорный экран */
+@media (hover: none) {
+    .favoriteIcon {
+        right: 66px;
+        display: block;
+    }
+    .magnifier {
+        display: block
+    }
+}
 
 @media (max-width: 1260px) {
     .grid {

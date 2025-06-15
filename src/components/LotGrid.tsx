@@ -18,7 +18,6 @@ import { useZoomPhotoModal } from '../contexts/ZoomPhotoModalContext'; // Хук
 import { useSelector, useDispatch } from 'react-redux'; // Хуки Redux
 import { RootState, AppDispatch } from '../store'; // Типы состояния и диспатча
 import { addFavorite, removeFavorite } from '../store/slices/favoritesSlice'; // Экшены для избранного
-// Import Lot type from filterSortSlice for consistency
 import { Lot } from '../store/slices/filterSortSlice'; // Тип лота
 
 // Вспомогательная функция для получения ширины окна
@@ -185,7 +184,7 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
     return sortedLots; // Возвращаем отфильтрованный и отсортированный список
   }, [
     allLots,
-    favoriteLotIds, // Зависимость для фильтрации избранного
+    // favoriteLotIds, // Зависимость для фильтрации избранного
     isFavoritePage, // Зависимость для переключения режимов фильтрации
     selectedLocations, // Зависимость для фильтров на главной
     selectedEvents, // Зависимость для фильтров на главной
@@ -207,8 +206,6 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
     selectedSort,
     globalSearchTerm,
     favoriteSearchTerm, // Сбрасываем страницу при изменении локального поиска избранного
-    favoriteLotIds, // Сбрасываем страницу, если изменился список избранного (особенно важно на странице избранного)
-    // isFavoritePage - не нужна как зависимость, так как этот эффект находится внутри компонента, который сам рендерится в зависимости от этой пропсы.
   ]);
 
 
