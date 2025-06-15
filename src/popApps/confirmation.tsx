@@ -12,7 +12,7 @@ interface ConfirmationProps {
 }
 
 // Компонент попапа подтверждения действия
-const ConfirmationPopup: React.FC<ConfirmationProps> = ({ onClose }) => {
+const ConfirmationPopup: React.FC<ConfirmationProps> = () => {
   // Получаем состояние и функции из контекста ConfirmationModalContext
   const { isOpen, message, filename, _confirm, _cancel } = useConfirmationModal();
 
