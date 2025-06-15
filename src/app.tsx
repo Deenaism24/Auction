@@ -18,12 +18,12 @@ import { routes } from './routes';
 const App = () => {
   return (
     <BrowserRouter basename="/Auction/">
+      {/* ScrollRestoration управляет прокруткой при навигации */}
+      <ScrollRestoration />
       <ConfirmationModalProvider>
         <AuthModalProvider>
           <ZoomPhotoModalProvider>
             <Routes>
-              {/* ScrollRestoration управляет прокруткой при навигации */}
-              <ScrollRestoration />
               <Route path="/" element={<HomePage />} />
               <Route path="/favorite" element={<FavoritePage />} />
               <Route path={routes.information} element={<InformationPage />} />
