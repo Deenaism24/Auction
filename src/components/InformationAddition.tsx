@@ -90,115 +90,71 @@ const InformationAddition = () => {
     return () => window.removeEventListener('resize', handleResize); // Отписываемся при размонтировании
   }, []); // Пустой массив зависимостей означает, что эффект сработает только при монтировании и размонтировании
 
-  // Вспомогательная функция для фильтрации лотов с учетом выбранных фильтров, КРОМЕ текущего типа фильтра
-  // Используется для подсчета количества лотов для каждого элемента фильтра.
-  const applyOtherFilters = (
-    lots: Lot[], // Исходный список лотов для фильтрации
-    currentFilterType: 'location' | 'event' | 'category', // Тип фильтра, который ИГНОРИРУЕМ в этой функции
-    locs: string[], // Текущие выбранные локации
-    events: string[], // Текущие выбранные события
-    cats: string[] // Текущие выбранные категории
-  ): Lot[] => {
-    return lots.filter(lot => {
-      // Проверяем соответствие локации, если currentFilterType НЕ 'location' ИЛИ выбраны локации
-      const matchLocation = currentFilterType === 'location' || locs.length === 0 || (lot.city !== undefined && lot.city !== null && locs.map(l => l.toLowerCase()).includes(lot.city.toLowerCase()));
-      // Проверяем соответствие событию
-      const matchEvent = currentFilterType === 'event' || events.length === 0 || (lot.event !== undefined && lot.event !== null && events.map(e => e.toLowerCase()).includes(lot.event.toLowerCase()));
-      // Проверяем соответствие категории
-      const matchCategory = currentFilterType === 'category' || cats.length === 0 || (lot.category !== undefined && lot.category !== null && cats.map(c => c.toLowerCase()).includes(lot.category.toLowerCase()));
+  // МЕТОД ПОДСЧЕТА КОЛИЧЕСТВА ДЛЯ КАЖДОГО ЭЛЕМЕНТА ФИЛЬТРА
+  // Возвращает массив объектов { name, count } для всех уникальных значений данного типа фильтра
+  // count - это количество лотов, которые соответствуют другим выбранным фильтрам, поисковому запросу И этому значению фильтра.
+  const getFilterCounts = (
+    filterKey: 'city' | 'event' | 'category', // Ключ свойства лота
+    selectedKeys: string[], // Выбранные значения для данного фильтра (игнорируются при подсчете лотов для этого ключа)
+    otherSelectedLocations: string[], // Выбранные локации (если filterKey != 'city')
+    otherSelectedEvents: string[], // Выбранные события (если filterKey != 'event')
+    otherSelectedCategories: string[], // Выбранные категории (если filterKey != 'category')
+    currentSearchTerm: string // Текущий поисковый запрос
+  ): FilterType[] => {
+    const counts: Record<string, number> = {}; // Хранит подсчитанные количества для каждого уникального значения
+    const uniqueNames = new Set<string>(); // Хранит все уникальные значения данного фильтра
 
-      // Лот соответствует, если соответствует всем нужным фильтрам
-      return matchLocation && matchEvent && matchCategory;
+    const lowerOtherLocations = otherSelectedLocations.map(loc => loc.toLowerCase());
+    const lowerOtherEvents = otherSelectedEvents.map(event => event.toLowerCase());
+    const lowerOtherCategories = otherSelectedCategories.map(cat => cat.toLowerCase());
+    const lowerSearchTerm = currentSearchTerm.toLowerCase();
+
+    allLots.forEach(lot => {
+      const filterValue = lot[filterKey]; // Получаем значение фильтра для текущего лота
+
+      // Добавляем значение в список уникальных, если оно существует
+      if (filterValue !== undefined && filterValue !== null) {
+        const valueAsString = String(filterValue);
+        uniqueNames.add(valueAsString);
+
+        // Проверяем, соответствует ли лот ВСЕМ ДРУГИМ фильтрам и поисковому запросу
+        const matchesOtherCriteria =
+          (filterKey === 'city' || otherSelectedLocations.length === 0 || (lot.city && lowerOtherLocations.includes(lot.city.toLowerCase()))) &&
+          (filterKey === 'event' || otherSelectedEvents.length === 0 || (lot.event && lowerOtherEvents.includes(lot.event.toLowerCase()))) &&
+          (filterKey === 'category' || otherSelectedCategories.length === 0 || (lot.category && lowerOtherCategories.includes(lot.category.toLowerCase()))) &&
+          (!currentSearchTerm || ( // Проверка поискового запроса
+            (lot.title && lot.title.toLowerCase().includes(lowerSearchTerm)) ||
+            (lot.number !== undefined && lot.number !== null && String(lot.number).toLowerCase().includes(lowerSearchTerm)) // Проверка номера лота
+          ));
+
+        // Если лот соответствует другим критериям, увеличиваем счетчик для его значения фильтра
+        if (matchesOtherCriteria) {
+          counts[valueAsString] = (counts[valueAsString] || 0) + 1;
+        }
+      }
     });
+
+    // Преобразуем уникальные значения в массив { name, count }, включая элементы с count 0
+    return Array.from(uniqueNames).map(name => ({
+      name,
+      count: counts[name] || 0 // Если count не найден, значит 0
+    })).sort((a, b) => a.name.localeCompare(b.name)); // Сортируем по имени
   };
 
+  // Подсчет количества лотов для каждой локации (с учетом фильтров событий, категорий и поиска)
+  const locationCounts = useMemo(() => {
+    return getFilterCounts('city', selectedLocations, selectedLocations, selectedEvents, selectedCategories, searchTerm);
+  }, [allLots, selectedLocations, selectedEvents, selectedCategories, searchTerm]); // Зависит от всех фильтров и поиска
 
-  // !!! ДИНАМИЧЕСКИЕ СПИСКИ ФИЛЬТРОВ С КОЛИЧЕСТВОМ !!!
-  // Этот useMemo фильтрует список allLots на основе ВСЕХ выбранных фильтров (локации, события, категории) И поискового запроса.
-  // Результат этого мемо используется для подсчета количества лотов для каждого элемента фильтра (dynamicLocations, dynamicEvents, dynamicCategories)
-  const filteredLotsForCounts = useMemo(() => {
-    let lots = allLots; // Начинаем с полного списка лотов
+  // Подсчет количества лотов для каждого события (с учетом фильтров локаций, категорий и поиска)
+  const eventCounts = useMemo(() => {
+    return getFilterCounts('event', selectedEvents, selectedLocations, selectedEvents, selectedCategories, searchTerm);
+  }, [allLots, selectedLocations, selectedEvents, selectedCategories, searchTerm]); // Зависит от всех фильтров и поиска
 
-    // Применяем фильтры локации (если выбраны)
-    if (selectedLocations.length > 0) {
-      const lowerSelectedLocations = selectedLocations.map(loc => loc.toLowerCase());
-      lots = lots.filter(lot => lot.city !== undefined && lot.city !== null && lowerSelectedLocations.includes(lot.city.toLowerCase()));
-    }
-    // Применяем фильтры событий (если выбраны)
-    if (selectedEvents.length > 0) {
-      const lowerSelectedEvents = selectedEvents.map(event => event.toLowerCase());
-      lots = lots.filter(lot => lot.event !== undefined && lot.event !== null && lowerSelectedEvents.includes(lot.event.toLowerCase()));
-    }
-    // Применяем фильтры категорий (если выбраны)
-    if (selectedCategories.length > 0) {
-      const lowerSelectedCategories = selectedCategories.map(cat => cat.toLowerCase());
-      lots = lots.filter(lot => lot.category !== undefined && lot.category !== null && lowerSelectedCategories.includes(lot.category.toLowerCase()));
-    }
-    // Применяем фильтр по поисковому запросу (если задан)
-    if (searchTerm) {
-      const lowerCaseSearchTerm = searchTerm.toLowerCase();
-      lots = lots.filter(lot =>
-        (lot.title && lot.title.toLowerCase().includes(lowerCaseSearchTerm)) ||
-        (lot.number !== undefined && lot.number !== null && lot.number.toString().toLowerCase().includes(lowerCaseSearchTerm))
-      );
-    }
-    return lots; // Возвращаем список лотов, отфильтрованный по всем критериям
-
-  }, [allLots, selectedLocations, selectedEvents, selectedCategories, searchTerm]); // Зависимости мемо: список всех лотов, выбранные фильтры и поисковый запрос
-
-
-  // Подсчет количества лотов для каждой локации С УЧЕТОМ ДРУГИХ ВЫБРАННЫХ ФИЛЬТРОВ (кроме локации)
-  const dynamicLocations = useMemo(() => {
-    // Используем filteredLotsForCounts, но применяем applyOtherFilters, игнорируя фильтр локации
-    const lotsForLocationCount = applyOtherFilters(filteredLotsForCounts, 'location', selectedLocations, selectedEvents, selectedCategories);
-
-    const counts = lotsForLocationCount.reduce((acc, lot) => {
-      if (lot.city !== undefined && lot.city !== null) {
-        acc[lot.city] = (acc[lot.city] || 0) + 1;
-      }
-      return acc;
-    }, {} as Record<string, number>);
-
-    // Преобразуем объект { локация: количество } в массив { name: локация, count: количество } и сортируем по имени
-    return Object.keys(counts).map(name => ({ name, count: counts[name] })).sort((a, b) => a.name.localeCompare(b.name));
-
-  }, [filteredLotsForCounts, selectedLocations, selectedEvents, selectedCategories]); // Зависимости мемо: отфильтрованный список и другие выбранные фильтры
-
-
-  // Подсчет количества лотов для каждого события С УЧЕТОМ ДРУГИХ ВЫБРАННЫХ ФИЛЬТРОВ (кроме события)
-  const dynamicEvents = useMemo(() => {
-    // Используем filteredLotsForCounts, но применяем applyOtherFilters, игнорируя фильтр события
-    const lotsForEventCount = applyOtherFilters(filteredLotsForCounts, 'event', selectedLocations, selectedEvents, selectedCategories);
-
-    const counts = lotsForEventCount.reduce((acc, lot) => {
-      if (lot.event !== undefined && lot.event !== null) {
-        acc[lot.event] = (acc[lot.event] || 0) + 1;
-      }
-      return acc;
-    }, {} as Record<string, number>);
-
-    // Преобразуем объект { событие: количество } в массив { name: событие, count: количество } и сортируем по имени
-    return Object.keys(counts).map(name => ({ name, count: counts[name] })).sort((a, b) => a.name.localeCompare(b.name));
-
-  }, [filteredLotsForCounts, selectedLocations, selectedEvents, selectedCategories]); // Зависимости мемо: отфильтрованный список и другие выбранные фильтры
-
-
-  // Подсчет количества лотов для каждой категории С УЧЕТОМ ДРУГИХ ВЫБРАННЫХ ФИЛЬТРОВ (кроме категории)
-  const dynamicCategories = useMemo(() => {
-    // Используем filteredLotsForCounts, но применяем applyOtherFilters, игнорируя фильтр категории
-    const lotsForCategoryCount = applyOtherFilters(filteredLotsForCounts, 'category', selectedLocations, selectedEvents, selectedCategories);
-
-    const counts = lotsForCategoryCount.reduce((acc, lot) => {
-      if (lot.category !== undefined && lot.category !== null) {
-        acc[lot.category] = (acc[lot.category] || 0) + 1;
-      }
-      return acc;
-    }, {} as Record<string, number>);
-
-    // Преобразуем объект { категория: количество } в массив { name: категория, count: количество } и сортируем по имени
-    return Object.keys(counts).map(name => ({ name, count: counts[name] })).sort((a, b) => a.name.localeCompare(b.name));
-
-  }, [filteredLotsForCounts, selectedLocations, selectedEvents]); // Зависимости мемо: отфильтрованный список и другие выбранные фильтры
+  // Подсчет количества лотов для каждой категории (с учетом фильтров локаций, событий и поиска)
+  const categoryCounts = useMemo(() => {
+    return getFilterCounts('category', selectedCategories, selectedLocations, selectedEvents, selectedCategories, searchTerm);
+  }, [allLots, selectedLocations, selectedEvents, selectedCategories, searchTerm]); // Зависит от всех фильтров и поиска
 
   // ПЕРЕРАСЧЕТ HASFILTERS
   // Определяем, есть ли хоть один активный фильтр или поисковый запрос
@@ -234,7 +190,7 @@ const InformationAddition = () => {
   // Вспомогательная функция для рендеринга одной секции фильтров (Локация, Событие, Категория)
   const renderFilterSection = (
     title: string, // Заголовок секции
-    items: FilterType[], // Список элементов фильтра (имя + количество)
+    items: FilterType[], // Список элементов фильтра ({ name, count })
     selectedItems: string[], // Список выбранных элементов (из Redux)
     isOpen: boolean, // Открыта ли секция UI
     toggleOpen: () => void, // Функция для переключения открытия/закрытия UI
@@ -256,9 +212,8 @@ const InformationAddition = () => {
       {/* Выпадающий список элементов фильтра (показывается только если isOpen === true) */}
       {isOpen && (
         <ul className={styles.sortDropdown}> {/* Используем тот же стиль, что и для сортировки */}
+          {/* ИТЕРИРУЕМ ПО ВСЕМ ЭЛЕМЕНТАМ ИЗ СПИСКА items */}
           {items.map((item) => (
-            // Отображаем элемент, только если у него > 0 лотов ИЛИ он уже выбран (чтобы выбранный элемент не исчезал при фильтрации)
-            (item.count > 0 || selectedItems.includes(item.name)) && (
               <li key={item.name} className={styles.sortOption}> {/* Используем стиль опции сортировки */}
                 {/* Чекбокс и лейбл для элемента фильтра */}
                 <label className={styles.checkboxItem}>
@@ -271,12 +226,12 @@ const InformationAddition = () => {
                   {/* Имя элемента фильтра и количество лотов */}
                   <div className={styles.filterItem}>
                     <span>{item.name}</span>
-                    <span className={styles.itemCount}>{item.count}</span>
+                    {/* Отображаем количество только если оно > 0 */}
+                    {item.count > 0 && <span className={styles.itemCount}>{item.count}</span>}
                   </div>
                 </label>
               </li>
-            )
-          ))}
+            ))}
         </ul>
       )}
     </div>
@@ -358,10 +313,9 @@ const InformationAddition = () => {
               )}
 
               {/* СЕКЦИИ ФИЛЬТРОВ (ЛОКАЦИЯ, СОБЫТИЕ, КАТЕГОРИЯ) */}
-              {/* Рендерим секцию Локации, если есть элементы для фильтрации */}
-              {dynamicLocations.length > 0 && renderFilterSection(
+              {locationCounts.length > 0 && renderFilterSection(
                 'ЛОКАЦИЯ',
-                dynamicLocations, // Список локаций с количеством
+                locationCounts, // <-- Передаем список с полным набором и правильными счетчиками
                 selectedLocations, // Выбранные локации из Redux
                 locationDropdownOpen, // Состояние открытия/закрытия UI
                 () => setLocationDropdownOpen((prev) => !prev), // Функция для переключения UI
@@ -369,10 +323,9 @@ const InformationAddition = () => {
                 'location' // Тип фильтра
               )}
 
-              {/* Рендерим секцию События, если есть элементы */}
-              {dynamicEvents.length > 0 && renderFilterSection(
+              {eventCounts.length > 0 && renderFilterSection(
                 'СОБЫТИЕ',
-                dynamicEvents,
+                eventCounts,
                 selectedEvents,
                 eventDropdownOpen,
                 () => setEventDropdownOpen((prev) => !prev),
@@ -380,10 +333,9 @@ const InformationAddition = () => {
                 'event'
               )}
 
-              {/* Рендерим секцию Категории, если есть элементы */}
-              {dynamicCategories.length > 0 && renderFilterSection(
+              {categoryCounts.length > 0 && renderFilterSection(
                 'КАТЕГОРИЯ',
-                dynamicCategories,
+                categoryCounts,
                 selectedCategories,
                 categoryDropdownOpen,
                 () => setCategoryDropdownOpen((prev) => !prev),
