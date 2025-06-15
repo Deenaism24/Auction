@@ -200,10 +200,6 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
     setCurrentPage(1); // Сбрасываем страницу на первую
     window.scrollTo({ top: 0, behavior: 'smooth' }); // Плавно прокручиваем в верх страницы
   }, [
-    selectedLocations,
-    selectedEvents,
-    selectedCategories,
-    selectedSort,
     globalSearchTerm,
     favoriteSearchTerm, // Сбрасываем страницу при изменении локального поиска избранного
   ]);
