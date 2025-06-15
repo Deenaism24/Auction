@@ -1,11 +1,14 @@
 // src/pages/information/index.tsx
 import React from 'react';
 import * as styles from './Information.module.css';
-import { routes } from '../routes';
+import { routes } from '../routes'; // Импорт определений маршрутов и якорей
 
+// Компонент, представляющий страницу "Информация"
 const InformationPage: React.FC = () => {
   return (
+    // Используем фрагмент <> для возврата нескольких элементов верхнего уровня
     <>
+      {/* Секция "PREFERRED ACCESS" с якорем */}
       <section id={routes.ANCHOR_PREFERRED_ACCESS} className={styles.sectionContainer}>
         <h2 className={styles.sectionTitle}>PREFERRED ACCESS</h2>
         <div className={styles.sectionContent}>
@@ -18,7 +21,7 @@ const InformationPage: React.FC = () => {
             Наша программа Preferred Access создана для самых взыскательных коллекционеров и инвесторов,
             которые ценят время и стремятся к максимальной эффективности на аукционе.
           </p>
-          <ul className={styles.sectionList}>
+          <ul className={styles.sectionList}> {/* Список преимуществ */}
             <li>Приглашения на закрытые показы</li>
             <li>Приоритетная регистрация на торги</li>
             <li>Индивидуальная поддержка менеджера</li>
@@ -27,7 +30,7 @@ const InformationPage: React.FC = () => {
         </div>
       </section>
 
-      {/* About Section */}
+      {/* Секция "ABOUT US" с якорем */}
       <section id={routes.ANCHOR_ABOUT} className={styles.sectionContainer}>
         <h2 className={styles.sectionTitle}>ABOUT US</h2>
         <div className={styles.sectionContent}>
@@ -44,7 +47,7 @@ const InformationPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Секция "SERVICES" с якорем */}
       <section id={routes.ANCHOR_SERVICES} className={styles.sectionContainer}>
         <h2 className={styles.sectionTitle}>SERVICES</h2>
         <div className={styles.sectionContent}>
@@ -66,9 +69,12 @@ const InformationPage: React.FC = () => {
         </div>
       </section>
 
+      {/* Секция "КАК КУПИТЬ ИЛИ ПРОДАТЬ" с якорем */}
       <section id={routes.ANCHOR_HOW_TO_BUY_SELL} className={styles.sectionContainer}>
         <h2 className={styles.sectionTitle}>КАК КУПИТЬ ИЛИ ПРОДАТЬ</h2>
+        {/* Контейнер с особыми стилями для секции покупки/продажи */}
         <div className={styles.howToBuySellSectionContent}>
+          {/* Блок "Как купить" */}
           <div>
             <h3 className={styles.stepTitle}>Как купить:</h3>
             <ol className={styles.howToBuySellStepsList}>
@@ -80,6 +86,7 @@ const InformationPage: React.FC = () => {
             </ol>
           </div>
 
+          {/* Блок "Как продать" */}
           <div>
             <h3 className={styles.stepTitle}>Как продать:</h3>
             <ol className={styles.howToBuySellStepsList}>

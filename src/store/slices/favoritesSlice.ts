@@ -33,10 +33,6 @@ const favoritesSlice = createSlice({
       // Фильтруем массив, оставляя только те ID, которые не равны удаляемому
       state.items = state.items.filter(id => id !== lotId);
     },
-    // Опционально: редьюсер для загрузки начального состояния (например, из LocalStorage)
-    // setFavorites: (state, action: PayloadAction<number[]>) => {
-    //   state.items = action.payload;
-    // },
   },
 });
 

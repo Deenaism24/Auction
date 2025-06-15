@@ -3,19 +3,23 @@ import React from 'react';
 import * as styles from './LotGrid.module.css';
 import LotGrid from './LotGrid';
 
-// ADD: Interface for the prop
+// Определение пропсов компонента: ожидает поисковый запрос, специфичный для избранного
 interface FavoritesGridProps {
-  favoriteSearchTerm: string; // Expect the local search term
+  favoriteSearchTerm: string; // Ожидаем поисковый запрос
 }
 
-// Modify component signature to accept the prop
+// Компонент, который рендерит раздел "Избранное" с сеткой лотов
 const FavoritesGrid: React.FC<FavoritesGridProps> = ({ favoriteSearchTerm }) => {
   return (
+    // Секция для отображения избранного, использует те же стили секции, что и AuctionLotGrid
     <section className={styles.lotSection}>
+      {/* Заголовок секции "Избранное" */}
       <div className={styles.gridHeader}>
         <div className={styles.h2}>Избранное</div>
       </div>
-      {/* Pass the local search term to LotGrid */}
+      {/* Встраиваем универсальный компонент LotGrid */}
+      {/* isFavoritePage={true} указывает LotGrid, что он находится в режиме отображения избранного */}
+      {/* favoriteSearchTerm передается для фильтрации внутри LotGrid */}
       <LotGrid isFavoritePage={true} favoriteSearchTerm={favoriteSearchTerm} />
     </section>
   );

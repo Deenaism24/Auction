@@ -1,92 +1,88 @@
+// src/widgets/footer/index.tsx
+
 import React from 'react';
-// !!! ИМПОРТИРУЕМ NAVLINK, USEDISPATCH И SETAUTHENTICATED !!!
-import { useNavigate } from 'react-router-dom'; // Добавим useNavigate для редиректа после выхода
-import { useDispatch, useSelector } from 'react-redux';
-import { setAuthenticated } from '../../store/slices/userSlice'; // Импортируем экшен для выхода
-import { RootState } from '../../store'; // Импортируем RootState для useSelector
-import OutIcon from '../../icons/out.svg'; // Иконка ЛК (будет использоваться для Выхода)
-// !!! КОНЕЦ ИМПОРТА !!!
+// Импорты для Redux (для управления статусом авторизации)
+import { useNavigate } from 'react-router-dom'; // Хук для навигации
+import { useDispatch, useSelector } from 'react-redux'; // Хуки для работы с Redux
+import { setAuthenticated } from '../../store/slices/userSlice'; // Экшен для сброса статуса авторизации
+import { RootState } from '../../store'; // Тип корневого состояния Redux
+
+import OutIcon from '../../icons/out.svg';
+import AuthIcon from '../../icons/enter.svg';
+
 import * as styles from './Footer.module.css';
-import { useAuthModal } from '../../contexts/AuthFlowModalContext';
-import { routes } from '../../routes';
-import { downloadEmptyPdf } from '../../utils/downloadPDF';
-import { useConfirmationModal } from '../../contexts/ConfirmationModalContext';
+import { useAuthModal } from '../../contexts/AuthFlowModalContext'; // Хук для модального окна авторизации
+import { routes } from '../../routes'; // Объект с путями роутов
+import { downloadEmptyPdf } from '../../utils/downloadPDF'; // Утилита для скачивания пустого PDF
+import { useConfirmationModal } from '../../contexts/ConfirmationModalContext'; // Хук для модального окна подтверждения
 
-import AuthIcon from '../../icons/enter.svg'; // Иконка для LOG IN
-
-
+// Компонент футера
 const Footer: React.FC = () => {
-  const { open } = useAuthModal();
-  const { openConfirmation } = useConfirmationModal();
-  const navigate = useNavigate(); // Получаем navigate для редиректа
-  // !!! ЧТЕНИЕ СОСТОЯНИЯ АВТОРИЗАЦИИ ИЗ REDUX !!!
+  const { open } = useAuthModal(); // Получаем функцию для открытия модалки авторизации
+  const { openConfirmation } = useConfirmationModal(); // Получаем функцию для открытия модалки подтверждения
+  const navigate = useNavigate(); // Получаем функцию для навигации между страницами
+  // ЧТЕНИЕ СОСТОЯНИЯ АВТОРИЗАЦИИ ИЗ REDUX
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
-  // !!! ПОЛУЧЕНИЕ DISPATCH !!!
+  // ПОЛУЧЕНИЕ DISPATCH ФУНКЦИИ ИЗ REDUX
   const dispatch = useDispatch();
-  // !!! КОНЕЦ ЧТЕНИЯ СОСТОЯНИЯ И ПОЛУЧЕНИЯ DISPATCH !!!
 
-
+  // Обработчик клика по кнопке "LOG IN"
   const handleLoginClick = () => {
-    open('login');
+    open('login'); // Открываем модальное окно авторизации
   };
 
-  // !!! НОВАЯ ФУНКЦИЯ ДЛЯ ВЫХОДА !!!
+  // НОВАЯ ФУНКЦИЯ ДЛЯ ВЫХОДА ИЗ АККАУНТА
   const handleLogoutClick = () => {
-    // Диспатчим экшен для установки статуса авторизации в false
+    // Диспатчим экшен для установки статуса авторизации в false в Redux
     dispatch(setAuthenticated(false));
 
-    // Опционально: удалить сохраненные данные авторизации (например, токены) из LocalStorage
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('authToken'); // Если вы использовали для сохранения
-
-    // Опционально: перенаправить пользователя на главную страницу или страницу входа после выхода
+    // Перенаправляем пользователя на главную страницу после выхода
     navigate(routes.home);
     console.log('Пользователь вышел.');
-
-    // Возможно, также нужно очистить данные пользователя или избранного из Redux,
-    // если они должны быть привязаны только к авторизованной сессии.
-    // dispatch(clearUserData()); // Пример экшена для очистки данных пользователя
-    // dispatch(clearFavorites()); // Пример экшена для очистки избранного
   };
-  // !!! КОНЕЦ НОВОЙ ФУНКЦИИ !!!
 
-
+  // Обработчик клика по ссылкам скачивания PDF
   const handleDownloadClick = async (linkText: string, e?: React.MouseEvent) => {
     if (e) {
-      e.preventDefault();
+      e.preventDefault(); // Предотвращаем стандартное поведение ссылки
     }
 
+    // Формируем имя файла из текста ссылки
     const filename = `${linkText.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '_')}.pdf`;
     const message = 'Скачать файл';
 
+    // Открываем модальное окно подтверждения скачивания
     const confirmed = await openConfirmation(message, filename);
 
+    // Если пользователь подтвердил, скачиваем пустой PDF
     if (confirmed) {
       downloadEmptyPdf(filename);
     }
   };
 
-
+  // Рендеринг компонента футера
   return (
     <>
       <footer className={styles.footer}>
-        {/* Support Column (оставляем как есть) */}
+        {/* Колонка "SUPPORT" */}
         <div className={styles.column}>
           <h3 className={styles.columnTitle}>SUPPORT</h3>
+          {/* Проходим по ссылкам из данных роутов и рендерим их */}
           {routes.footerLinks.support.map(link => (
             <div
-              key={link.path}
-              className={styles.link}
-              onClick={(e) => handleDownloadClick(link.text, e)}
+              key={link.path} // Ключ для React
+              className={styles.link} // Стили ссылки
+              onClick={(e) => handleDownloadClick(link.text, e)} // Обработчик клика для скачивания
             >
-              {link.text}
+              {link.text} {/* Текст ссылки */}
             </div>
           ))}
         </div>
 
-        {/* Corporate Column (оставляем как есть) */}
+        {/* Колонка "CORPORATE" */}
         <div className={styles.column}>
           <h3 className={styles.columnTitle}>CORPORATE</h3>
+          {/* Проходим по ссылкам и рендерим их */}
           {routes.footerLinks.corporate.map(link => (
             <div
               key={link.path}
@@ -98,9 +94,10 @@ const Footer: React.FC = () => {
           ))}
         </div>
 
-        {/* More Column (оставляем как есть) */}
+        {/* Колонка "MORE..." */}
         <div className={styles.column}>
           <h3 className={styles.columnTitle}>MORE...</h3>
+          {/* Проходим по ссылкам и рендерим их */}
           {routes.footerLinks.more.map(link => (
             <div
               key={link.path}
@@ -112,23 +109,20 @@ const Footer: React.FC = () => {
           ))}
         </div>
 
-        {/* !!! УСЛОВНЫЙ РЕНДЕРИНГ: LOG IN ИЛИ ВЫХОД !!! */}
+        {/* РЕНДЕРИНГ КНОПКИ АВТОРИЗАЦИИ ИЛИ ВЫХОДА */}
         {isAuthenticated ? (
-          // Если авторизован - кнопка Выход (div с обработчиком клика)
-          <div onClick={handleLogoutClick} className={styles.auth}> {/* Используем стиль .auth */}
-            {/* Текст "Выход" */}
-            <div className={styles.login}>ВЫХОД</div> {/* Переиспользуем стиль для текста, изменив текст */}
-            {/* Иконка - можно использовать иконку ЛК или найти иконку выхода */}
-            <img src={OutIcon} alt="Выход" className={styles.icon} /> {/* Используем иконку ЛК */}
+          // Если пользователь авторизован, показываем кнопку "ВЫХОД"
+          <div onClick={handleLogoutClick} className={styles.auth}> {/* Кликабельный контейнер */}
+            <div className={styles.login}>ВЫХОД</div> {/* Текст кнопки */}
+            <img src={OutIcon} alt="Выход" className={styles.icon} /> {/* Иконка выхода */}
           </div>
         ) : (
-          // Если не авторизован - кнопка LOG IN (div с обработчиком клика)
+          // Если пользователь не авторизован, показываем кнопку "LOG IN"
           <div onClick={handleLoginClick} className={styles.auth}>
             <div className={styles.login}>LOG IN</div>
-            <img src={AuthIcon} alt="Вход" className={styles.icon} />
+            <img src={AuthIcon} alt="Вход" className={styles.icon} /> {/* Иконка входа */}
           </div>
         )}
-        {/* !!! КОНЕЦ УСЛОВНОГО РЕНДЕРИНГА !!! */}
 
       </footer>
     </>
