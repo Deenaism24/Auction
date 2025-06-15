@@ -17,18 +17,9 @@ import { useZoomPhotoModal } from '../contexts/ZoomPhotoModalContext';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { addFavorite, removeFavorite } from '../store/slices/favoritesSlice';
+// Import Lot type from filterSortSlice for consistency
+import { Lot } from '../store/slices/filterSortSlice';
 
-// Определяем тип лота
-interface Lot {
-  id: number;
-  number: string | number;
-  title: string;
-  price: string;
-  city: string | undefined;
-  event: string | undefined;
-  category: string | undefined;
-  image: string;
-}
 
 function getWindowWidth() {
   return window.innerWidth;
@@ -37,147 +28,204 @@ function getWindowWidth() {
 const getPaginationItems = (currentPage: number, totalPages: number): (number | string)[] => {
   const T = totalPages;
   const C = currentPage;
-  const items: (number | string)[] = [];
+  // const items: (number | string)[] = [];
   if (T <= 1) { return [1]; }
-  const visiblePages = new Set<number>();
-  visiblePages.add(1);
-  if (C > 1 && C < T) { visiblePages.add(C); }
-  if (T > 1) visiblePages.add(T);
-  const sortedVisiblePages = Array.from(visiblePages).sort((a, b) => a - b);
-  if (sortedVisiblePages.length > 0) {
-    items.push(sortedVisiblePages[0]);
-    for (let i = 1; i < sortedVisiblePages.length; i++) {
-      const prev = sortedVisiblePages[i - 1];
-      const current = sortedVisiblePages[i];
-      if (current - prev > 1) { items.push('...'); }
-      items.push(current);
+
+  // Always include first and last pages
+  // items.push(1);
+  // if (T > 1) items.push(T);
+
+  // Add pages around the current page for better navigation UX
+  const pagesToShowAroundCurrent: number[] = [];
+  if (C > 2) pagesToShowAroundCurrent.push(C - 1);
+  if (C > 1 && C < T) { pagesToShowAroundCurrent.push(C); }
+  if (C < T - 1) pagesToShowAroundCurrent.push(C + 1);
+
+  // Add 2 and T-1 if they are not close to the edge pages or current pages
+  if (T > 4) {
+    if (C > 3 && !pagesToShowAroundCurrent.includes(2)) pagesToShowAroundCurrent.push(2);
+    if (C < T - 2 && !pagesToShowAroundCurrent.includes(T - 1)) pagesToShowAroundCurrent.push(T - 1);
+  }
+
+
+  const allRelevantPages = Array.from(new Set([1, ...pagesToShowAroundCurrent, T])).sort((a, b) => a - b);
+
+  const finalItems: (number | string)[] = [];
+  if (allRelevantPages.length > 0) {
+    finalItems.push(allRelevantPages[0]);
+    for (let i = 1; i < allRelevantPages.length; i++) {
+      const prev = allRelevantPages[i - 1];
+      const current = allRelevantPages[i];
+      if (current - prev > 1) { finalItems.push('...'); }
+      finalItems.push(current);
     }
   }
-  return items;
+
+  return finalItems;
 };
 
 
-// ПРОП ISFAVORITEPAGE
+// ПРОП ISFAVORITEPAGE - ADD favoriteSearchTerm prop
 interface LotGridProps {
   isFavoritePage?: boolean;
+  favoriteSearchTerm?: string; // ADD THIS PROP - used only when isFavoritePage is true
 }
 
-const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false }) => {
+const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearchTerm = '' }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [windowWidth] = React.useState(getWindowWidth());
+  // Consider adding a state/effect for window width if you need dynamic lotsPerPage
+  // For now, keeping it simple with initial render width
+  const [windowWidth] = React.useState(getWindowWidth()); // This won't update on resize
   const lotsPerPage = windowWidth >= 600 ? 9 : 4;
+
 
   // ЧТЕНИЕ ИЗ REDUX
   const allLots = useSelector((state: RootState) => state.filterSort.allLots) as Lot[];
   const favoriteLotIds = useSelector((state: RootState) => state.favorites.items); // ID избранных лотов
-  const selectedLocations = useSelector((state: RootState) => state.filterSort.selectedLocations);
-  const selectedEvents = useSelector((state: RootState) => state.filterSort.selectedEvents);
-  const selectedCategories = useSelector((state: RootState) => state.filterSort.selectedCategories);
+
+  // Read filters/global search only if NOT on favorite page
+  const selectedLocations = !isFavoritePage ? useSelector((state: RootState) => state.filterSort.selectedLocations) : [];
+  const selectedEvents = !isFavoritePage ? useSelector((state: RootState) => state.filterSort.selectedEvents) : [];
+  const selectedCategories = !isFavoritePage ? useSelector((state: RootState) => state.filterSort.selectedCategories) : [];
+
+  // Read global search term only if NOT on favorite page
+  const globalSearchTerm = !isFavoritePage ? useSelector((state: RootState) => state.filterSort.searchTerm) : '';
+
+  // Read global sort option (sorting applies to both pages' filtered lists)
   const selectedSort = useSelector((state: RootState) => state.filterSort.selectedSort);
-  const searchTerm = useSelector((state: RootState) => state.filterSort.searchTerm);
+
+
+  // Determine which search term to use based on the page
+  const currentSearchTerm = isFavoritePage ? favoriteSearchTerm : globalSearchTerm;
+
 
   // ЛОГИКА ФИЛЬТРАЦИИ И СОРТИРОВКИ
   const filteredAndSortedLots = useMemo(() => {
-    let workingLots = allLots; // Начинаем с полного списка
+    let workingLots = allLots; // Start with the full list
 
-    // 1. Если это страница избранного, сначала фильтруем по избранным ID
+    // 1. Filter by favorites if on the favorite page
     if (isFavoritePage) {
       workingLots = workingLots.filter(lot => favoriteLotIds.includes(lot.id));
     }
 
-    // 2. Применяем фильтры (только на главной странице)
+    // 2. Apply filters (only on the main page)
     if (!isFavoritePage) {
       if (selectedLocations.length > 0) {
         const lowerSelectedLocations = selectedLocations.map(loc => loc.toLowerCase());
         workingLots = workingLots.filter(lot =>
-          lot.city !== undefined && lowerSelectedLocations.includes(lot.city.toLowerCase())
+          lot.city !== undefined && lot.city !== null && lowerSelectedLocations.includes(lot.city.toLowerCase())
         );
       }
       if (selectedEvents.length > 0) {
         const lowerSelectedEvents = selectedEvents.map(event => event.toLowerCase());
         workingLots = workingLots.filter(lot =>
-          lot.event !== undefined && lowerSelectedEvents.includes(lot.event.toLowerCase())
+          lot.event !== undefined && lot.event !== null && lowerSelectedEvents.includes(lot.event.toLowerCase())
         );
       }
       if (selectedCategories.length > 0) {
         const lowerSelectedCategories = selectedCategories.map(cat => cat.toLowerCase());
         workingLots = workingLots.filter(lot =>
-          lot.category !== undefined && lowerSelectedCategories.includes(lot.category.toLowerCase())
+          lot.category !== undefined && lot.category !== null && lowerSelectedCategories.includes(lot.category.toLowerCase())
         );
       }
     }
 
-
-    // 3. Применяем фильтр по поисковому запросу
-    if (searchTerm) {
-      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    // 3. Apply search filter using the determined search term
+    if (currentSearchTerm) {
+      const lowerCaseSearchTerm = currentSearchTerm.toLowerCase();
       workingLots = workingLots.filter(lot =>
-          (lot.title && lot.title.toLowerCase().includes(lowerCaseSearchTerm)) ||
-          (lot.number !== undefined && lot.number.toString().toLowerCase().includes(lowerCaseSearchTerm))
+        (lot.title && lot.title.toLowerCase().includes(lowerCaseSearchTerm)) ||
+        (lot.number !== undefined && lot.number !== null && lot.number.toString().toLowerCase().includes(lowerCaseSearchTerm))
       );
     }
 
-    // 4. Применяем сортировку (используем Redux state)
+    // 4. Apply sorting (Sorting is global, uses Redux state)
     const sortedLots = [...workingLots];
     switch (selectedSort) {
       case 'title-asc': sortedLots.sort((a, b) => (a.title || '').localeCompare(b.title || '')); break;
       case 'title-desc': sortedLots.sort((a, b) => (b.title || '').localeCompare(a.title || '')); break;
-      case 'city-asc': sortedLots.sort((a, b) => (a.city || '').localeCompare(b.city || '')); break;
-      case 'city-desc': sortedLots.sort((a, b) => (b.city || '').localeCompare(a.city || '')); break;
-      case 'price-asc': sortedLots.sort((a, b) => { const priceA = parseFloat(a.price); const priceB = parseFloat(b.price); if (isNaN(priceA) && isNaN(priceB)) return 0; if (isNaN(priceA)) return 1; if (isNaN(priceB)) return -1; return priceA - priceB; }); break;
-      case 'price-desc': sortedLots.sort((a, b) => { const priceA = parseFloat(a.price); const priceB = parseFloat(b.price); if (isNaN(priceA) && isNaN(priceB)) return 0; if (isNaN(priceA)) return -1; if (isNaN(priceB)) return 1; return priceB - priceA; }); break;
-      default: sortedLots.sort((a, b) => a.id - b.id); break;
+      case 'city-asc': sortedLots.sort((a, b) => {
+        const cityA = a.city || ''; // Treat undefined/null as empty string for sorting
+        const cityB = b.city || '';
+        return cityA.localeCompare(cityB);
+      }); break;
+      case 'city-desc': sortedLots.sort((a, b) => {
+        const cityA = a.city || '';
+        const cityB = b.city || '';
+        return cityB.localeCompare(cityA);
+      }); break;
+      case 'price-asc': sortedLots.sort((a, b) => {
+        const priceA = parseFloat((a.price || '0').replace(/,/g, '')); // Handle undefined/null price and remove commas
+        const priceB = parseFloat((b.price || '0').replace(/,/g, ''));
+        // Handle non-numeric prices by pushing them to the end (or start)
+        if (isNaN(priceA) && isNaN(priceB)) return 0;
+        if (isNaN(priceA)) return 1; // Push non-numeric priceA to end
+        if (isNaN(priceB)) return -1; // Push non-numeric priceB to end
+        return priceA - priceB;
+      }); break;
+      case 'price-desc': sortedLots.sort((a, b) => {
+        const priceA = parseFloat((a.price || '0').replace(/,/g, ''));
+        const priceB = parseFloat((b.price || '0').replace(/,/g, ''));
+        if (isNaN(priceA) && isNaN(priceB)) return 0;
+        if (isNaN(priceA)) return 1; // Push non-numeric priceA to end (still)
+        if (isNaN(priceB)) return -1; // Push non-numeric priceB to end (still)
+        return priceB - priceA;
+      }); break;
+      default: sortedLots.sort((a, b) => a.id - b.id); break; // Default sort by ID
     }
 
     return sortedLots;
 
-  }, [allLots, favoriteLotIds, isFavoritePage, selectedLocations, selectedEvents, selectedCategories, selectedSort, searchTerm]);
+  }, [
+    allLots,
+    favoriteLotIds, // Dependency for Favorite page filtering
+    isFavoritePage, // Dependency for switching between filter modes
+    selectedLocations, // Dependency for Home page filtering
+    selectedEvents, // Dependency for Home page filtering
+    selectedCategories, // Dependency for Home page filtering
+    selectedSort, // Dependency for sorting (global)
+    globalSearchTerm, // Dependency for Home page search (from Redux)
+    favoriteSearchTerm // Dependency for Favorite page search (from prop)
+  ]);
 
-  // ЭФФЕКТЫ ДЛЯ СБРОСА СТРАНИЦЫ
-  // Сброс страницы при изменении списка избранного (только на странице избранного)
+  // Effect to reset page and scroll to top when filter/sort/search changes
   useEffect(() => {
-    if (isFavoritePage) {
-      setCurrentPage(1);
-    }
-  }, [favoriteLotIds, isFavoritePage]);
-
-  // Сброс страницы и прокрутка вверх при изменении сортировки
-  useEffect(() => {
+    // Reset page to 1 whenever the calculated filtered/sorted list potentially changes
+    // This includes changes to filters, sort option, or either search term.
     setCurrentPage(1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [selectedSort]); // Зависит только от выбранной опции сортировки
+  }, [
+    selectedLocations,
+    selectedEvents,
+    selectedCategories,
+    selectedSort,
+    globalSearchTerm,
+    favoriteSearchTerm, // ADD THIS: Reset page when favorite search changes
+    // favoriteLotIds is intentionally *not* here, as changing favorites shouldn't reset scroll/page on *main* page.
+    // On favorite page, changing favorites WILL trigger re-render due to favoriteLotIds change,
+    // and the dependency on favoriteSearchTerm (even if empty) will cause reset.
+    // A separate effect *could* be added just for favorite page if needed, but current seems OK.
+  ]);
 
-  // Сброс страницы (без прокрутки) при изменении фильтров (только на главной)
-  useEffect(() => {
-    if (!isFavoritePage) {
-      setCurrentPage(1);
-    }
-  }, [selectedLocations, selectedEvents, selectedCategories, isFavoritePage]); // Зависит от фильтров и режима страницы
 
-  // Сброс страницы при изменении поиска (в обоих режимах)
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm]); // Зависит только от поискового запроса
-
-  // РАСЧЕТ HASFILTERS ЛОКАЛЬНО
-  const hasActiveFilters = isFavoritePage
-    ? searchTerm !== ''
-    : selectedLocations.length > 0 || selectedEvents.length > 0 || selectedCategories.length > 0 || searchTerm !== '';
-  const hasActiveSearch = searchTerm !== ''; // Этот флаг нужен для сообщения о поиске
-
-  // Общее количество страниц зависит от filteredAndSortedLots
+  // Calculate total pages based on the current filtered/sorted list
   const totalPages = filteredAndSortedLots.length === 0 ? 1 : Math.ceil(filteredAndSortedLots.length / lotsPerPage);
-  // Если текущая страница стала больше нового общего количества страниц
+
+  // Adjust current page if it's out of bounds after filtering/sorting
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
-    } else if (currentPage === 0 && totalPages > 0) {
+    } else if (currentPage <= 0 && totalPages > 0) {
       setCurrentPage(1);
+    } else if (totalPages === 0 && currentPage !== 1) {
+      // If there are no lots matching criteria, ensure page is 1 (or 0 if that's preferred for 'no results')
+      setCurrentPage(1); // Stay on page 1 even if no results
     }
   }, [currentPage, totalPages]);
 
+
   const startIndex = (currentPage - 1) * lotsPerPage;
-  // Получаем лоты для текущей страницы ИЗ отфильтрованного и отсортированного списка
+  // Get lots for the current page slice
   const currentLots = filteredAndSortedLots.slice(startIndex, startIndex + lotsPerPage);
 
 
@@ -194,48 +242,63 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false }) => {
   };
 
   const dispatch = useDispatch<AppDispatch>();
-  // В FavoriteGrid логика добавления в избранное не нужна, только удаление
+  // Handle toggling favorite status
   const handleToggleFavorite = (event: React.MouseEvent, lotId: number) => {
     event.preventDefault();
     event.stopPropagation();
     if (favoriteLotIds.includes(lotId)) {
       dispatch(removeFavorite(lotId));
+      // If on the favorite page and removing, might want to re-evaluate the list immediately,
+      // but the dependency array in useMemo already handles favoriteLotIds change.
     } else {
+      // Allow adding from any page
       dispatch(addFavorite(lotId));
     }
   };
 
-  // Генерируем элементы пагинации для отображения
+  // Generate pagination items
   const paginationItems = totalPages > 1 ? getPaginationItems(currentPage, totalPages) : [];
+
+  // Determine the appropriate "no results" message
+  const getNoResultsMessage = () => {
+    if (allLots.length === 0) {
+      return 'Данные о лотах отсутствуют.'; // If original list is empty
+    }
+    if (isFavoritePage && favoriteLotIds.length === 0 && !currentSearchTerm) {
+      // Specific message for empty favorites list when no search is active
+      return 'Список избранного пуст.';
+    }
+    if (currentSearchTerm) { // If there's an active search term (either global or favorite)
+      return isFavoritePage ?
+        `Среди избранного поиск по запросу "${currentSearchTerm}" не дал результатов.` :
+        `Поиск по запросу "${currentSearchTerm}" не дал результатов.`;
+    }
+    // Check for active filters only on the main page
+    if (!isFavoritePage && (selectedLocations.length > 0 || selectedEvents.length > 0 || selectedCategories.length > 0)) {
+      return `Нет лотов, соответствующих выбранным фильтрам.`;
+    }
+    if (filteredAndSortedLots.length === 0) {
+      // This covers cases like being on favorite page with favorites, but filters/search on favorites give no results
+      return isFavoritePage ?
+        'Нет лотов в избранном, соответствующих текущим критериям.' :
+        'Нет лотов, соответствующих текущим критериям.';
+    }
+    return 'Нет лотов для отображения.'; // Catch-all (should be rare)
+  };
 
 
   return (
     <div>
-      {/* Отображаем сообщение, если лоты не найдены */}
+      {/* Display "no results" message if the filtered list is empty */}
       {filteredAndSortedLots.length === 0 && (
         <div className={styles.noResults}>
-          {allLots.length === 0 ? (
-            'Данные о лотах отсутствуют.' // Если исходный список пуст
-          ) : isFavoritePage && favoriteLotIds.length === 0 ? (
-            'Список избранного пуст.' // Если на странице избранного и избранных лотов нет
-          ) : hasActiveSearch ? ( // Если есть активный поиск
-            isFavoritePage ? (
-              `Среди избранного поиск по запросу "${searchTerm}" не дал результатов.` // Поиск по избранным
-            ) : (
-              `Поиск по запросу "${searchTerm}" не дал результатов.` // Поиск по всему списку
-            )
-          ) : hasActiveFilters && !isFavoritePage ? ( // Если есть активные фильтры и это не страница избранного
-            `Нет лотов, соответствующих выбранным фильтрам.`
-          ) : (
-            'Нет лотов для отображения.' // Этот случай маловероятен
-          )}
+          {getNoResultsMessage()}
         </div>
       )}
-      {/* Рендерим сетку, только если есть лоты для текущей страницы */}
+      {/* Render the grid only if there are lots for the current page */}
       {currentLots.length > 0 && (
         <div className={styles.grid}>
           {currentLots.map((lot) => {
-            // Проверяем, является ли этот лот избранным
             const isFavorite = favoriteLotIds.includes(lot.id);
             const handleClickFavorite = (event: React.MouseEvent) => {
               handleToggleFavorite(event, lot.id);
@@ -245,14 +308,15 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false }) => {
               <div key={lot.id} className={styles.card}>
                 <div
                   className={styles.imageWrapper}
-                  onClick={() => openImagePopup(lot.image)} // Клик по обертке вызывает попап
+                  onClick={() => openImagePopup(lot.image)}
                 >
                   <img src={lot.image} alt={lot.title} className={styles.image} />
 
+                  {/* Favorite Icon Logic */}
                   <img
-                    src={(isFavorite || isFavoritePage) ? FavoriteLotIcon : AddFavoriteLotIcon}
+                    src={isFavorite ? FavoriteLotIcon : AddFavoriteLotIcon}
                     alt={isFavorite ? 'В избранном' : 'Добавить в избранное'}
-                    className={`${styles.favoriteIcon} ${(isFavorite || isFavoritePage) ? styles.active : ''}`}
+                    className={`${styles.favoriteIcon} ${isFavorite ? styles.active : ''}`}
                     onClick={handleClickFavorite}
                   />
 
@@ -264,11 +328,12 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false }) => {
 
                 </div>
 
-                {/* NavLink для перехода на страницу лота */}
+                {/* NavLink to lot details */}
                 <NavLink
                   to={generatePath(routes.openLot, { lot: lot.number })}
                   className={styles.info}
                 >
+                  {/* Inner info div */}
                   <div className={styles.info}>
                     <div className={styles.numberRow}>
                       НОМЕР ЛОТА:
@@ -292,8 +357,8 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false }) => {
         </div>
       )}
 
-
-      {totalPages > 1 && (
+      {/* Pagination */}
+      {totalPages > 1 && ( // Only show pagination if more than 1 page
         <div className={styles.pagination}>
           <button className={`${styles.pageBtn} ${currentPage === 1 ? styles.disabled : ''}`} onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
             <img src={currentPage === 1 ? BackPageAIcon : BackPageDIcon} alt="Назад" />
