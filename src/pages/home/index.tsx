@@ -9,12 +9,14 @@ import Header from '../../widgets/header';
 import Search from '../../components/Search'; // Используем универсальный Search
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { setSearchTerm } from '../../store/slices/filterSortSlice';
+// Импортируем нужные экшены из filterSortSlice
+import { setSearchTerm, setFilters } from '../../store/slices/filterSortSlice';
 
 const HomePage: React.FC = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
   const location = useLocation();
+  // const navigate = useNavigate(); // Не нужен для логики сброса
 
   // Эффект для фокусировки инпута поиска по хэшу
   useEffect(() => {
@@ -27,36 +29,32 @@ const HomePage: React.FC = () => {
         setTimeout(() => {
           searchInputRef.current?.focus();
         }, 600); // Время таймаута должно быть достаточным для плавного скролла
-
-        // Опционально: удалить хэш из URL после фокусировки, чтобы не было скролла при каждом обновлении страницы
-        // navigate(location.pathname, { replace: true });
       }
     }
-    // Эффект запускается при изменении location.hash.
-    // НЕ добавляем cleanup функцию здесь, так как мы не хотим сбрасывать поиск при уходе с этой страницы.
+    // Эффект запускается при изменении location.hash
   }, [location.hash, searchInputRef]); // Добавляем searchInputRef в зависимости
 
-
-  // --- УДАЛЕННЫЙ ЭФФЕКТ ДЛЯ СБРОСА ПОИСКА ---
-  // Предыдущий эффект с cleanup функцией, который мы УДАЛЯЕМ:
-  /*
+  // !!! НОВЫЙ ЭФФЕКТ ДЛЯ СБРОСА ФИЛЬТРОВ И ПОИСКА ПРИ ПЕРЕХОДЕ НА СТРАНИЦУ !!!
   useEffect(() => {
-    return () => {
-        // Эта функция сработает, когда компонент HomePage будет размонтирован.
-        // УДАЛЯЕМ эту строку:
-        // dispatch(setSearchTerm(''));
-        console.log("Глобальный поиск сброшен при уходе с Домашней страницы (через cleanup)."); // Этот лог тоже можно удалить
-    };
-  }, [dispatch]); // Зависимость только от dispatch
-  */
-  // --- Конец удаленного эффекта ---
-  // Нет, не удаляем весь useEffect, просто удаляем return () => {...} из существующего useEffect,
-  // который реагирует на location.hash ИЛИ создаем новый useEffect без зависимостей (или с dispatch), но без cleanup.
-  // Самый простой способ: убедиться, что ни один useEffect в HomePage не диспатчит setSearchTerm('') при уходе.
-  // Проверяем: в этом файле нет других useEffect, диспатчащих сброс.
-  // Значит, просто убеждаемся, что предыдущая cleanup функция удалена.
-  // Если вы скопировали предыдущий код, то cleanup функция уже удалена.
-  // Все, что нужно, это чтобы не было логики диспатча setSearchTerm('') при размонтировании.
+    // Этот эффект с пустым массивом зависимостей [] выполняется только один раз:
+    // при первом монтировании компонента HomePage.
+    // Таким образом, при каждом переходе на главную страницу (будь то первый заход
+    // или переход с другой страницы), этот эффект сработает.
+
+    // Диспатчим экшены для сброса состояния фильтров и поиска в Redux
+    dispatch(setSearchTerm('')); // Сбрасываем глобальный поисковый запрос
+    dispatch(setFilters({ locations: [], events: [], categories: [] })); // Сбрасываем все выбранные фильтры
+
+    console.log("Глобальные фильтры и поиск сброшены при переходе на Домашнюю страницу.");
+
+    // Cleanup функция не нужна для этой логики.
+    // cleanup функция нужна, если нужно что-то сделать при УХОДЕ со страницы.
+    // Новое требование - приходить на страницу "чистыми".
+
+  }, [dispatch]); // Зависимость от dispatch необходима
+
+  // --- Конец нового эффекта ---
+
 
   return (
     <div className="pageLayout">
@@ -72,7 +70,7 @@ const HomePage: React.FC = () => {
             {/* Передаем функцию, которая будет обновлять глобальное состояние поиска в Redux */}
             <Search
               ref={searchInputRef}
-              onSearch={(value) => dispatch(setSearchTerm(value))} // Этот диспатч устанавливает значение поиска
+              onSearch={(value) => dispatch(setSearchTerm(value))}
             />
             <InformationAddition/>
           </div>
