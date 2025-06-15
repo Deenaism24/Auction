@@ -10,15 +10,16 @@ import * as styles from './Header.module.css';
 import { useAuthModal } from '../../contexts/AuthFlowModalContext';
 import { routes } from '../../routes';
 import articlesList from '../../articlesList';
-// !!! ИМПОРТ ДЛЯ ЧТЕНИЯ СОСТОЯНИЯ ПОЛЬЗОВАТЕЛЯ ИЗ REDUX !!!
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-// !!! КОНЕЦ ИМПОРТА !!!
+// !!! ИМПОРТЫ ДЛЯ ВЫХОДА ИЗ REDUX !!!
+import { useSelector, useDispatch } from 'react-redux'; // Добавляем useDispatch
+import { RootState } from '../../store'; // Импортируем RootState
+import { setAuthenticated } from '../../store/slices/userSlice'; // Импортируем экшен для выхода
+// !!! КОНЕЦ ИМПОРТОВ !!!
 
 
 interface HeaderProps {
   searchInputRef: React.RefObject<HTMLInputElement | null>;
-  onLoginClick?: () => void;
+  onLoginClick?: () => void; // Этот проп больше не используется в текущей логике AuthModalContext
 }
 
 const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
@@ -29,9 +30,11 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // !!! ЧТЕНИЕ СОСТОЯНИЯ АВТОРИЗАЦИИ ИЗ REDUX !!!
+  // ЧТЕНИЕ СОСТОЯНИЯ АВТОРИЗАЦИИ ИЗ REDUX
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
-  // !!! КОНЕЦ ЧТЕНИЯ СОСТОЯНИЯ АВТОРИЗАЦИИ !!!
+  // !!! ПОЛУЧЕНИЕ DISPATCH !!!
+  const dispatch = useDispatch();
+  // !!! КОНЕЦ ИМПОРТА !!!
 
 
   const isInformationPage = location.pathname === routes.information;
@@ -57,6 +60,17 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
     navigate(routes.personalAccount);
   };
 
+  // !!! НОВАЯ ФУНКЦИЯ ДЛЯ ВЫХОДА !!!
+  const handleLogoutClick = () => {
+    closeMenu(); // Закрываем бургер-меню при выходе
+    // Диспатчим экшен для установки статуса авторизации в false
+    dispatch(setAuthenticated(false));
+
+    navigate(routes.home); // Перенаправляем на главную
+    console.log('Пользователь вышел.');
+  };
+  // !!! КОНЕЦ НОВОЙ ФУНКЦИИ !!!
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -70,22 +84,26 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
     closeMenu();
     const targetPath = routes.home;
     const targetHash = '#search-section';
+    // Проверяем, находимся ли мы уже на домашней странице
     if (location.pathname === targetPath) {
       const searchSection = document.getElementById('search-section');
       if (searchSection) {
+        // Если на домашней, скроллим и фокусируем
         setTimeout(() => {
           searchSection.scrollIntoView({ behavior: 'smooth' });
+          // Дополнительный таймаут для фокусировки после скролла
           setTimeout(() => {
             searchInputRef.current?.focus();
           }, 300);
-        }, 0);
+        }, 0); // Небольшой таймаут, чтобы дать скроллу запуститься
       }
     } else {
+      // Если не на домашней, переходим на домашнюю с хэшем
       navigate(`${targetPath}${targetHash}`);
     }
   };
 
-  const handleDiscoverClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleDiscoverClick = (event: React.MouseEvent<HTMLSpanElement>) => { // Use HTMLSpanElement as it's a span
     event.preventDefault();
     closeMenu();
 
@@ -144,15 +162,15 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
           </div>
         )}
         <div className={styles.actions}>
-          {/* !!! УСЛОВНЫЙ РЕНДЕРИНГ: Авторизация ИЛИ Личный кабинет !!! */}
+          {/* !!! УСЛОВНЫЙ РЕНДЕРИНГ: Авторизация ИЛИ Личный кабинет (для широких экранов) !!! */}
           {isAuthenticated ? (
-            // Если авторизован - кнопка Личный кабинет
-            <div onClick={handlePersonalAccountClick} className={styles.login}> {/* Можно использовать тот же стиль login или создать personalAccount */}
+            // Если авторизован - кнопка Личный кабинет (для широких экранов)
+            <div onClick={handlePersonalAccountClick} className={styles.login}>
               ЛИЧНЫЙ КАБИНЕТ
               <img src={AuthIcon} alt="Личный кабинет" className={styles.icon} />
             </div>
           ) : (
-            // Если не авторизован - кнопка Авторизация
+            // Если не авторизован - кнопка Авторизация (для широких экранов)
             <div onClick={handleLoginClick} className={styles.login}>
               АВТОРИЗАЦИЯ
               <img src={AuthIcon} alt="Вход" className={styles.icon} />
@@ -161,6 +179,7 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
           {/* !!! КОНЕЦ УСЛОВНОГО РЕНДЕРИНГА !!! */}
 
           {/* Иконка поиска в ОСНОВНОМ хедере */}
+          {/* Иконка поиска должна быть видима на всех размерах экрана */}
           <div onClick={handleSearchClick} className={styles.icon}> <img className={styles.icon} alt="Поиск" src={SearchIcon} /> </div>
           {/* Избранное */}
           <NavLink to={routes.favorite} onClick={closeMenu}> <img className={styles.favIcon} alt="Избранное" src={StarIcon} /> </NavLink>
@@ -172,36 +191,42 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
       {/* Бургер-меню */}
       <div className={`${styles.burgerMenu} ${isMenuOpen ? styles.active : ''}`} ref={menuRef}>
         <div className={styles.burgerMenuContent}>
-          {/* ... другие ссылки ... */}
+          {/* ... другие ссылки бургер-меню ... */}
           <HashLink smooth to={routes.access} className={styles.burgerMenuLink} onClick={closeMenu}> PREFERED ACCESS </HashLink>
           <HashLink smooth to={routes.about} className={styles.burgerMenuLink} onClick={closeMenu}> ABOUT </HashLink>
           {/* Ссылка "DISCOVER" в бургере */}
           <span className={styles.burgerMenuLink} onClick={handleDiscoverClick}> DISCOVER </span>
           <HashLink smooth to={routes.services} className={styles.burgerMenuLink} onClick={closeMenu}> SERVICES </HashLink>
           <HashLink smooth to={routes.instructions} className={styles.burgerMenuLink} onClick={closeMenu}> КАК КУПИТЬ ИЛИ ПРОДАТЬ </HashLink>
-          <HashLink smooth to={routes.ROUTE_TO_FOOTER_LINKS_SUPPORT} className={styles.burgerMenuLink} onClick={closeMenu}> ПОДДЕРЖКА </HashLink>
-          <HashLink smooth to={routes.ROUTE_TO_FOOTER_LINKS_CORPORATE} className={styles.burgerMenuLink} onClick={closeMenu}> СОТРУДНИЧЕСТВО </HashLink>
 
-          {window.innerWidth <= 650 && (
+          <HashLink smooth to={`${routes.information}${routes.ANCHOR_FOOTER_LINKS_SUPPORT}`} className={styles.burgerMenuLink} onClick={closeMenu}> ПОДДЕРЖКА </HashLink>
+          <HashLink smooth to={`${routes.information}${routes.ANCHOR_FOOTER_LINKS_CORPORATE}`} className={styles.burgerMenuLink} onClick={closeMenu}> СОТРУДНИЧЕСТВО </HashLink>
+
+          {/* !!! УСЛОВНЫЙ РЕНДЕРИНГ: Авторизация/ЛК или ВЫХОД (в бургер-меню) !!! */}
+          {isAuthenticated ? (
+            // Если авторизован - ссылка Личный кабинет и кнопка Выйти
             <>
-              {/* !!! УСЛОВНЫЙ РЕНДЕРИНГ В БУРГЕР-МЕНЮ !!! */}
-              {isAuthenticated ? (
-                // Если авторизован - ссылка Личный кабинет
-                <NavLink to={routes.personalAccount} className={styles.burgerMenuLink} onClick={closeMenu}>
-                  ЛИЧНЫЙ КАБИНЕТ
-                </NavLink>
-              ) : (
-                // Если не авторизован - ссылка Авторизация
-                <span className={styles.burgerMenuLink} onClick={handleLoginClick}>
-                     АВТОРИЗАЦИЯ
-                 </span>
-              )}
-              {/* !!! КОНЕЦ УСЛОВНОГО РЕНДЕРИНГА В БУРГЕР-МЕНЮ !!! */}
-
-              {/* Ссылка "ПОИСК" в бургер-меню */}
-              <div className={styles.burgerMenuLink} onClick={handleSearchClick}> ПОИСК </div>
+              <NavLink to={routes.personalAccount} className={styles.burgerMenuLink} onClick={closeMenu}>
+                ЛИЧНЫЙ КАБИНЕТ
+              </NavLink>
+              {/* Кнопка Выйти - используем span или button и обрабатываем клик */}
+              <span className={styles.burgerMenuLink} onClick={handleLogoutClick}> {/* Используем тот же класс стиля ссылки */}
+                ВЫЙТИ
+              </span>
             </>
+          ) : (
+            // Если не авторизован - ссылка Авторизация
+            <span className={styles.burgerMenuLink} onClick={handleLoginClick}>
+                 АВТОРИЗАЦИЯ
+             </span>
           )}
+          {/* !!! КОНЕЦ УСЛОВНОГО РЕНДЕРИНГА В БУРГЕР-МЕНЮ !!! */}
+
+          {/* Проверяем ширину экрана, чтобы показывать эту ссылку только там, где иконка скрыта */}
+          {window.innerWidth <= 650 && ( // Если иконка скрыта на экранах <= 650px
+            <span className={styles.burgerMenuLink} onClick={handleSearchClick}> ПОИСК </span>
+          )}
+
         </div>
       </div>
     </>
