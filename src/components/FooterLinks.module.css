@@ -91,19 +91,4 @@
     .footerLinksContainer {
         padding: 20px max(20px, calc((100% - 335px) / 2));
     }
-    .footerLinksTitle {
-        font-size: 16px;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-    }
-    .groupTitle {
-        font-size: 14px;
-        margin-bottom: 8px;
-    }
-    .link {
-        font-size: 10px;
-    }
-    .linksList {
-        gap: 3px;
-    }
 }
