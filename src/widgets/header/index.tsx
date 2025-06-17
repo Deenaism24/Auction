@@ -216,8 +216,8 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
           <HashLink smooth to={routes.instructions} className={styles.burgerMenuLink} onClick={closeMenu}> КАК КУПИТЬ ИЛИ ПРОДАТЬ </HashLink>
 
           {/* Ссылки на секции футера (предполагается, что это якоря на странице Information) */}
-          <HashLink smooth to={`${routes.information}${routes.ANCHOR_FOOTER_LINKS_SUPPORT}`} className={styles.burgerMenuLink} onClick={closeMenu}> ПОДДЕРЖКА </HashLink>
-          <HashLink smooth to={`${routes.information}${routes.ANCHOR_FOOTER_LINKS_CORPORATE}`} className={styles.burgerMenuLink} onClick={closeMenu}> СОТРУДНИЧЕСТВО </HashLink>
+          <HashLink smooth to={routes.ROUTE_TO_FOOTER_LINKS_SUPPORT} className={styles.burgerMenuLink} onClick={closeMenu}> ПОДДЕРЖКА </HashLink>
+          <HashLink smooth to={routes.ROUTE_TO_FOOTER_LINKS_CORPORATE} className={styles.burgerMenuLink} onClick={closeMenu}> СОТРУДНИЧЕСТВО </HashLink>
 
           {isAuthenticated ? (
             // Если авторизован - ссылка Личный кабинет и кнопка Выйти
