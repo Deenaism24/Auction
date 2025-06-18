@@ -13,7 +13,7 @@ interface AuthModalContextType {
   close: () => void; // Функция для закрытия модального окна
   view: AuthView; // Текущее активное представление в модалке
   isOpen: boolean; // Флаг: открыто ли модальное окно (view не null)
-  data?: any; // Опциональные данные, передаваемые при открытии (например, предзаполненные поля)
+  data?: any; // Опциональные данные, передаваемые при открытии (предзаполненные поля)
 }
 // Создание контекста
 const AuthModalContext = createContext<AuthModalContextType | undefined>(undefined);
