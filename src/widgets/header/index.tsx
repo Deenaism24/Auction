@@ -11,7 +11,7 @@ import BurgerIcon from '../../icons/burger.svg';
 import * as styles from './Header.module.css';
 // Импорт хука для работы с контекстом модального потока авторизации
 import { useAuthModal } from '../../contexts/AuthFlowModalContext';
-import { routes } from '../../routes'; // Объект с путями роутов
+import { routes } from '../../routes';
 import articlesList from '../../articlesList'; // Импорт списка статей (для кнопки DISCOVER)
 // ИМПОРТЫ ДЛЯ REDUX (для статуса авторизации и выхода)
 import { useSelector, useDispatch } from 'react-redux'; // Хуки для работы с Redux

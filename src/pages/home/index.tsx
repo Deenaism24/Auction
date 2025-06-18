@@ -16,17 +16,18 @@ import { RootState } from '../../store'; // Импорт типа корнево
 
 // Функция для прокрутки к секции поиска и фокусировки поля ввода
 const scrollToSearchAndFocus = (ref: React.RefObject<HTMLInputElement | null>) => {
-  const searchSectionElement = document.getElementById('search-section');
-  if (searchSectionElement && ref.current) {
-    // Прокрутка к элементу
-    searchSectionElement.scrollIntoView({ behavior: 'smooth' });
-    // Фокусировка поля ввода с небольшой задержкой, чтобы дождаться завершения скролла
-    // Таймаут нужен, потому что focus() может сработать некорректно во время плавного скролла
+  const searchSection = document.getElementById('search-section');
+  if (searchSection && ref.current) {
     setTimeout(() => {
-      ref.current?.focus();
-    }, 300);
+      // Прокрутка к элементу
+      searchSection.scrollIntoView({ behavior: 'smooth' });
+      // Фокусируем поле ввода поиска с помощью переданного рефа
+      setTimeout(() => {
+        ref.current?.focus();
+      }, 300)
+    }, 0);
   }
-};
+}
 
 // Компонент главной страницы
 const HomePage: React.FC = () => {
