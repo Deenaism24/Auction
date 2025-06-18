@@ -339,9 +339,6 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
                 <NavLink
                   to={generatePath(routes.openLot, { lot: lot.number })}
                   className={styles.info}
-                  onClick={(e) => {
-                    // Если модалка фото открыта, закрываем ее перед переходом
-                  }}
                 >
                   {/* Блок информации о лоте */}
                   <div className={styles.info}> {/* Может быть избыточным, но соответствует исходной структуре */}
