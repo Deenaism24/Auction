@@ -1,5 +1,5 @@
 // src/components/LotGrid.tsx
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import * as styles from './LotGrid.module.css';
 import { generatePath, NavLink } from 'react-router'; // Хуки и компоненты для маршрутизации
 import { routes } from '../routes'; // Объект с путями роутов
@@ -56,6 +56,7 @@ const getPaginationItems = (currentPage: number, totalPages: number): (number | 
       const prev = sortedUniquePages[i - 1] as number;
       const current = sortedUniquePages[i] as number;
 
+      // Если разница между соседними страницами больше 1, добавляем многоточие
       if (current - prev > 1) {
         finalItems.push('...'); // Вставляем многоточие при пропуске
       }
@@ -65,8 +66,6 @@ const getPaginationItems = (currentPage: number, totalPages: number): (number | 
 
   return finalItems; // Возвращаем итоговый массив для рендеринга
 };
-// !!! КОНЕЦ ОБНОВЛЕННОЙ ЛОГИКИ !!!
-
 
 // Интерфейс пропсов компонента LotGrid
 interface LotGridProps {
@@ -192,17 +191,19 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
     favoriteSearchTerm // Зависимость для поиска на странице избранного (из пропса)
   ]);
 
-  // Эффект для сброса текущей страницы пагинации на 1 и прокрутки вверх
+  // Эффект для сброса текущей страницы пагинации на 1
   // Срабатывает при любом изменении фильтров, сортировки или поиска, которые могут изменить список лотов
   useEffect(() => {
-    // При изменении фильтров/сортировки/поиска не нужно скроллить к заголовку сетки.
-    // shouldScrollToGridHeader.current по умолчанию false, и здесь мы его не меняем.
-    setCurrentPage(1); // Сбрасываем страницу на первую
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Плавно прокручиваем окно в верх
+    // Сбрасываем текущую страницу на 1 при изменении фильтров, сортировки или поиска.
+    // Прокрутка к верху в этом случае не происходит.
+    setCurrentPage(1);
   }, [
     globalSearchTerm,
     favoriteSearchTerm,
-    isFavoritePage // Учитываем смену страницы (Главная/Избранное), хотя компонент обычно монтируется/демонтируется
+    selectedLocations, // Добавляем зависимость от фильтров локаций
+    selectedEvents,    // Добавляем зависимость от фильтров событий
+    selectedCategories,// Добавляем зависимость от фильтров категорий
+    selectedSort,      // Добавляем зависимость от сортировки
   ]);
 
 
@@ -210,16 +211,20 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
   const totalPages = filteredAndSortedLots.length === 0 ? 1 : Math.ceil(filteredAndSortedLots.length / lotsPerPage);
 
   // Эффект для корректировки текущей страницы, если она вышла за пределы после фильтрации
-  // Например, если мы были на 5 странице, а после фильтрации стало всего 3 страницы
   useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages); // Переходим на последнюю доступную страницу
-    } else if (currentPage <= 0 && totalPages > 0) {
-      setCurrentPage(1); // Корректируем на страницу 1, если как-то оказались на 0 или меньше
+    // Если текущая страница стала больше, чем общее количество страниц после фильтрации/сортировки,
+    // переходим на последнюю доступную страницу (если страниц больше 0).
+    // Если лотов нет (totalPages === 0), currentPage должен быть 1.
+    if (currentPage > totalPages && totalPages >= 1) {
+      setCurrentPage(totalPages);
+    } else if (currentPage <= 0 && totalPages >= 1) {
+      // Корректируем на страницу 1, если как-то оказались на 0 или меньше
+      setCurrentPage(1);
     } else if (totalPages === 0 && currentPage !== 1) {
-      // Если лотов нет (total pages = 0 или 1), убеждаемся, что текущая страница = 1
+      // Если лотов нет, убеждаемся, что текущая страница = 1
       setCurrentPage(1);
     }
+    // Этот эффект НЕ должен вызывать прокрутку.
   }, [currentPage, totalPages]); // Зависит от текущей страницы и общего количества страниц
 
   // Вычисляем начальный индекс лотов для текущей страницы
@@ -230,9 +235,10 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
 
   // Обработчик изменения страницы при клике на кнопки пагинации
   const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) { // Проверяем, что страница в допустимом диапазоне
+    if (page >= 1 && page <= totalPages && page !== currentPage) { // Добавляем проверку, что страница действительно меняется
       setCurrentPage(page); // Устанавливаем новую текущую страницу
-      window.scrollTo({ top: 0, behavior: 'smooth' }); // Прокручиваем вверх
+      // Здесь вызываем прокрутку к верху, потому что пользователь явно нажал кнопку пагинации.
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -331,8 +337,11 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
 
                 {/* Ссылка на страницу с деталями лота (на весь блок информации) */}
                 <NavLink
-                  to={generatePath(routes.openLot, { lot: lot.number })} // Генерируем путь с номером лота
-                  className={styles.info} // Применяем стили информационного блока
+                  to={generatePath(routes.openLot, { lot: lot.number })}
+                  className={styles.info}
+                  onClick={(e) => {
+                    // Если модалка фото открыта, закрываем ее перед переходом
+                  }}
                 >
                   {/* Блок информации о лоте */}
                   <div className={styles.info}> {/* Может быть избыточным, но соответствует исходной структуре */}
