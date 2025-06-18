@@ -105,7 +105,6 @@ const HomePage: React.FC = () => {
               }}
               placeholderText="Для поиска по аукциону введите номер лота или название"
             />
-            {/* Отображаем компонент боковой панели с информацией и фильтрами */}
             {/* InformationAddition будет читать глобальные фильтры из Redux */}
             <InformationAddition/>
           </div>
