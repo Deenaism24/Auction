@@ -1,5 +1,5 @@
 // src/components/LotGrid.tsx
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import * as styles from './LotGrid.module.css';
 import { generatePath, NavLink } from 'react-router'; // Хуки и компоненты для маршрутизации
 import { routes } from '../routes'; // Объект с путями роутов
@@ -83,6 +83,8 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
   // Количество лотов на странице в зависимости от ширины
   const lotsPerPage = windowWidth >= 600 ? 9 : 4;
 
+  // --- РЕФ ДЛЯ ЗАГОЛОВКА СЕТКИ ---
+  const gridHeaderRef = useRef<HTMLDivElement>(null);
 
   // ЧТЕНИЕ СОСТОЯНИЯ ИЗ REDUX
   const allLots = useSelector((state: RootState) => state.filterSort.allLots) as Lot[]; // Полный список лотов
@@ -184,7 +186,6 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
     return sortedLots; // Возвращаем отфильтрованный и отсортированный список
   }, [
     allLots,
-    // favoriteLotIds, // Зависимость для фильтрации избранного
     isFavoritePage, // Зависимость для переключения режимов фильтрации
     selectedLocations, // Зависимость для фильтров на главной
     selectedEvents, // Зависимость для фильтров на главной
@@ -194,16 +195,31 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
     favoriteSearchTerm // Зависимость для поиска на странице избранного (из пропса)
   ]);
 
-  // Эффект для сброса текущей страницы пагинации на 1 и прокрутки вверх
-  // Срабатывает при любом изменении фильтров, сортировки или поиска, которые могут изменить список лотов
+  // Эффект для сброса текущей страницы пагинации на 1
+  // Срабатывает при изменении любых фильтров, сортировки или поиска
   useEffect(() => {
     setCurrentPage(1); // Сбрасываем страницу на первую
     window.scrollTo({ top: 0, behavior: 'smooth' }); // Плавно прокручиваем в верх страницы
   }, [
+    selectedLocations,
+    selectedEvents,
+    selectedCategories,
+    selectedSort,
     globalSearchTerm,
-    favoriteSearchTerm, // Сбрасываем страницу при изменении локального поиска избранного
+    favoriteSearchTerm,
+    isFavoritePage // Учитываем смену страницы (Главная/Избранное), хотя компонент обычно монтируется/демонтируется
   ]);
 
+  // Эффект срабатывает при изменении текущей страницы или при изменении отфильтрованного/отсортированного списка лотов.
+  useEffect(() => {
+    // Проверяем, что ref привязан к элементу и что список лотов не пустой.
+    if (gridHeaderRef.current) {
+      gridHeaderRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    // Зависимости:
+    // currentPage - меняется при клике на пагинацию.
+    // filteredAndSortedLots - меняется при фильтрации, сортировке, поиске, добавлении/удалении из избранного (на странице избранного).
+  }, [currentPage, filteredAndSortedLots]);
 
   // Вычисляем общее количество страниц на основе отфильтрованного списка
   const totalPages = filteredAndSortedLots.length === 0 ? 1 : Math.ceil(filteredAndSortedLots.length / lotsPerPage);
@@ -229,9 +245,9 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
 
   // Обработчик изменения страницы при клике на кнопки пагинации
   const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) { // Проверяем, что страница в допустимом диапазоне
+    if (page >= 1 && page <= totalPages) {
       setCurrentPage(page); // Устанавливаем новую текущую страницу
-      window.scrollTo({ top: 0, behavior: 'smooth' }); // Прокручиваем вверх
+      // Прокрутка будет автоматически вызвана эффектом при изменении currentPage
     }
   };
 
@@ -287,6 +303,9 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
   // JSX разметка компонента
   return (
     <div>
+      {/* --- ПРИВЯЗЫВАЕМ РЕФ К ЗАГОЛОВКУ СЕТКИ --- */}
+      <div ref={gridHeaderRef} className={styles.gridHeader}></div>
+
       {/* Отображаем сообщение "нет результатов", если список лотов для отображения пуст */}
       {filteredAndSortedLots.length === 0 && (
         <div className={styles.noResults}>
