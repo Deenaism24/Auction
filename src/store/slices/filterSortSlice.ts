@@ -1,26 +1,21 @@
 // src/store/slices/filterSortSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import lotsData from '../../lotsList'; // Ensure this imports your full list of lots data
+import lotsData from '../../lotsList';
 
-// !!! IMPORTANT: Ensure the Lot interface is defined and exported here !!!
-export interface Lot { // Exporting the interface
+export interface Lot { // Экспорт интерфейса
   id: number;
   number: string | number;
   title: string;
-  price: string; // Assuming price is stored as a string with currency, e.g., "50,000$"
+  price: string;
   city: string | undefined;
   event: string | undefined;
   category: string | undefined;
   image: string;
-  // Add any other properties present in your lotsList.tsx here
-  // description?: string; // Example if you have a description field
 }
-// !!! END IMPORTANT !!!
 
-
-// Define the state type
+// Определяем тип состояния
 interface FilterSortState {
-  allLots: Lot[]; // Stores the full list of lots
+  allLots: Lot[]; // Хранит полный список лотов
   selectedLocations: string[];
   selectedEvents: string[];
   selectedCategories: string[];
@@ -28,9 +23,9 @@ interface FilterSortState {
   searchTerm: string;
 }
 
-// Initial state
+// Начальное состояние
 const initialState: FilterSortState = {
-  allLots: lotsData as Lot[], // Load the initial data here
+  allLots: lotsData as Lot[], // Загружаем начальные данные здесь
   selectedLocations: [],
   selectedEvents: [],
   selectedCategories: [],
@@ -38,12 +33,12 @@ const initialState: FilterSortState = {
   searchTerm: '',
 };
 
-// Create the slice
+// Создаем срез состояния
 const filterSortSlice = createSlice({
-  name: 'filterSort',
+  name: 'filterSort', // Имя среза
   initialState,
   reducers: {
-    // Reducers for managing filters and sort (these are already implemented)
+    // Редьюсеры для управления фильтрами и сортировкой (уже реализованы)
     setFilters: (state, action: PayloadAction<{
       locations?: string[];
       events?: string[];
@@ -86,7 +81,7 @@ const filterSortSlice = createSlice({
   },
 });
 
-// Export actions
+// Экспортируем экшены
 export const {
   setFilters,
   toggleLocationFilter,
@@ -96,5 +91,5 @@ export const {
   setSearchTerm,
 } = filterSortSlice.actions;
 
-// Export the reducer
+// Экспортируем редьюсер
 export default filterSortSlice.reducer;

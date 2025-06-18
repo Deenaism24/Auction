@@ -32,6 +32,8 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
   const location = useLocation(); // Хук для получения информации о текущем URL
   const navigate = useNavigate(); // Хук для программной навигации
 
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 650);
+
   // ЧТЕНИЕ СОСТОЯНИЯ АВТОРИЗАЦИИ ИЗ REDUX STORE
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
   // ПОЛУЧЕНИЕ DISPATCH ФУНКЦИИ ИЗ REDUX
@@ -159,6 +161,21 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
     };
   }, [isMenuOpen]); // Зависимость эффекта от состояния isMenuOpen
 
+  useEffect(() => {
+    const handleResize = () => {
+      // Обновляем состояние isMobileView при изменении ширины окна
+      setIsMobileView(window.innerWidth < 650);
+    };
+
+    // Добавляем слушатель события resize
+    window.addEventListener('resize', handleResize);
+
+    // Функция очистки: удаляем слушатель события при размонтировании компонента
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []); // Пустой массив зависимостей: эффект запускается один раз при монтировании и очищается при размонтировании
+
   // Рендеринг компонента хедера
   return (
     <>
@@ -219,22 +236,24 @@ const Header: React.FC<HeaderProps> = ({ searchInputRef }) => {
           <HashLink smooth to={routes.ROUTE_TO_FOOTER_LINKS_SUPPORT} className={styles.burgerMenuLink} onClick={closeMenu}> ПОДДЕРЖКА </HashLink>
           <HashLink smooth to={routes.ROUTE_TO_FOOTER_LINKS_CORPORATE} className={styles.burgerMenuLink} onClick={closeMenu}> СОТРУДНИЧЕСТВО </HashLink>
 
-          {isAuthenticated ? (
-            // Если авторизован - ссылка Личный кабинет и кнопка Выйти
-            <>
-              <NavLink to={routes.personalAccount} className={styles.burgerMenuLink} onClick={closeMenu}>
-                ЛИЧНЫЙ КАБИНЕТ
-              </NavLink>
-              {/* Кнопка Выйти - используем span с стилями ссылки */}
-              <span className={styles.burgerMenuLink} onClick={handleLogoutClick}>
-                 ВЫЙТИ
-              </span>
-            </>
-          ) : (
-            // Если не авторизован - ссылка Авторизация
-            <span className={styles.burgerMenuLink} onClick={handleLoginClick}>
-                 АВТОРИЗАЦИЯ
-             </span>
+          {isMobileView && ( // Показываем только если мобильный вид
+            isAuthenticated ? (
+              // Если пользователь авторизован - ссылка Личный кабинет и кнопка Выйти
+              <>
+                <NavLink to={routes.personalAccount} className={styles.burgerMenuLink} onClick={closeMenu}>
+                  ЛИЧНЫЙ КАБИНЕТ
+                </NavLink>
+                {/* Кнопка Выйти - используем span с стилями ссылки */}
+                <span className={styles.burgerMenuLink} onClick={handleLogoutClick}>
+                   ВЫЙТИ
+                </span>
+              </>
+            ) : (
+              // Если пользователь не авторизован - ссылка Авторизация
+              <span className={styles.burgerMenuLink} onClick={handleLoginClick}>
+                   АВТОРИЗАЦИЯ
+               </span>
+            )
           )}
 
         </div>

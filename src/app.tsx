@@ -23,7 +23,7 @@ const App = () => {
           <ZoomPhotoModalProvider>
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/favorite" element={<FavoritePage />} />
+              <Route path={routes.favorite} element={<FavoritePage />} />
               <Route path={routes.information} element={<InformationPage />} />
               <Route path={routes.article} element={<ArticlePage />} />
               <Route path={routes.personalAccount} element={<PersonalAccountPage />} />

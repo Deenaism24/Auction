@@ -76,11 +76,10 @@ interface LotGridProps {
 // Основной компонент LotGrid
 const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearchTerm = '' }) => {
   const [currentPage, setCurrentPage] = useState(1); // Состояние для текущей страницы пагинации
-  // Состояние для ширины окна (для определения lotsPerPage). Не обновляется при ресайзе.
+  // Состояние для ширины окна (для определения lotsPerPage).
   const [windowWidth] = React.useState(getWindowWidth());
   // Количество лотов на странице в зависимости от ширины
   const lotsPerPage = windowWidth >= 600 ? 9 : 4;
-
 
   // ЧТЕНИЕ СОСТОЯНИЯ ИЗ REDUX
   const allLots = useSelector((state: RootState) => state.filterSort.allLots) as Lot[]; // Полный список лотов
@@ -97,10 +96,8 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
   // Читаем выбранную опцию сортировки (сортировка применяется к отфильтрованному списку на обеих страницах)
   const selectedSort = useSelector((state: RootState) => state.filterSort.selectedSort);
 
-
   // Определяем, какой поисковый запрос использовать: локальный (для избранного) или глобальный (для главной)
   const currentSearchTerm = isFavoritePage ? favoriteSearchTerm : globalSearchTerm;
-
 
   // ЛОГИКА ФИЛЬТРАЦИИ И СОРТИРОВКИ (мемоизирована для производительности)
   // Пересчитывается только при изменении соответствующих зависимостей
@@ -247,7 +244,7 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
     open(imageUrl); // Открываем модалку с переданным URL изображения
   };
 
-  const dispatch = useDispatch<AppDispatch>(); // Получаем функцию dispatch
+  const dispatch = useDispatch<AppDispatch>(); // Получаем функцию dispatch для работы с Redux
   // Обработчик для добавления/удаления лота из избранного
   const handleToggleFavorite = (event: React.MouseEvent, lotId: number) => {
     event.preventDefault(); // Предотвращаем стандартное поведение (например, переход по ссылке)
@@ -283,13 +280,10 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
     }
     // Общее сообщение, если после всех применений (фильтры, поиск) список пуст
     if (filteredAndSortedLots.length === 0) {
-      return isFavoritePage ?
-        'Нет лотов в избранном, соответствующих текущим критериям.' :
-        'Нет лотов, соответствующих текущим критериям.';
+      return 'Нет лотов, соответствующих текущим критериям.';
     }
     return 'Нет лотов для отображения.'; // Редкий случай, если filteredAndSortedLots почему-то 0, но не подпадает под предыдущие условия
   };
-
 
   // JSX разметка компонента
   return (

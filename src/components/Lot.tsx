@@ -1,5 +1,5 @@
 // src/components/Lot.tsx
-import React, { useEffect } from 'react'; // <-- ИМПОРТИРУЕМ useEffect
+import React, { useEffect } from 'react';
 import * as styles from './Lot.module.css';
 import DollarIcon from '../icons/dollar.svg';
 import { Lot as LotType } from '../store/slices/filterSortSlice'; // Импорт типа лота из Redux slice

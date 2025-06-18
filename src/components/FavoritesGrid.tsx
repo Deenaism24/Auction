@@ -3,7 +3,7 @@ import React from 'react';
 import * as styles from './LotGrid.module.css';
 import LotGrid from './LotGrid';
 
-// Определение пропсов компонента: ожидает поисковый запрос, специфичный для избранного
+// Определение пропсов компонента: ожидает поисковый запрос (работает отдельно от поиска главной страницы)
 interface FavoritesGridProps {
   favoriteSearchTerm: string; // Ожидаем поисковый запрос
 }

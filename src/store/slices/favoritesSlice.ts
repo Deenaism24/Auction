@@ -5,7 +5,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface FavoritesState {
   // Храним только ID лотов, находящихся в избранном
   // Предполагаем, что ID лота - это число.
-  // Если у вас другой тип ID (строка, UUID), измените 'number' соответственно.
   items: number[];
 }
 

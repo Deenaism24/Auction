@@ -15,7 +15,6 @@ const OpenLotPage: React.FC = () => {
   const { lot: lotNumberParam } = useParams<{ lot: string }>();
 
   // ЧТЕНИЕ СПИСКА ВСЕХ ЛОТОВ ИЗ REDUX STORE
-  // Предполагаем, что полный список лотов уже загружен в Redux при входе на главную страницу
   const allLots = useSelector((state: RootState) => state.filterSort.allLots) as LotType[];
 
   // Используем useMemo для поиска лота по номеру из URL

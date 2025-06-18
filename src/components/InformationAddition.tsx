@@ -24,18 +24,6 @@ import { // Экшены для управления фильтрами и со�
   setSearchTerm,
 } from '../store/slices/filterSortSlice';
 
-// Определяем тип лота (должен совпадать с Lot в filterSortSlice)
-interface Lot {
-  id: number;
-  number: string | number;
-  title: string;
-  price: string;
-  city: string | undefined;
-  event: string | undefined;
-  category: string | undefined;
-  image: string;
-}
-
 // Интерфейс для элементов списка фильтров (имя + количество)
 interface FilterType {
   name: string;

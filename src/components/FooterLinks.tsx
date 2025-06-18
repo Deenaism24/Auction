@@ -46,7 +46,7 @@ const FooterLinks: React.FC = () => {
       {/* Заголовок страницы */}
       <h1 className={styles.footerLinksTitle}>Дополнительная информация</h1>
 
-      {/* Итерируемся по группам ссылок, определенным в routes.ts */}
+      {/* Итерируемся по группам ссылок, определенным в routes.ts, перебор всех пар ключ-значение */}
       {Object.entries(routes.footerLinks).map(([groupKey, links]) => (
         // Контейнер для каждой группы ссылок, с ID якоря для навигации
         <div

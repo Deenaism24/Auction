@@ -8,9 +8,9 @@ import Footer from '../../widgets/footer';
 import Header from '../../widgets/header';
 import Search from '../../components/Search';
 // Импорты для Redux
-import { useDispatch, useSelector } from 'react-redux'; // Хук для диспатча экшенов и хук для чтения состояния
+import { useDispatch, useSelector } from 'react-redux'; // Хук для диспатча событий и хук для чтения состояния
 import { useLocation } from 'react-router-dom'; // Хук для информации о текущем URL
-// Импорт экшенов для сброса фильтров и поиска
+// Импорт событий для сброса фильтров и поиска
 import { setSearchTerm, setFilters } from '../../store/slices/filterSortSlice';
 import { RootState } from '../../store'; // Импорт типа корневого состояния Redux
 
@@ -33,7 +33,7 @@ const scrollToSearchAndFocus = (ref: React.RefObject<HTMLInputElement | null>) =
 const HomePage: React.FC = () => {
   // Реф для поля поиска. Используется для фокусировки поля при клике из хедера И при вводе.
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useDispatch(); // Хук для диспатча экшенов Redux
+  const dispatch = useDispatch(); // Хук для диспатча событий Redux
   const location = useLocation(); // Хук для доступа к информации о текущем URL (нужен для хэш-ссылки)
 
   // Читаем текущее состояние поискового запроса из REDUX
@@ -101,7 +101,7 @@ const HomePage: React.FC = () => {
                   // Вызываем функцию прокрутки и фокусировки
                   memoizedScrollToSearchAndFocus();
                 }
-                // Диспатчим экшен для обновления глобального состояния поиска в Redux в любом случае
+                // Диспатчим событие для обновления глобального состояния поиска в Redux в любом случае
                 dispatch(setSearchTerm(value));
               }}
               placeholderText="Для поиска по аукциону введите номер лота или название"
