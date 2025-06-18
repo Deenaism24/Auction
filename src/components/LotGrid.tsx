@@ -82,11 +82,6 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
   // Количество лотов на странице в зависимости от ширины
   const lotsPerPage = windowWidth >= 600 ? 9 : 4;
 
-  // --- РЕФ ДЛЯ ЗАГОЛОВКА СЕТКИ ---
-  const gridHeaderRef = useRef<HTMLDivElement>(null);
-  // --- РЕФ-ФЛАГ ДЛЯ ПРОКРУТКИ К ЗАГОЛОВКУ СЕТКИ ПРИ СМЕНЕ СТРАНИЦЫ ---
-  const shouldScrollToGridHeader = useRef(false);
-
 
   // ЧТЕНИЕ СОСТОЯНИЯ ИЗ REDUX
   const allLots = useSelector((state: RootState) => state.filterSort.allLots) as Lot[]; // Полный список лотов
@@ -197,33 +192,18 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
     favoriteSearchTerm // Зависимость для поиска на странице избранного (из пропса)
   ]);
 
-  // Эффект для сброса текущей страницы пагинации на 1 при изменении фильтров, сортировки или поиска.
+  // Эффект для сброса текущей страницы пагинации на 1 и прокрутки вверх
+  // Срабатывает при любом изменении фильтров, сортировки или поиска, которые могут изменить список лотов
   useEffect(() => {
     // При изменении фильтров/сортировки/поиска не нужно скроллить к заголовку сетки.
     // shouldScrollToGridHeader.current по умолчанию false, и здесь мы его не меняем.
     setCurrentPage(1); // Сбрасываем страницу на первую
     window.scrollTo({ top: 0, behavior: 'smooth' }); // Плавно прокручиваем окно в верх
   }, [
-    selectedLocations,
-    selectedEvents,
-    selectedCategories,
-    selectedSort,
     globalSearchTerm,
     favoriteSearchTerm,
     isFavoritePage // Учитываем смену страницы (Главная/Избранное), хотя компонент обычно монтируется/демонтируется
   ]);
-
-  // --- ЭФФЕКТ ДЛЯ ПРОКРУТКИ К ЗАГОЛОВКУ СЕТКИ ---
-  // Этот эффект срабатывает только при изменении currentPage
-  useEffect(() => {
-    // Проверяем, что ref привязан к элементу И что флаг shouldScrollToGridHeader установлен в true.
-    if (gridHeaderRef.current && shouldScrollToGridHeader.current) {
-      gridHeaderRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // Сбрасываем флаг после выполнения прокрутки, чтобы она не срабатывала при сбросе страницы на 1.
-      shouldScrollToGridHeader.current = false;
-    }
-    // Этот эффект зависит ТОЛЬКО от currentPage
-  }, [currentPage]);
 
 
   // Вычисляем общее количество страниц на основе отфильтрованного списка
@@ -250,11 +230,9 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
 
   // Обработчик изменения страницы при клике на кнопки пагинации
   const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      // Устанавливаем флаг, чтобы следующий эффект прокрутил к заголовку сетки.
-      shouldScrollToGridHeader.current = true;
+    if (page >= 1 && page <= totalPages) { // Проверяем, что страница в допустимом диапазоне
       setCurrentPage(page); // Устанавливаем новую текущую страницу
-      // Прокрутка окна здесь не нужна, ее делает новый эффект при изменении currentPage
+      window.scrollTo({ top: 0, behavior: 'smooth' }); // Прокручиваем вверх
     }
   };
 
@@ -310,16 +288,14 @@ const LotGrid: React.FC<LotGridProps> = ({ isFavoritePage = false, favoriteSearc
   // JSX разметка компонента
   return (
     <div>
-      {/* --- ПРИВЯЗЫВАЕМ РЕФ К ЗАГОЛОВКУ СЕТКИ --- */}
-      <div ref={gridHeaderRef} className={styles.gridHeader}></div>
-
       {/* Отображаем сообщение "нет результатов", если список лотов для отображения пуст */}
-      {filteredAndSortedLots.length === 0 ? (
+      {filteredAndSortedLots.length === 0 && (
         <div className={styles.noResults}>
           {getNoResultsMessage()} {/* Вызываем функцию для получения нужного сообщения */}
         </div>
-      ) : (
-        // Рендерим сетку лотов, только если есть лоты для текущей страницы
+      )}
+      {/* Рендерим сетку лотов, только если есть лоты для текущей страницы */}
+      {currentLots.length > 0 && (
         <div className={styles.grid}>
           {currentLots.map((lot) => { // Проходим по лотам текущей страницы
             const isFavorite = favoriteLotIds.includes(lot.id); // Проверяем, находится ли лот в избранном
